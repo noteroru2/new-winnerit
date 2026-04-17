@@ -2,7 +2,6 @@
 import Header from '../components/site/Header.astro';
 import Footer from '../components/site/Footer.astro';
 import '../styles/global.css';
-import '@fontsource/inter/latin.css';
 
 type Props = {
 	title?: string;
@@ -44,10 +43,53 @@ const orgSchema = {
 	contactPoint: {
 		'@type': 'ContactPoint',
 		contactType: 'customer service',
+		telephone: '+66-64-257-9353',
 		email: 'amphontrading@gmail.com',
 		availableLanguage: 'Thai',
 	},
-	sameAs: ['https://line.me/R/ti/p/@webuy'],
+	sameAs: [
+		'https://line.me/R/ti/p/@webuy',
+		'https://amphontd.com/',
+		'https://webuy.in.th/',
+	],
+};
+
+const localBusinessSchema = {
+	'@type': 'LocalBusiness',
+	'@id': `${siteUrl}/#localbusiness`,
+	name: 'Winner IT (ร้านอำพล เทรดดิ้ง)',
+	alternateName: 'AMPHON TRADING',
+	image: `${siteUrl}/og-default.png`,
+	url: siteUrl,
+	telephone: '+66-64-257-9353',
+	email: 'amphontrading@gmail.com',
+	priceRange: '฿',
+	address: {
+		'@type': 'PostalAddress',
+		streetAddress: '740/8 ถนนชยางกูร',
+		addressLocality: 'เมืองอุบลราชธานี',
+		addressRegion: 'อุบลราชธานี',
+		postalCode: '34000',
+		addressCountry: 'TH',
+	},
+	geo: {
+		'@type': 'GeoCoordinates',
+		latitude: 15.2448,
+		longitude: 104.8473,
+	},
+	openingHoursSpecification: [
+		{
+			'@type': 'OpeningHoursSpecification',
+			dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+			opens: '09:00',
+			closes: '18:00',
+		},
+	],
+	areaServed: {
+		'@type': 'Country',
+		name: 'Thailand',
+	},
+	parentOrganization: { '@id': `${siteUrl}/#organization` },
 };
 
 const websiteSchema = {
@@ -63,6 +105,7 @@ const baseJsonLd = {
 	'@context': 'https://schema.org',
 	'@graph': [
 		orgSchema,
+		localBusinessSchema,
 		websiteSchema,
 		...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : []),
 	],
@@ -80,6 +123,11 @@ const baseJsonLd = {
 		<title>{title}</title>
 		<meta name="description" content={description} />
 		<meta name="theme-color" content="#F97316" />
+		<meta name="geo.region" content="TH-34" />
+		<meta name="geo.placename" content="อุบลราชธานี" />
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
 		<meta property="og:type" content={ogType} />
 		<meta property="og:url" content={canonicalUrl.toString()} />

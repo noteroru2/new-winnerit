@@ -1,16 +1,56 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
+
+function sitemapLastmodPlugin() {
+	let outDir = '';
+	return {
+		name: 'sitemap-lastmod',
+		hooks: {
+			'astro:config:done'({ config }) {
+				outDir = config.outDir?.pathname?.replace(/^\/([A-Z]:)/, '$1') ?? './dist';
+			},
+			async 'astro:build:done'() {
+				const mapPath = join(outDir, '_lastmod-map.json');
+				if (!existsSync(mapPath)) return;
+				const map = JSON.parse(readFileSync(mapPath, 'utf-8'));
+
+				for (const name of ['sitemap-0.xml', 'sitemap.xml']) {
+					const sitemapPath = join(outDir, name);
+					if (!existsSync(sitemapPath)) continue;
+					let xml = readFileSync(sitemapPath, 'utf-8');
+					for (const [url, mod] of Object.entries(map)) {
+						const locTag = `<loc>${url}</loc>`;
+						if (!xml.includes(locTag)) continue;
+						const dateStr = new Date(/** @type {string} */ (mod)).toISOString();
+						xml = xml.replace(
+							new RegExp(`${locTag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*<lastmod>[^<]+</lastmod>`),
+							`${locTag}<lastmod>${dateStr}</lastmod>`
+						);
+					}
+					writeFileSync(sitemapPath, xml);
+				}
+
+				try { readFileSync(mapPath); writeFileSync(mapPath, ''); } catch {}
+			},
+		},
+	};
+}
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://winnerit.in.th',
+	site: process.env.PUBLIC_SITE_URL ?? 'https://winnerit.in.th',
 	integrations: [
 		sitemap({
 			serialize(item) {
-				item.lastmod = new Date().toISOString();
+				if (!item.lastmod) {
+					item.lastmod = new Date().toISOString();
+				}
 				return item;
 			},
 		}),
+		sitemapLastmodPlugin(),
 	],
 });

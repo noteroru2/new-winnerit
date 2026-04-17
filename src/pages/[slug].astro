@@ -1,10 +1,12 @@
 ---
 import he from 'he';
 import { parse } from 'node-html-parser';
+import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'node:fs';
+import { join, dirname } from 'node:path';
 import Layout from '../layouts/Layout.astro';
 import Post from '../components/blog/Post.astro';
 import { getAllPosts, getCategoriesByIds, getMediaById, decodeSlug, type WPPost } from '../lib/wp';
-import { transformPostHtml } from '../lib/contentTransforms';
+import { transformPostHtml, extractFaqFromHtml } from '../lib/contentTransforms';
 
 export async function getStaticPaths() {
 	const RESERVED = new Set([
@@ -88,6 +90,24 @@ const breadcrumbSchema = {
 		{ '@type': 'ListItem', position: 3, name: title, item: pageUrl },
 	],
 };
+
+const faqs = extractFaqFromHtml(post.content.rendered);
+const faqSchema = faqs.length > 0 ? {
+	'@type': 'FAQPage',
+	mainEntity: faqs.map((f) => ({
+		'@type': 'Question',
+		name: f.question,
+		acceptedAnswer: { '@type': 'Answer', text: f.answer },
+	})),
+} : null;
+
+try {
+	const mapPath = join('dist', '_lastmod-map.json');
+	mkdirSync(dirname(mapPath), { recursive: true });
+	const existing = existsSync(mapPath) ? JSON.parse(readFileSync(mapPath, 'utf-8')) : {};
+	existing[pageUrl] = post.modified;
+	writeFileSync(mapPath, JSON.stringify(existing));
+} catch {}
 ---
 
 <Layout
@@ -97,7 +117,7 @@ const breadcrumbSchema = {
 	ogType="article"
 	articleDate={post.date}
 	articleModified={post.modified}
-	jsonLd={[articleSchema, breadcrumbSchema]}
+	jsonLd={[articleSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])]}
 >
 	<Post post={post} categories={categories} contentHtml={contentHtml} featuredMedia={featuredMedia} prevPost={prevPost} nextPost={nextPost} />
 </Layout>

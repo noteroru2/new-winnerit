@@ -25,7 +25,8 @@ export type WPCategory = {
 	count?: number;
 };
 
-export const WP_BASE = 'https://wp.winnerit.in.th';
+const env = (import.meta.env ?? {}) as any;
+export const WP_BASE = String(env.WP_BASE_URL ?? 'https://wp.winnerit.in.th');
 
 function wpUrl(path: string) {
 	return new URL(path, WP_BASE).toString();

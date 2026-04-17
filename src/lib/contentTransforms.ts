@@ -244,6 +244,46 @@ export async function autoGenerateImageAlts(html: string, postTitle: string) {
 	return root.toString();
 }
 
+export function extractFaqFromHtml(html: string): { question: string; answer: string }[] {
+	const root = parse(html, { comment: false });
+	const faqs: { question: string; answer: string }[] = [];
+
+	for (const details of root.querySelectorAll('details')) {
+		const summary = details.querySelector('summary');
+		if (!summary) continue;
+		const question = summary.text.trim();
+		if (!question) continue;
+
+		const answerParts: string[] = [];
+		for (const child of details.childNodes) {
+			if (child === summary) continue;
+			const text = (child as any).text?.trim();
+			if (text) answerParts.push(text);
+		}
+		const answer = answerParts.join(' ').trim();
+		if (answer) faqs.push({ question, answer: answer.slice(0, 500) });
+	}
+
+	if (!faqs.length) {
+		const headings = root.querySelectorAll('h2, h3');
+		for (const h of headings) {
+			const q = h.text.trim();
+			if (!q || !q.includes('?') && !q.includes('ไหม') && !q.includes('อย่างไร') && !q.includes('อะไร') && !q.includes('เท่าไหร่') && !q.includes('ทำไม')) continue;
+			let answer = '';
+			let sibling = h.nextElementSibling;
+			while (sibling && !['H2', 'H3'].includes(sibling.tagName)) {
+				const t = sibling.text?.trim();
+				if (t) { answer += (answer ? ' ' : '') + t; }
+				sibling = sibling.nextElementSibling;
+			}
+			if (answer.length > 20) faqs.push({ question: q, answer: answer.slice(0, 500) });
+			if (faqs.length >= 5) break;
+		}
+	}
+
+	return faqs;
+}
+
 export async function transformPostHtml(html: string, postTitle: string) {
 	const normalizedAssets = normalizeWpHtmlAssets(html);
 	const withLinks = autoLinkKeywords(normalizedAssets);

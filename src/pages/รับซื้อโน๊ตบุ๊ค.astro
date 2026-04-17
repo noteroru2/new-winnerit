@@ -22,9 +22,16 @@ const breadcrumbSchema = {
 		{ '@type': 'ListItem', position: 2, name: 'รับซื้อโน๊ตบุ๊ค', item: 'https://winnerit.in.th/รับซื้อโน๊ตบุ๊ค' },
 	],
 };
+
+const speakableSchema = {
+	'@type': 'WebPage',
+	name: 'รับซื้อโน๊ตบุ๊คมือสอง ราคาดี ทุกยี่ห้อ ทุกรุ่น — Winner IT',
+	speakable: { '@type': 'SpeakableSpecification', cssSelector: ['.hero h1', '.lead', '.faq-sec summary'] },
+	url: 'https://winnerit.in.th/รับซื้อโน๊ตบุ๊ค',
+};
 ---
 
-<Layout title="รับซื้อโน๊ตบุ๊คมือสอง ราคาดี ทุกยี่ห้อ ทุกรุ่น — Winner IT" description="รับซื้อโน๊ตบุ๊คมือสอง ทุกยี่ห้อ ทุกรุ่น ประเมินราคาฟรี จ่ายเงินทันที ติดต่อ Line @WEBUY บริการรับซื้อโน๊ตบุ๊คทั่วประเทศไทย" jsonLd={[faqSchema, breadcrumbSchema]}>
+<Layout title="รับซื้อโน๊ตบุ๊คมือสอง ราคาดี ทุกยี่ห้อ ทุกรุ่น — Winner IT" description="รับซื้อโน๊ตบุ๊คมือสอง ทุกยี่ห้อ ทุกรุ่น ประเมินราคาฟรี จ่ายเงินทันที ติดต่อ Line @WEBUY บริการรับซื้อโน๊ตบุ๊คทั่วประเทศไทย" jsonLd={[faqSchema, breadcrumbSchema, speakableSchema]}>
 	<!-- Hero Section -->
 	<section class="hero">
 		<div class="hero-bg"></div>

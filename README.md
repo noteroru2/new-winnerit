@@ -46,3 +46,10 @@ src/
 | `npm run dev`     | Start dev server at `localhost:4321`         |
 | `npm run build`   | Build production site to `./dist/`           |
 | `npm run preview` | Preview production build locally             |
+
+## Environment Variables (Coolify / Deploy)
+
+- `PUBLIC_SITE_URL` (recommended): Base URL used for canonical URLs + sitemap.
+  - Example: `https://winnerit.in.th`
+- `WP_BASE_URL` (recommended): WordPress base URL used during build to fetch posts.
+  - Example: `https://wp.winnerit.in.th`
