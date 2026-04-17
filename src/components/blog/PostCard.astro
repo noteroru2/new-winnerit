@@ -1,0 +1,139 @@
+---
+import he from 'he';
+import { getMediaById, decodeSlug, type WPPost } from '../../lib/wp';
+
+const { post } = Astro.props as { post: WPPost };
+const title = he.decode(post.title.rendered);
+const featuredMedia = post.featured_media ? await getMediaById(post.featured_media) : null;
+const slugSafe = decodeSlug(post.slug);
+---
+
+<article class="card">
+	{featuredMedia?.source_url ? (
+		<a href={`/${slugSafe}`} class="thumb" aria-label={`อ่าน: ${title}`}>
+			<img src={featuredMedia.source_url} alt={featuredMedia.alt_text?.trim() || title} loading="lazy" decoding="async" />
+			<div class="thumb-overlay"></div>
+		</a>
+	) : (
+		<a href={`/${slugSafe}`} class="thumb thumb-empty" aria-label={`อ่าน: ${title}`}>
+			<div class="ph">
+				<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(249,115,22,.2)" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="3"/><circle cx="8.5" cy="8.5" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
+			</div>
+		</a>
+	)}
+	<div class="body">
+		<time datetime={post.date}>
+			{new Date(post.date).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' })}
+		</time>
+		<h3><a href={`/${slugSafe}`}>{title}</a></h3>
+		<div class="excerpt" set:html={post.excerpt.rendered} />
+		<a class="read-more" href={`/${slugSafe}`}>
+			อ่านต่อ
+			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+		</a>
+	</div>
+</article>
+
+<style>
+	.card {
+		background: #fff;
+		border: 1px solid var(--border, #ebe4db);
+		border-radius: 20px;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		box-shadow: var(--shadow-card, 0 1px 3px rgba(26,18,7,.05), 0 8px 28px rgba(26,18,7,.03));
+		transition: all .35s var(--ease-out, cubic-bezier(0.16,1,0.3,1));
+	}
+	.card:hover {
+		box-shadow: var(--shadow-hover, 0 4px 12px rgba(26,18,7,.07), 0 16px 48px rgba(26,18,7,.05));
+		transform: translateY(-6px);
+	}
+
+	.thumb {
+		display: block;
+		aspect-ratio: 16 / 10;
+		overflow: hidden;
+		background: var(--bg-alt, #faf7f4);
+		position: relative;
+	}
+	.thumb img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform .5s var(--ease-out, cubic-bezier(0.16,1,0.3,1));
+	}
+	.thumb-overlay {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,.04) 100%);
+		pointer-events: none;
+	}
+	.card:hover .thumb img {
+		transform: scale(1.06);
+	}
+	.thumb-empty {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-decoration: none;
+	}
+	.ph {
+		opacity: .6;
+	}
+
+	.body {
+		padding: 22px 24px 26px;
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+	}
+	time {
+		font-size: 13px;
+		color: var(--muted, #7a6e5e);
+		font-weight: 500;
+		letter-spacing: .01em;
+	}
+	h3 {
+		margin: 10px 0 0;
+		font-size: 17px;
+		font-weight: 700;
+		line-height: 1.45;
+	}
+	h3 a {
+		text-decoration: none;
+		color: var(--text, #1a1207);
+		transition: color .2s;
+	}
+	h3 a:hover {
+		color: var(--accent-hover, #ea580c);
+	}
+	.excerpt {
+		margin-top: 10px;
+		font-size: 14px;
+		color: var(--muted, #7a6e5e);
+		line-height: 1.7;
+		flex: 1;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+	.excerpt :global(p) { margin: 0; }
+
+	.read-more {
+		margin-top: 18px;
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 14px;
+		font-weight: 700;
+		color: var(--accent, #F97316);
+		text-decoration: none;
+		transition: all .2s var(--ease-out, cubic-bezier(0.16,1,0.3,1));
+	}
+	.read-more:hover {
+		color: var(--accent-hover, #ea580c);
+		gap: 10px;
+	}
+</style>

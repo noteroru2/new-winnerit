@@ -1,0 +1,257 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const faqSchema = {
+	'@type': 'FAQPage',
+	mainEntity: [
+		{ '@type': 'Question', name: 'รับซื้อ iPhone รุ่นเก่ามากๆ เช่น iPhone 8, iPhone X ไหม?', acceptedAnswer: { '@type': 'Answer', text: 'รับซื้อครับ เรารับซื้อ iPhone ทุกรุ่น ตั้งแต่รุ่นเก่าอย่าง iPhone 8, iPhone X ไปจนถึงรุ่นล่าสุด ราคารับซื้อจะขึ้นอยู่กับรุ่น ความจุ และสภาพเครื่อง รุ่นเก่าอาจได้ราคาไม่สูงมาก แต่ก็ยังดีกว่าเก็บไว้โดยไม่ได้ใช้งาน' } },
+		{ '@type': 'Question', name: 'ต้องเตรียมอะไรบ้างก่อนขาย iPhone?', acceptedAnswer: { '@type': 'Answer', text: 'สำรองข้อมูลสำคัญผ่าน iCloud หรือ iTunes จากนั้น Sign out จาก Apple ID ปิด Find My iPhone แล้วทำ Erase All Content and Settings เพื่อรีเซ็ตเครื่อง สุดท้ายถอด SIM Card ออก หากมีกล่องและอุปกรณ์เสริมก็เตรียมมาด้วยเพื่อให้ได้ราคาที่ดีที่สุด' } },
+		{ '@type': 'Question', name: 'ประเมินราคา iPhone ใช้เวลานานแค่ไหน?', acceptedAnswer: { '@type': 'Answer', text: 'เพียงส่งรูปถ่ายเครื่องและข้อมูล (รุ่น ความจุ Battery Health) มาทาง Line ทีมงานจะแจ้งราคาประเมินกลับภายใน 15-30 นาทีในเวลาทำการ นอกเวลาทำการจะตอบกลับโดยเร็วที่สุด' } },
+		{ '@type': 'Question', name: 'iPhone จอแตกหรือเครื่องเสีย รับซื้อราคาเท่าไหร่?', acceptedAnswer: { '@type': 'Answer', text: 'รับซื้อ iPhone ทุกสภาพ ทั้งจอแตก จอเป็นเส้น เครื่องเปิดไม่ติด ลำโพงเสีย Face ID ไม่ทำงาน ราคารับซื้อขึ้นอยู่กับรุ่น สภาพความเสียหาย และอะไหล่ที่ยังใช้งานได้ ส่งรูปมาประเมินได้เลยครับ' } },
+		{ '@type': 'Question', name: 'โอนเงินช่องทางไหนบ้าง? รอนานไหม?', acceptedAnswer: { '@type': 'Answer', text: 'เราโอนเงินให้ทันทีหลังตรวจเช็กเครื่องเรียบร้อย ผ่านโอนแบงก์ทุกธนาคาร พร้อมเพย์ หรือช่องทางที่คุณสะดวก ไม่ต้องรอนาน ตรวจเช็กเสร็จก็โอนเลย' } },
+		{ '@type': 'Question', name: 'อยู่ต่างจังหวัด ขาย iPhone ได้ไหม?', acceptedAnswer: { '@type': 'Answer', text: 'ได้ครับ เรารับซื้อจากทั่วประเทศ ลูกค้าต่างจังหวัดสามารถส่ง iPhone มาทางขนส่ง เช่น Kerry, Flash Express, EMS เมื่อได้รับเครื่องตรวจเช็กเรียบร้อยก็โอนเงินให้ทันที ทีมงานจะแนะนำวิธีแพ็คเครื่องให้ปลอดภัยระหว่างจัดส่ง' } },
+		{ '@type': 'Question', name: 'iPhone เครื่องนอก เครื่องหิ้ว รับซื้อไหม?', acceptedAnswer: { '@type': 'Answer', text: 'รับซื้อครับ ทั้งเครื่องศูนย์ไทยและเครื่องนำเข้าจากต่างประเทศ แต่เครื่องศูนย์ไทยจะได้ราคาสูงกว่าเล็กน้อย เพราะเป็นที่ต้องการในตลาดมือสองมากกว่า' } },
+		{ '@type': 'Question', name: 'Battery Health เท่าไหร่ถึงจะได้ราคาดี?', acceptedAnswer: { '@type': 'Answer', text: 'iPhone ที่ Battery Health 90% ขึ้นไปจะได้ราคาดีที่สุด ถ้าอยู่ในช่วง 85-89% ราคาจะลดลงเล็กน้อย ต่ำกว่า 80% จะมีผลต่อราคาค่อนข้างมาก แต่เราก็ยังรับซื้อทุกสภาพแบตเตอรี่ครับ' } },
+	],
+};
+
+const breadcrumbSchema = {
+	'@type': 'BreadcrumbList',
+	itemListElement: [
+		{ '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: 'https://winnerit.in.th' },
+		{ '@type': 'ListItem', position: 2, name: 'รับซื้อ iPhone', item: 'https://winnerit.in.th/รับซื้อiphone' },
+	],
+};
+---
+
+<Layout title="รับซื้อ iPhone มือสอง ทุกรุ่น ราคาดี — Winner IT" description="รับซื้อ iPhone มือสอง ทุกรุ่น ทุกความจุ ราคาสูงกว่าตลาด ประเมินฟรี โอนเงินไว ติดต่อ Line @WEBUY บริการรับซื้อ iPhone SE, 11, 12, 13, 14, 15, 16 ทุก Pro Max Plus" jsonLd={[faqSchema, breadcrumbSchema]}>
+	<section class="hero">
+		<div class="hero-bg"></div>
+		<div class="container hero-inner">
+			<span class="pill">📱 รับซื้อ iPhone</span>
+			<h1>รับซื้อ iPhone มือสอง <span class="accent">ราคาดี ทุกรุ่น ทุกความจุ</span></h1>
+			<p class="lead">ไม่ว่าจะเป็น iPhone SE, iPhone 11 ถึง iPhone 16 ทุก Pro, Max, Plus เราให้ราคาสูง ประเมินฟรี โอนเงินทันที</p>
+			<div class="btns">
+				<a class="btn btn-line btn-big" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener">
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 5.83 2 10.44c0 4.17 3.7 7.66 8.69 8.32.34.07.8.23.91.52.1.27.07.68.03.95l-.15.88c-.04.25-.2.99.87.54s5.78-3.4 7.88-5.82C22.08 13.79 22 12.16 22 10.44 22 5.83 17.52 2 12 2z"/></svg>
+					แอดไลน์ @WEBUY
+				</a>
+				<a class="btn btn-big" href="/contact">ติดต่อประเมินราคา</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="article-sec">
+		<div class="container article-wrap prose">
+			<img src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=800&q=80" alt="รับซื้อ iPhone มือสอง ทุกรุ่น ราคาดี" width="800" height="450" loading="eager" />
+
+			<h2>ทำไมต้องขาย iPhone กับ Winner IT</h2>
+			<p>ในยุคที่เทคโนโลยีสมาร์ตโฟนพัฒนาอย่างรวดเร็ว Apple ออก iPhone รุ่นใหม่ทุกปี ทำให้ผู้ใช้หลายคนต้องการอัปเกรดเครื่องเพื่อให้ได้ฟีเจอร์ใหม่ล่าสุด ไม่ว่าจะเป็นกล้องที่ดีขึ้น ชิปที่เร็วขึ้น หรือหน้าจอที่สวยขึ้น แต่ปัญหาที่หลายคนต้องเจอคือ จะเอา iPhone เก่าไปขายที่ไหนดี ขายอย่างไรให้ได้ราคาสูงที่สุด และจะขายอย่างไรให้ปลอดภัยไม่ถูกหลอก Winner IT คือคำตอบของปัญหาเหล่านี้ทั้งหมด เราเป็นผู้เชี่ยวชาญด้านการรับซื้อ iPhone มือสอง ที่ให้บริการมาอย่างยาวนาน มีลูกค้าเชื่อมั่นและไว้วางใจในบริการของเรานับพันราย</p>
+			<p>การขาย iPhone กับ Winner IT มีข้อดีมากมายที่แตกต่างจากการขายผ่านช่องทางอื่น ประการแรก เราให้ราคารับซื้อ iPhone ที่สูงกว่าตลาดทั่วไป เพราะเรามีช่องทางการจำหน่ายที่หลากหลาย ทำให้สามารถรับซื้อในราคาที่ดีกว่าร้านค้าทั่วไปได้ ประการที่สอง กระบวนการประเมินราคาของเราโปร่งใสและยุติธรรม เราจะแจ้งรายละเอียดการประเมินทุกขั้นตอนให้คุณทราบ ว่าราคาขึ้นอยู่กับปัจจัยอะไรบ้าง ไม่มีการกดราคาหรือหลอกลวง ประการที่สาม เราโอนเงินให้ทันทีหลังตกลงราคา ไม่ต้องรอนาน ไม่ต้องลุ้นว่าจะได้เงินเมื่อไหร่</p>
+			<p>นอกจากนี้ Winner IT ยังให้บริการที่สะดวกสบาย ไม่จำเป็นต้องเดินทางมาที่ร้าน สามารถส่งรูปถ่ายและข้อมูลเครื่องผ่าน Line เพื่อประเมินราคาเบื้องต้นได้ทันที หากพอใจในราคาก็นัดส่งเครื่องได้เลย ทีมงานของเราพร้อมให้บริการทุกวัน ตอบไว ประเมินไว โอนไว ทำให้คุณไม่เสียเวลาไปกับการรอคอย เรายังมีทีมช่างผู้เชี่ยวชาญที่สามารถตรวจเช็กสภาพเครื่องได้อย่างแม่นยำ ทำให้การประเมินราคาถูกต้องและเป็นธรรม คุณจึงมั่นใจได้ว่าจะได้ราคาที่ดีที่สุดเมื่อขาย iPhone กับเรา</p>
+
+			<h2>iPhone รุ่นไหนที่รับซื้อบ้าง</h2>
+			<p>Winner IT รับซื้อ iPhone ทุกรุ่นที่วางจำหน่ายในประเทศไทย ตั้งแต่รุ่นเก่าไปจนถึงรุ่นล่าสุด ครอบคลุมทุกตระกูลและทุกความจุ ไม่ว่า iPhone ของคุณจะเป็นรุ่นไหน สภาพเป็นอย่างไร เราพร้อมรับซื้อและให้ราคาที่เหมาะสม</p>
+			<p><strong>iPhone SE Series</strong> — รับซื้อ iPhone SE ทุกเจเนอเรชัน ตั้งแต่ iPhone SE (1st generation) ไปจนถึง iPhone SE (3rd generation) และ iPhone SE 4 รุ่นล่าสุด แม้จะเป็นรุ่นที่ราคาไม่สูงมาก แต่เรายังคงให้ราคาที่เป็นธรรมตามสภาพเครื่องจริง</p>
+			<p><strong>iPhone 11 Series</strong> — รับซื้อ iPhone 11, iPhone 11 Pro, iPhone 11 Pro Max ทุกความจุ ตั้งแต่ 64GB, 128GB, 256GB ไปจนถึง 512GB เป็นรุ่นที่ยังมีความต้องการในตลาดมือสองสูง เพราะยังรองรับ iOS เวอร์ชันล่าสุดและมีประสิทธิภาพเพียงพอสำหรับการใช้งานทั่วไป</p>
+			<p><strong>iPhone 12 Series</strong> — รับซื้อ iPhone 12 mini, iPhone 12, iPhone 12 Pro, iPhone 12 Pro Max ทุกสี ทุกความจุ เป็นรุ่นแรกที่รองรับ 5G และมีดีไซน์ขอบเหลี่ยมที่หลายคนชื่นชอบ ราคารับซื้อยังอยู่ในเกณฑ์ดี</p>
+			<p><strong>iPhone 13 Series</strong> — รับซื้อ iPhone 13 mini, iPhone 13, iPhone 13 Pro, iPhone 13 Pro Max ครบทุกรุ่น รุ่นนี้มีแบตเตอรี่ที่อึดขึ้นและกล้องที่ดีขึ้น ทำให้ยังคงเป็นที่ต้องการในตลาดมือสอง ราคารับซื้อจึงยังสูงอยู่</p>
+			<p><strong>iPhone 14 Series</strong> — รับซื้อ iPhone 14, iPhone 14 Plus, iPhone 14 Pro, iPhone 14 Pro Max ทุกความจุตั้งแต่ 128GB ถึง 1TB สำหรับรุ่น Pro เป็นรุ่นแรกที่ใช้ Dynamic Island และกล้อง 48MP ทำให้มีมูลค่าในตลาดมือสองสูง</p>
+			<p><strong>iPhone 15 Series</strong> — รับซื้อ iPhone 15, iPhone 15 Plus, iPhone 15 Pro, iPhone 15 Pro Max ทุกสี ทุกความจุ เป็นรุ่นแรกที่เปลี่ยนมาใช้พอร์ต USB-C ทำให้ได้รับความนิยมสูง ราคารับซื้อยังคงน่าสนใจ</p>
+			<p><strong>iPhone 16 Series</strong> — รับซื้อ iPhone 16, iPhone 16 Plus, iPhone 16 Pro, iPhone 16 Pro Max เป็นรุ่นล่าสุดที่ราคารับซื้อสูงที่สุด หากคุณเพิ่งซื้อมาแต่ต้องการเปลี่ยนรุ่น หรือได้มาเป็นของขวัญแต่ไม่ต้องการใช้ เรารับซื้อให้ราคาดีมาก</p>
+
+			<img src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800&q=80" alt="iPhone หลายรุ่นพร้อมขาย" width="800" height="450" loading="lazy" />
+
+			<h2>ปัจจัยที่มีผลต่อราคารับซื้อ iPhone</h2>
+			<p>ราคารับซื้อ iPhone มือสอง ไม่ได้ขึ้นอยู่กับรุ่นเพียงอย่างเดียว แต่ยังมีปัจจัยอื่นอีกหลายประการที่ส่งผลต่อราคาอย่างมาก การทำความเข้าใจปัจจัยเหล่านี้จะช่วยให้คุณประเมินราคา iPhone ของตัวเองได้ใกล้เคียงความจริงมากขึ้น และเตรียมตัวก่อนขายได้อย่างเหมาะสม</p>
+			<p><strong>รุ่นและเจเนอเรชัน (Model)</strong> — เป็นปัจจัยหลักที่กำหนดราคาเริ่มต้น iPhone รุ่นใหม่กว่าย่อมมีราคาสูงกว่า และรุ่น Pro หรือ Pro Max จะมีราคาสูงกว่ารุ่นธรรมดาเสมอ เนื่องจากมีสเปกและฟีเจอร์ที่ดีกว่า เช่น กล้องเทเลโฟโต ตัวเครื่องสแตนเลสสตีลหรือไทเทเนียม และหน้าจอ ProMotion 120Hz</p>
+			<p><strong>ความจุ (Storage)</strong> — iPhone มีให้เลือกหลายความจุ ตั้งแต่ 64GB, 128GB, 256GB, 512GB ไปจนถึง 1TB สำหรับรุ่น Pro ยิ่งความจุสูง ราคารับซื้อก็ยิ่งสูงตาม เพราะ iPhone ไม่สามารถเพิ่มหน่วยความจำภายนอกได้ ทำให้ความจุเป็นปัจจัยสำคัญมากในการกำหนดราคา iPhone 256GB จะมีราคาสูงกว่า 128GB อย่างเห็นได้ชัด และ iPhone 1TB จะมีราคาสูงกว่ารุ่นอื่นมากเนื่องจากหายากในตลาดมือสอง</p>
+			<p><strong>สี (Color)</strong> — สีของ iPhone มีผลต่อราคารับซื้อเล็กน้อย โดยทั่วไปสีที่ได้รับความนิยมสูง เช่น สีดำ สีขาว หรือสี Natural Titanium จะมีราคาสูงกว่าสีที่คนนิยมน้อยเล็กน้อย แต่ส่วนต่างไม่มากนัก</p>
+			<p><strong>สุขภาพแบตเตอรี่ (Battery Health)</strong> — นี่คือปัจจัยสำคัญมากที่หลายคนมองข้าม iPhone ที่มี Battery Health สูง เช่น 90% ขึ้นไป จะมีราคาสูงกว่า iPhone ที่แบตเตอรี่เสื่อมมาก เช่น ต่ำกว่า 80% อย่างเห็นได้ชัด เพราะการเปลี่ยนแบตเตอรี่ iPhone มีค่าใช้จ่ายค่อนข้างสูง โดยเฉพาะรุ่นใหม่ๆ ที่ต้องเปลี่ยนผ่านศูนย์บริการ Apple เท่านั้น</p>
+			<p><strong>สภาพหน้าจอ (Screen Condition)</strong> — หน้าจอ iPhone เป็นส่วนที่มีค่าใช้จ่ายในการซ่อมสูงที่สุด iPhone ที่หน้าจอสมบูรณ์ไม่มีรอยขีดข่วน จะมีราคาสูงกว่า iPhone ที่มีรอยขีดข่วนเล็กน้อย และสูงกว่ามากเมื่อเทียบกับ iPhone ที่จอแตกหรือจอเป็นเส้น การติดฟิล์มกระจกนิรภัยตั้งแต่แรกจะช่วยรักษาสภาพหน้าจอให้สมบูรณ์เมื่อถึงเวลาขาย</p>
+			<p><strong>สถานะ iCloud / Activation Lock</strong> — iPhone ที่ยังล็อก iCloud หรือเปิด Find My iPhone อยู่จะไม่สามารถรับซื้อได้ในราคาปกติ หรืออาจไม่สามารถรับซื้อได้เลยหากไม่สามารถปลดล็อกได้ ดังนั้นก่อนขายต้อง Sign out จาก iCloud และปิด Find My iPhone ให้เรียบร้อย เราจะอธิบายวิธีการในหัวข้อถัดไป</p>
+			<p><strong>อุปกรณ์เสริมและกล่อง (Accessories &amp; Box)</strong> — iPhone ที่มีกล่องครบชุดพร้อมอุปกรณ์เสริม เช่น สาย USB-C หรือ Lightning, หัวชาร์จ (สำหรับรุ่นเก่าที่แถมมา) จะมีราคาสูงกว่า iPhone ที่ไม่มีกล่องและไม่มีอุปกรณ์เสริม เพราะผู้ซื้อมือสองมักต้องการสินค้าที่ครบชุด ดูน่าเชื่อถือ และมั่นใจได้ว่าเป็นของแท้</p>
+			<p><strong>สภาพตัวเครื่อง (Body Condition)</strong> — รอยบุบ รอยขีดข่วนบนตัวเครื่อง หรือกรอบขอบที่มีรอยกระแทก ล้วนส่งผลต่อราคา iPhone ที่สภาพสวยเหมือนใหม่ สภาพ Mint Condition จะได้ราคาสูงสุด ส่วน iPhone ที่มีรอยใช้งานบ้างแต่ไม่มาก ก็ยังได้ราคาดี เพียงแต่ลดลงเล็กน้อยจากราคาสูงสุด</p>
+
+			<h2>วิธีเช็กสภาพ iPhone ก่อนขาย</h2>
+			<p>ก่อนที่คุณจะติดต่อขาย iPhone กับเรา การตรวจเช็กสภาพเครื่องเบื้องต้นจะช่วยให้คุณทราบข้อมูลที่จำเป็นและสามารถแจ้งทีมงานได้อย่างถูกต้อง ทำให้การประเมินราคาแม่นยำและรวดเร็วมากขึ้น</p>
+			<p><strong>ตรวจเช็กข้อมูลเครื่องผ่าน Settings</strong> — เข้าไปที่ Settings (การตั้งค่า) > General (ทั่วไป) > About (เกี่ยวกับ) คุณจะเห็นข้อมูลสำคัญของเครื่อง ได้แก่ Model Name (ชื่อรุ่น) เช่น iPhone 15 Pro Max, Model Number (หมายเลขรุ่น), Serial Number (หมายเลขประจำเครื่อง), Total Capacity (ความจุทั้งหมด) เช่น 256 GB และ IMEI จดข้อมูลเหล่านี้ไว้เพื่อแจ้งทีมงาน หรือจะแคปหน้าจอส่งมาก็ได้</p>
+			<p><strong>ตรวจเช็ก Battery Health (สุขภาพแบตเตอรี่)</strong> — เข้าที่ Settings > Battery > Battery Health &amp; Charging สำหรับ iOS 16.1 ขึ้นไป หรือ Settings > Battery > Battery Health สำหรับ iOS เวอร์ชันก่อนหน้า ดูที่ Maximum Capacity ซึ่งจะแสดงเป็นเปอร์เซ็นต์ เช่น 92% หมายความว่าแบตเตอรี่ยังคงความจุได้ 92% ของตอนเป็นเครื่องใหม่ ตัวเลขยิ่งสูงยิ่งดี ราคารับซื้อก็จะสูงตาม นอกจากนี้ ยังดูได้ว่ามี Cycle Count (จำนวนรอบการชาร์จ) เท่าไหร่ ยิ่งน้อยยิ่งดี</p>
+			<p><strong>ตรวจเช็ก IMEI</strong> — IMEI คือหมายเลขประจำเครื่องที่ไม่ซ้ำกัน ใช้ตรวจสอบได้ว่าเครื่องเป็นเครื่องศูนย์ไทยหรือนำเข้า สถานะการรับประกัน และสถานะการถูกบล็อกหรือไม่ คุณสามารถดู IMEI ได้จากหน้า About ที่กล่าวไปข้างต้น หรือกด *#06# ในหน้าโทรศัพท์ก็ได้ การตรวจเช็ก IMEI ก่อนขายจะช่วยให้มั่นใจว่าเครื่องของคุณไม่มีปัญหาใดๆ และสามารถรับซื้อได้ตามปกติ</p>
+			<p><strong>ตรวจสอบฟังก์ชันการทำงาน</strong> — ลองทดสอบฟังก์ชันพื้นฐานของ iPhone ได้แก่ ลำโพงและไมโครโฟน กล้องหน้าและกล้องหลัง Face ID หรือ Touch ID ปุ่มกดทุกปุ่มรวมถึงปุ่ม Action Button (สำหรับ iPhone 15 Pro ขึ้นไป) หน้าจอสัมผัสทุกจุด Wi-Fi และ Bluetooth พอร์ตชาร์จ และการสั่น (Haptic) หากมีฟังก์ชันใดที่ไม่ทำงาน ควรแจ้งทีมงานล่วงหน้า เพื่อให้การประเมินราคาตรงกับสภาพจริง</p>
+
+			<img src="https://images.unsplash.com/photo-1605236453806-6ff36851218e?w=800&q=80" alt="ตรวจเช็กสภาพ iPhone ก่อนประเมินราคา" width="800" height="450" loading="lazy" />
+
+			<h2>วิธีเตรียม iPhone ก่อนขาย</h2>
+			<p>การเตรียม iPhone ก่อนขายเป็นขั้นตอนที่สำคัญมาก ไม่เพียงแต่เพื่อความปลอดภัยของข้อมูลส่วนตัว แต่ยังช่วยให้กระบวนการขายราบรื่นและรวดเร็วมากขึ้น หากไม่ได้เตรียมเครื่องให้พร้อม อาจทำให้เสียเวลาทั้งสองฝ่ายและอาจส่งผลต่อราคารับซื้อด้วย</p>
+			<p><strong>สำรองข้อมูล (Backup)</strong> — ก่อนอื่นต้องสำรองข้อมูลทั้งหมดบน iPhone เพื่อไม่ให้ข้อมูลสำคัญสูญหาย คุณสามารถสำรองข้อมูลผ่าน iCloud ได้โดยเข้าที่ Settings > [ชื่อของคุณ] > iCloud > iCloud Backup แล้วกด Back Up Now หรือจะสำรองผ่านคอมพิวเตอร์โดยเชื่อมต่อ iPhone กับ Mac หรือ PC แล้วใช้ Finder (macOS Catalina ขึ้นไป) หรือ iTunes (Windows หรือ macOS เวอร์ชันเก่า) ในการสำรองข้อมูลก็ได้ แนะนำให้สำรองข้อมูลทั้งสองทาง เพื่อความมั่นใจ</p>
+			<p><strong>ปิด Find My iPhone</strong> — นี่คือขั้นตอนที่สำคัญที่สุด หาก Find My iPhone ยังเปิดอยู่ ผู้ซื้อจะไม่สามารถตั้งค่าเครื่องใหม่ได้ และเครื่องจะถูกล็อกด้วย Activation Lock เข้าที่ Settings > [ชื่อของคุณ] > Find My > Find My iPhone แล้วปิด กรอกรหัสผ่าน Apple ID เพื่อยืนยัน เท่านี้ก็เรียบร้อย</p>
+			<p><strong>Sign out จาก Apple ID / iCloud</strong> — เข้าที่ Settings > [ชื่อของคุณ] เลื่อนลงสุดแล้วกด Sign Out กรอกรหัสผ่าน Apple ID เพื่อยืนยัน ระบบจะถามว่าต้องการเก็บสำเนาข้อมูลไว้บนเครื่องหรือไม่ เลือกไม่เก็บก็ได้เพราะเราจะลบข้อมูลทั้งหมดในขั้นตอนถัดไปอยู่แล้ว การ Sign out จาก Apple ID จะช่วยปลดล็อก Activation Lock โดยอัตโนมัติ</p>
+			<p><strong>ลบข้อมูลทั้งหมด (Erase All Content and Settings)</strong> — หลังจาก Sign out แล้ว ให้เข้าที่ Settings > General > Transfer or Reset iPhone > Erase All Content and Settings กดยืนยัน เครื่องจะเริ่มกระบวนการลบข้อมูลทั้งหมดและรีเซ็ตกลับเป็นค่าโรงงาน เมื่อเสร็จแล้ว iPhone จะแสดงหน้าจอ Hello เหมือนเครื่องใหม่ เครื่องจะพร้อมสำหรับการส่งมอบ</p>
+			<p><strong>ถอด SIM Card และ eSIM</strong> — หากคุณใช้ SIM Card แบบ Physical ให้ถอดออกก่อนส่งมอบ โดยใช้เข็มจิ้ม SIM ที่อยู่ในกล่อง iPhone สำหรับ eSIM ให้เข้าที่ Settings > Cellular > [แผน eSIM ที่ต้องการลบ] แล้วกด Remove eSIM เพื่อลบ eSIM Profile ออกจากเครื่อง หรือหากทำ Erase All Content and Settings แล้ว eSIM จะถูกลบโดยอัตโนมัติ (ในกรณีที่เลือกลบ eSIM ด้วย)</p>
+
+			<h2>ขั้นตอนการขาย iPhone กับเรา</h2>
+			<p>กระบวนการขาย iPhone กับ Winner IT ถูกออกแบบมาให้ง่ายและสะดวกที่สุด คุณสามารถทำได้จากที่บ้านโดยไม่ต้องเดินทางมาที่ร้าน มีเพียง 5 ขั้นตอนง่ายๆ ดังนี้</p>
+			<p><strong>ขั้นตอนที่ 1: แอดไลน์ @WEBUY</strong> — เพิ่มเพื่อนผ่าน Line Official Account ของเราที่ @WEBUY หรือคลิกลิงก์ <a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener">line.me/R/ti/p/@webuy</a> ได้เลย ทีมงานจะตอบแชทรวดเร็วทั้งในเวลาและนอกเวลาทำการ</p>
+			<p><strong>ขั้นตอนที่ 2: ส่งรูปถ่ายและข้อมูลเครื่อง</strong> — ถ่ายรูป iPhone ของคุณทั้งด้านหน้า ด้านหลัง และด้านข้าง พร้อมแคปหน้าจอข้อมูลเครื่องจาก Settings > General > About และหน้า Battery Health ส่งมาทาง Line ยิ่งให้ข้อมูลละเอียดมากเท่าไหร่ การประเมินราคาก็จะยิ่งแม่นยำมากเท่านั้น</p>
+			<p><strong>ขั้นตอนที่ 3: รับราคาประเมิน</strong> — ทีมงานจะตรวจสอบข้อมูลและรูปถ่ายที่ส่งมา แล้วแจ้งราคาประเมินกลับภายใน 15-30 นาที (ในเวลาทำการ) ราคาที่แจ้งเป็นราคาประเมินเบื้องต้น ราคาจริงอาจปรับเพิ่มหรือลดเล็กน้อยหลังตรวจสอบเครื่องจริง</p>
+			<p><strong>ขั้นตอนที่ 4: ตกลงราคาและนัดส่งเครื่อง</strong> — หากพอใจในราคาที่ประเมิน สามารถนัดส่งเครื่องได้ทันที ทั้งแบบส่งด้วยตัวเองที่จุดนัดรับ หรือส่งผ่านขนส่ง ทีมงานจะแนะนำวิธีการจัดส่งที่ปลอดภัยและสะดวกที่สุด</p>
+			<p><strong>ขั้นตอนที่ 5: ตรวจเช็กเครื่องและโอนเงิน</strong> — เมื่อได้รับเครื่องแล้ว ทีมช่างจะตรวจเช็กสภาพเครื่องจริง หากตรงกับข้อมูลที่แจ้งมา เราจะโอนเงินเข้าบัญชีของคุณทันที ผ่านโอนแบงก์ พร้อมเพย์ หรือช่องทางที่คุณสะดวก ทั้งหมดเสร็จภายในไม่กี่นาที</p>
+
+			<h2>เปรียบเทียบราคารับซื้อ iPhone แต่ละรุ่น</h2>
+			<p>ราคารับซื้อ iPhone มือสอง เปลี่ยนแปลงตามสภาวะตลาดอยู่เสมอ แต่เพื่อให้คุณมีข้อมูลเบื้องต้น เราขอสรุปแนวโน้มราคารับซื้อ iPhone แต่ละรุ่นตามลำดับ โดยราคาจริงจะขึ้นอยู่กับสภาพเครื่อง ความจุ และปัจจัยอื่นๆ ตามที่กล่าวไว้ข้างต้น</p>
+			<p>iPhone รุ่นใหม่กว่า เช่น iPhone 16 Pro Max จะมีราคารับซื้อสูงที่สุด เนื่องจากยังเป็นรุ่นล่าสุดที่มีความต้องการสูง รองลงมาคือ iPhone 15 Pro Max และ iPhone 15 Pro ตามลำดับ สำหรับรุ่นที่ไม่ใช่ Pro เช่น iPhone 16, iPhone 15 จะมีราคาต่ำกว่ารุ่น Pro ของปีเดียวกัน แต่ก็ยังถือว่าได้ราคาดี</p>
+			<p>iPhone 14 Series ยังคงมีราคารับซื้อที่น่าสนใจ โดยเฉพาะ iPhone 14 Pro Max ที่ยังเป็นที่ต้องการในตลาดมือสอง เนื่องจากเป็นรุ่นแรกที่มี Dynamic Island, กล้อง 48MP และชิป A16 Bionic ส่วน iPhone 13 Series ราคาเริ่มลดลงบ้างแต่ยังอยู่ในเกณฑ์ดี โดยเฉพาะรุ่น Pro Max ที่ยังมีความต้องการ</p>
+			<p>สำหรับ iPhone 12 Series และ iPhone 11 Series ราคารับซื้อจะต่ำกว่ารุ่นใหม่พอสมควร แต่ยังถือว่าขายได้ราคาดีกว่าการปล่อยทิ้งไว้โดยไม่ได้ใช้ iPhone SE ทุกเจเนอเรชันก็รับซื้อเช่นกัน แม้ราคาจะไม่สูงมากแต่ก็เป็นทางเลือกที่ดีกว่าการเก็บไว้เฉยๆ</p>
+			<p>ปัจจัยที่ทำให้ iPhone ได้ราคาสูงกว่าเกณฑ์เฉลี่ย ได้แก่ ความจุสูง (256GB ขึ้นไป), Battery Health สูง (90% ขึ้นไป), สภาพสวยไม่มีรอย, มีกล่องและอุปกรณ์ครบ และเป็นเครื่องศูนย์ไทย ในทางกลับกัน ปัจจัยที่ทำให้ราคาต่ำกว่าเกณฑ์ ได้แก่ ความจุน้อย (64GB), Battery Health ต่ำ (ต่ำกว่า 80%), มีรอยหรือตำหนิมาก และไม่มีกล่อง ไม่มีอุปกรณ์เสริม</p>
+			<blockquote>💡 เคล็ดลับ: ติดต่อเราเพื่อสอบถามราคารับซื้อ iPhone ของคุณได้ทันที ราคาที่แจ้งเป็นราคาปัจจุบัน ณ วันที่สอบถาม และอาจเปลี่ยนแปลงตามสภาวะตลาด ยิ่งขายเร็วยิ่งได้ราคาดี เพราะราคา iPhone มือสองมักจะลดลงเรื่อยๆ ตามเวลาที่ผ่านไป</blockquote>
+
+			<h2>เคล็ดลับเพิ่มมูลค่า iPhone ก่อนขาย</h2>
+			<p>หากคุณต้องการให้ iPhone ได้ราคารับซื้อสูงที่สุด มีเคล็ดลับหลายอย่างที่สามารถทำได้ก่อนนำมาขาย ซึ่งจะช่วยเพิ่มมูลค่าให้กับเครื่องของคุณได้อย่างมีนัยสำคัญ</p>
+			<p><strong>รักษาสภาพเครื่องตั้งแต่วันแรก</strong> — การใส่เคสกันกระแทกและติดฟิล์มกระจกนิรภัยตั้งแต่วันแรกที่ได้เครื่องมา เป็นการลงทุนที่คุ้มค่ามาก เคสและฟิล์มราคาไม่กี่ร้อยบาทสามารถรักษาสภาพ iPhone ให้สวยเหมือนใหม่ ซึ่งจะทำให้ได้ราคารับซื้อสูงขึ้นหลายพันบาท</p>
+			<p><strong>ดูแลแบตเตอรี่อย่างถูกวิธี</strong> — หลีกเลี่ยงการชาร์จข้ามคืนทุกวัน พยายามไม่ปล่อยให้แบตหมด 0% บ่อยๆ ใช้ฟีเจอร์ Optimized Battery Charging ที่ Apple มีให้ ซึ่งจะช่วยชะลอการเสื่อมของแบตเตอรี่ iPhone ที่ Battery Health ยังสูงจะได้ราคารับซื้อที่ดีกว่ามาก</p>
+			<p><strong>เก็บกล่องและอุปกรณ์ให้ครบ</strong> — หลายคนทิ้งกล่อง iPhone ไปหลังแกะเครื่อง แต่จริงๆ แล้วกล่องมีผลต่อราคารับซื้อ iPhone ที่มีกล่องครบพร้อมอุปกรณ์ เช่น สาย USB-C หรือ Lightning, SIM Ejector Tool จะได้ราคาสูงกว่าเครื่องเปล่าที่ไม่มีกล่อง</p>
+			<p><strong>ทำความสะอาดเครื่องก่อนขาย</strong> — ก่อนส่งขาย ควรทำความสะอาด iPhone ให้ดูสะอาดเรียบร้อย ใช้ผ้าไมโครไฟเบอร์เช็ดหน้าจอและตัวเครื่อง ทำความสะอาดช่องลำโพง พอร์ตชาร์จ ถอดเคสออกเช็ดทำความสะอาดทั้งเคสและตัวเครื่อง เครื่องที่สะอาดเรียบร้อยจะสร้างความประทับใจแรกที่ดี</p>
+			<p><strong>อัปเดต iOS เป็นเวอร์ชันล่าสุด</strong> — ก่อนขาย ควรอัปเดต iOS เป็นเวอร์ชันล่าสุดที่ iPhone ของคุณรองรับ เพราะจะทำให้เครื่องทำงานได้เสถียรและลดปัญหาที่อาจเกิดจากซอฟต์แวร์เวอร์ชันเก่า ซึ่งจะช่วยให้การตรวจเช็กเครื่องเป็นไปอย่างราบรื่น</p>
+			<p><strong>ขายในเวลาที่เหมาะสม</strong> — ช่วงเวลาที่เหมาะสมในการขาย iPhone มือสอง คือช่วงก่อนที่ Apple จะประกาศ iPhone รุ่นใหม่ (ประมาณเดือนกรกฎาคม-สิงหาคม) เพราะหลังจากเปิดตัวรุ่นใหม่ ราคามือสองของรุ่นเก่าจะลดลงอย่างรวดเร็ว หากคุณวางแผนจะเปลี่ยนรุ่น ควรขายก่อนที่ราคาจะตก</p>
+
+			<h2>iPhone จอแตก เครื่องเสีย รับซื้อไหม</h2>
+			<p>คำถามที่เราได้รับบ่อยมากคือ "iPhone จอแตกยังรับซื้อไหม" หรือ "iPhone เปิดไม่ติดรับซื้อไหม" คำตอบคือ รับซื้อครับ Winner IT รับซื้อ iPhone ทุกสภาพ ไม่ว่าจะจอแตก จอเป็นเส้น เครื่องเปิดไม่ติด ลำโพงเสีย กล้องเสีย Face ID ไม่ทำงาน หรือแม้แต่เครื่องที่ตกน้ำ เราก็รับซื้อ</p>
+			<p>แน่นอนว่า iPhone ที่มีปัญหาเหล่านี้จะได้ราคาต่ำกว่า iPhone สภาพดี เพราะต้องมีค่าใช้จ่ายในการซ่อมแซม แต่อย่างน้อยคุณก็ยังได้เงินกลับมาแทนที่จะเก็บเครื่องที่ไม่ได้ใช้ไว้ในลิ้นชัก iPhone จอแตกที่ทุกอย่างยังใช้งานได้ปกติจะได้ราคาสูงกว่า iPhone ที่มีปัญหาหลายอย่างพร้อมกัน</p>
+			<p>กรณีที่ iPhone มีปัญหาร้ายแรง เช่น เมนบอร์ดเสีย หรือเครื่องถูก Blacklist เราจะประเมินราคาตามมูลค่าอะไหล่ที่สามารถนำไปใช้ได้ เช่น หน้าจอ กล้อง แบตเตอรี่ เป็นต้น ดังนั้นแม้ iPhone จะเสียหนัก ก็ยังพอมีมูลค่าอยู่</p>
+			<p>สิ่งที่ต้องแจ้งทีมงานเมื่อต้องการขาย iPhone ที่เสียหรือมีปัญหา ได้แก่ อาการเสียที่เป็นอยู่ (เช่น จอแตก, ลำโพงไม่ดัง, Face ID ไม่ทำงาน), เหตุที่ทำให้เสีย (ตก, ตกน้ำ, เสียเอง), เครื่องยังเปิดได้หรือไม่, สามารถ Sign out iCloud ได้หรือไม่ ข้อมูลเหล่านี้จะช่วยให้ทีมงานประเมินราคาได้แม่นยำ</p>
+
+			<h2>พื้นที่ให้บริการรับซื้อ iPhone</h2>
+			<p>Winner IT ให้บริการรับซื้อ iPhone มือสอง ครอบคลุมพื้นที่ทั่วประเทศไทย ไม่ว่าคุณจะอยู่จังหวัดไหนก็สามารถขาย iPhone กับเราได้ เรามีช่องทางการให้บริการที่หลากหลายเพื่อรองรับลูกค้าทุกพื้นที่</p>
+			<p><strong>กรุงเทพฯ และปริมณฑล</strong> — สำหรับลูกค้าในกรุงเทพมหานครและจังหวัดปริมณฑล (นนทบุรี ปทุมธานี สมุทรปราการ นครปฐม สมุทรสาคร) สามารถนัดพบเพื่อส่งมอบเครื่องและรับเงินได้โดยตรง หรือจะส่งผ่านขนส่งก็สะดวกเช่นกัน เราให้บริการรวดเร็ว นัดหมายได้ทุกวัน</p>
+			<p><strong>ต่างจังหวัดทั่วประเทศ</strong> — สำหรับลูกค้าต่างจังหวัด สามารถส่ง iPhone มาทางขนส่ง เช่น Kerry Express, Flash Express, ไปรษณีย์ไทย EMS หรือขนส่งเอกชนอื่นๆ ทีมงานจะแนะนำวิธีแพ็คเครื่องอย่างปลอดภัย และเมื่อได้รับเครื่องตรวจเช็กเรียบร้อยก็จะโอนเงินให้ทันที ไม่ว่าจะอยู่เชียงใหม่ ขอนแก่น นครราชสีมา ภูเก็ต สุราษฎร์ธานี หรือจังหวัดอื่นๆ ก็ขายได้หมด</p>
+			<p><strong>บริการออนไลน์ตลอด 24 ชั่วโมง</strong> — คุณสามารถส่งข้อมูลเครื่องมาสอบถามราคาผ่าน Line ได้ตลอด 24 ชั่วโมง ทีมงานจะตอบกลับโดยเร็วที่สุด ทำให้คุณไม่ต้องเสียเวลาเดินทางมาที่ร้าน สะดวก รวดเร็ว และปลอดภัย</p>
+
+			<img src="https://images.unsplash.com/photo-1556656793-08538906a9f8?w=800&q=80" alt="บริการรับซื้อ iPhone ราคาสูง Winner IT" width="800" height="450" loading="lazy" />
+
+			<hr />
+
+			<h2>บริการรับซื้ออุปกรณ์อื่นๆ ของ Winner IT</h2>
+			<p>นอกจากบริการรับซื้อ iPhone แล้ว Winner IT ยังรับซื้ออุปกรณ์ IT มือสองอื่นๆ อีกมากมาย หากคุณมีอุปกรณ์ที่ไม่ได้ใช้งานแล้ว สามารถนำมาขายกับเราได้เช่นกัน เรารับซื้อ <a href="/รับซื้อโน๊ตบุ๊ค">โน๊ตบุ๊คมือสอง</a> ทุกยี่ห้อ ทุกรุ่น ทั้ง Acer, Asus, Dell, HP, Lenovo, MSI รับซื้อ <a href="/รับซื้อmacbook">MacBook มือสอง</a> ทั้ง MacBook Air และ MacBook Pro ทุกชิป ทุกปี รับซื้อ <a href="/รับซื้อคอมพิวเตอร์">คอมพิวเตอร์ตั้งโต๊ะ</a> ทั้ง PC ประกอบเองและแบรนด์เนม รับซื้อ <a href="/รับซื้อipad">iPad มือสอง</a> ทุกรุ่น ทั้ง iPad, iPad Air, iPad Pro, iPad mini และเรายังรับซื้อ <a href="/รับซื้อกล้อง">กล้องถ่ายรูป</a> ทั้งกล้อง Mirrorless กล้อง DSLR และเลนส์ทุกยี่ห้ออีกด้วย ทุกอุปกรณ์ให้ราคาสูง ประเมินฟรี โอนไว</p>
+		</div>
+	</section>
+
+	<section class="faq">
+		<div class="container">
+			<h2 class="sec-title">คำถามที่พบบ่อยเกี่ยวกับการรับซื้อ iPhone</h2>
+			<div class="faq-list">
+				<details>
+					<summary>รับซื้อ iPhone รุ่นเก่ามากๆ เช่น iPhone 8, iPhone X ไหม?</summary>
+					<p>รับซื้อครับ เรารับซื้อ iPhone ทุกรุ่น ตั้งแต่รุ่นเก่าอย่าง iPhone 8, iPhone X ไปจนถึงรุ่นล่าสุด ราคารับซื้อจะขึ้นอยู่กับรุ่น ความจุ และสภาพเครื่อง รุ่นเก่าอาจได้ราคาไม่สูงมาก แต่ก็ยังดีกว่าเก็บไว้โดยไม่ได้ใช้งาน</p>
+				</details>
+				<details>
+					<summary>ต้องเตรียมอะไรบ้างก่อนขาย iPhone?</summary>
+					<p>สำรองข้อมูลสำคัญผ่าน iCloud หรือ iTunes จากนั้น Sign out จาก Apple ID ปิด Find My iPhone แล้วทำ Erase All Content and Settings เพื่อรีเซ็ตเครื่อง สุดท้ายถอด SIM Card ออก หากมีกล่องและอุปกรณ์เสริมก็เตรียมมาด้วยเพื่อให้ได้ราคาที่ดีที่สุด</p>
+				</details>
+				<details>
+					<summary>ประเมินราคา iPhone ใช้เวลานานแค่ไหน?</summary>
+					<p>เพียงส่งรูปถ่ายเครื่องและข้อมูล (รุ่น ความจุ Battery Health) มาทาง Line ทีมงานจะแจ้งราคาประเมินกลับภายใน 15-30 นาทีในเวลาทำการ นอกเวลาทำการจะตอบกลับโดยเร็วที่สุด</p>
+				</details>
+				<details>
+					<summary>iPhone จอแตกหรือเครื่องเสีย รับซื้อราคาเท่าไหร่?</summary>
+					<p>รับซื้อ iPhone ทุกสภาพ ทั้งจอแตก จอเป็นเส้น เครื่องเปิดไม่ติด ลำโพงเสีย Face ID ไม่ทำงาน ราคารับซื้อขึ้นอยู่กับรุ่น สภาพความเสียหาย และอะไหล่ที่ยังใช้งานได้ ส่งรูปมาประเมินได้เลยครับ</p>
+				</details>
+				<details>
+					<summary>โอนเงินช่องทางไหนบ้าง? รอนานไหม?</summary>
+					<p>เราโอนเงินให้ทันทีหลังตรวจเช็กเครื่องเรียบร้อย ผ่านโอนแบงก์ทุกธนาคาร พร้อมเพย์ หรือช่องทางที่คุณสะดวก ไม่ต้องรอนาน ตรวจเช็กเสร็จก็โอนเลย</p>
+				</details>
+				<details>
+					<summary>อยู่ต่างจังหวัด ขาย iPhone ได้ไหม?</summary>
+					<p>ได้ครับ เรารับซื้อจากทั่วประเทศ ลูกค้าต่างจังหวัดสามารถส่ง iPhone มาทางขนส่ง เช่น Kerry, Flash Express, EMS เมื่อได้รับเครื่องตรวจเช็กเรียบร้อยก็โอนเงินให้ทันที ทีมงานจะแนะนำวิธีแพ็คเครื่องให้ปลอดภัยระหว่างจัดส่ง</p>
+				</details>
+				<details>
+					<summary>iPhone เครื่องนอก เครื่องหิ้ว รับซื้อไหม?</summary>
+					<p>รับซื้อครับ ทั้งเครื่องศูนย์ไทยและเครื่องนำเข้าจากต่างประเทศ แต่เครื่องศูนย์ไทยจะได้ราคาสูงกว่าเล็กน้อย เพราะเป็นที่ต้องการในตลาดมือสองมากกว่า</p>
+				</details>
+				<details>
+					<summary>Battery Health เท่าไหร่ถึงจะได้ราคาดี?</summary>
+					<p>iPhone ที่ Battery Health 90% ขึ้นไปจะได้ราคาดีที่สุด ถ้าอยู่ในช่วง 85-89% ราคาจะลดลงเล็กน้อย ต่ำกว่า 80% จะมีผลต่อราคาค่อนข้างมาก แต่เราก็ยังรับซื้อทุกสภาพแบตเตอรี่ครับ</p>
+				</details>
+			</div>
+		</div>
+	</section>
+
+	<section class="partner-sec">
+		<div class="container">
+			<h2>เว็บในเครือที่ให้บริการรับซื้อ</h2>
+			<p class="partner-desc">นอกจาก Winner IT แล้ว คุณยังสามารถติดต่อขายผ่านเว็บในเครือของเราได้อีกหลายช่องทาง</p>
+			<div class="partner-grid">
+				<a href="https://amphontd.com/" target="_blank" rel="noopener" class="partner-card">
+					<span class="partner-name">AMPHON TRADING</span>
+					<span class="partner-tagline">รับซื้อ iPhone และอุปกรณ์ Apple ครบวงจร</span>
+				</a>
+				<a href="https://webuy.in.th/" target="_blank" rel="noopener" class="partner-card">
+					<span class="partner-name">Webuy Hub</span>
+					<span class="partner-tagline">ขาย iPhone ถึงบ้าน ตรวจสภาพ จ่ายเงินทันที</span>
+				</a>
+				<a href="https://xn--c3c3a0aa6cvaf8b9dze.com/" target="_blank" rel="noopener" class="partner-card">
+					<span class="partner-name">เรารับซื้อ.com</span>
+					<span class="partner-tagline">รับซื้อไอโฟนมือสองทุกรุ่น ราคายุติธรรม</span>
+				</a>
+				<a href="https://xn--12cman8e0bjt1czaccb9b1fg31ad.com/" target="_blank" rel="noopener" class="partner-card">
+					<span class="partner-name">รับซื้อกล้องมือสอง.com</span>
+					<span class="partner-tagline">รับซื้อกล้องมือสอง Canon Sony Nikon Fujifilm</span>
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="cta-sec">
+		<div class="container">
+			<div class="cta-box">
+				<div>
+					<h2>พร้อมขาย iPhone แล้วใช่ไหม?</h2>
+					<p>แอดไลน์ @WEBUY ส่งรูปเครื่องมาประเมินราคาฟรี โอนเงินทันที</p>
+				</div>
+				<a class="cta-btn" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener">
+					<svg width="22" height="22" viewBox="0 0 24 24" fill="#06C755"><path d="M12 2C6.48 2 2 5.83 2 10.44c0 4.17 3.7 7.66 8.69 8.32.34.07.8.23.91.52.1.27.07.68.03.95l-.15.88c-.04.25-.2.99.87.54s5.78-3.4 7.88-5.82C22.08 13.79 22 12.16 22 10.44 22 5.83 17.52 2 12 2z"/></svg>
+					แอดไลน์ @WEBUY
+				</a>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.hero{position:relative;padding:80px 0 64px;text-align:center;overflow:hidden}
+	.hero-bg{position:absolute;inset:0;background:linear-gradient(168deg,#fff7ed 0%,#fffbf5 30%,#fff 60%);z-index:0}
+	.hero-inner{position:relative;z-index:1;animation:fadeUp .6s var(--ease-out) both}
+	@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+	.hero h1{font-size:42px;margin:16px 0 0;letter-spacing:-.03em}
+	.accent{background:linear-gradient(135deg,#F97316,#ea580c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+	.lead{margin:16px auto 0;font-size:17px;color:var(--muted);max-width:640px;line-height:1.75}
+	.btns{display:flex;gap:14px;justify-content:center;margin-top:36px;flex-wrap:wrap}
+	.article-sec{padding:64px 0}
+	.article-wrap{max-width:800px;margin:0 auto}
+	.faq{padding:80px 0;background:var(--bg-alt)}
+	.sec-title{text-align:center;font-size:30px;margin:0 0 40px;letter-spacing:-.02em}
+	.faq-list{max-width:720px;margin:0 auto;display:grid;gap:14px}
+	details{background:#fff;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;transition:all .25s var(--ease-out)}
+	details[open]{border-color:rgba(249,115,22,.25);box-shadow:var(--shadow-card)}
+	summary{padding:20px 24px;font-weight:700;font-size:16px;cursor:pointer;color:var(--text);list-style:none;display:flex;align-items:center;gap:14px}
+	summary::marker,summary::-webkit-details-marker{display:none}
+	summary::before{content:'+';width:30px;height:30px;border-radius:10px;background:var(--accent-light);color:#F97316;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;flex-shrink:0;transition:all .25s var(--ease-out)}
+	details[open] summary::before{content:'−';background:linear-gradient(135deg,#F97316,#ea580c);color:#fff;box-shadow:0 2px 8px rgba(249,115,22,.25)}
+	details p{padding:0 24px 20px 68px;margin:0;font-size:15px;color:var(--muted);line-height:1.75}
+	.cta-sec{padding:0 0 80px}
+	.cta-box{background:linear-gradient(135deg,#1a1207 0%,#2d2418 50%,#1a1207 100%);border-radius:24px;padding:56px 52px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;position:relative;overflow:hidden}
+	.cta-box::before{content:'';position:absolute;top:-60px;right:-40px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(249,115,22,.2) 0%,transparent 70%);pointer-events:none}
+	.cta-box h2{color:#fff;font-size:24px;margin:0}
+	.cta-box p{color:rgba(255,255,255,.6);font-size:15px;margin:8px 0 0}
+	.cta-btn{position:relative;z-index:1;display:inline-flex;align-items:center;gap:10px;padding:16px 34px;border-radius:14px;background:#fff;color:var(--text);font-size:17px;font-weight:700;text-decoration:none;transition:all .3s var(--ease-out);box-shadow:0 4px 24px rgba(0,0,0,.15);white-space:nowrap}
+	.cta-btn:hover{background:var(--accent-light);color:var(--accent-hover);transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.2)}
+	@media(max-width:900px){.hero h1{font-size:34px}.cta-box{padding:40px 28px;flex-direction:column;text-align:center}}
+	.partner-sec{padding:64px 0;background:var(--bg-alt,#faf7f4)}
+	.partner-sec h2{text-align:center;font-size:28px;margin-bottom:8px}
+	.partner-desc{text-align:center;color:var(--muted);margin-bottom:36px;font-size:15px}
+	.partner-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+	.partner-card{display:flex;flex-direction:column;gap:6px;padding:24px;border-radius:16px;border:1.5px solid var(--border,#ebe4db);background:#fff;text-decoration:none;transition:all .25s var(--ease-out,cubic-bezier(0.16,1,0.3,1))}
+	.partner-card:hover{border-color:var(--accent,#F97316);transform:translateY(-3px);box-shadow:0 8px 24px rgba(249,115,22,.1)}
+	.partner-name{font-weight:700;font-size:16px;color:var(--text,#1a1207)}
+	.partner-tagline{font-size:13px;color:var(--muted,#7a6e5e);line-height:1.5}
+</style>

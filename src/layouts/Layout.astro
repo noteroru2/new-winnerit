@@ -1,23 +1,110 @@
+---
+import Header from '../components/site/Header.astro';
+import Footer from '../components/site/Footer.astro';
+import '../styles/global.css';
+import '@fontsource/inter/latin.css';
+
+type Props = {
+	title?: string;
+	description?: string;
+	ogImage?: string;
+	ogType?: 'website' | 'article';
+	robots?: string;
+	jsonLd?: Record<string, any> | Record<string, any>[];
+	articleDate?: string;
+	articleModified?: string;
+};
+
+const {
+	title = 'Winner IT — รับซื้อโน๊ตบุ๊ค คอม IT มือสอง',
+	description = 'Winner IT รับซื้อโน๊ตบุ๊ค คอมพิวเตอร์ อุปกรณ์ IT มือสอง ราคาดี บริการรวดเร็ว ติดต่อ Line @WEBUY',
+	ogImage,
+	ogType = 'website',
+	robots,
+	jsonLd,
+	articleDate,
+	articleModified,
+} = Astro.props as Props;
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://winnerit.in.th';
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const defaultOgImage = `${siteUrl}/og-default.png`;
+const ogImageUrl = ogImage ?? defaultOgImage;
+
+const orgSchema = {
+	'@type': 'Organization',
+	'@id': `${siteUrl}/#organization`,
+	name: 'Winner IT',
+	legalName: 'บริษัท อำพล เทรดดิ้ง จำกัด',
+	url: siteUrl,
+	logo: {
+		'@type': 'ImageObject',
+		url: `${siteUrl}/favicon.svg`,
+	},
+	contactPoint: {
+		'@type': 'ContactPoint',
+		contactType: 'customer service',
+		email: 'amphontrading@gmail.com',
+		availableLanguage: 'Thai',
+	},
+	sameAs: ['https://line.me/R/ti/p/@webuy'],
+};
+
+const websiteSchema = {
+	'@type': 'WebSite',
+	'@id': `${siteUrl}/#website`,
+	name: 'Winner IT',
+	url: siteUrl,
+	publisher: { '@id': `${siteUrl}/#organization` },
+	inLanguage: 'th-TH',
+};
+
+const baseJsonLd = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		orgSchema,
+		websiteSchema,
+		...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : []),
+	],
+};
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="th">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<link rel="canonical" href={canonicalUrl.toString()} />
+		{robots && <meta name="robots" content={robots} />}
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta name="theme-color" content="#F97316" />
+
+		<meta property="og:type" content={ogType} />
+		<meta property="og:url" content={canonicalUrl.toString()} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={ogImageUrl} />
+		<meta property="og:locale" content="th_TH" />
+		<meta property="og:site_name" content="Winner IT" />
+		{articleDate && <meta property="article:published_time" content={articleDate} />}
+		{articleModified && <meta property="article:modified_time" content={articleModified} />}
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImageUrl} />
+
+		<link rel="alternate" type="application/rss+xml" title="Winner IT RSS" href="/rss.xml" />
+
+		<script type="application/ld+json" set:html={JSON.stringify(baseJsonLd)} />
 	</head>
 	<body>
-		<slot />
+		<Header />
+		<main>
+			<slot />
+		</main>
+		<Footer />
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

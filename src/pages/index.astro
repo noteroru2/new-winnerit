@@ -1,11 +1,736 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import { getAllPosts } from '../lib/wp';
+import PostCard from '../components/blog/PostCard.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const posts = (await getAllPosts())
+	.sort((a, b) => (a.date < b.date ? 1 : -1))
+	.slice(0, 6);
 ---
 
-<Layout>
-	<Welcome />
+<Layout
+	title="Winner IT — รับซื้อโน๊ตบุ๊ค คอม อุปกรณ์ IT มือสอง ราคาดี"
+	description="Winner IT รับซื้อโน๊ตบุ๊ค คอมพิวเตอร์ MacBook iPhone อุปกรณ์ IT มือสอง ราคาสูง จ่ายทันที ติดต่อ Line @WEBUY"
+>
+	<!-- ━━━ HERO ━━━ -->
+	<section class="hero">
+		<div class="hero-bg">
+			<div class="hero-orb hero-orb-1"></div>
+			<div class="hero-orb hero-orb-2"></div>
+			<div class="hero-orb hero-orb-3"></div>
+			<div class="hero-grid-bg"></div>
+		</div>
+		<div class="container hero-inner">
+			<div class="hero-badge">
+				<span class="badge-dot"></span>
+				เปิดรับซื้อทุกวัน
+			</div>
+			<h1>รับซื้อโน๊ตบุ๊ค คอม<br/>อุปกรณ์ IT มือสอง<br/><span class="h-accent">ราคาดี จ่ายทันที</span></h1>
+			<p class="hero-sub">
+				Winner IT รับซื้อโน๊ตบุ๊ค คอมพิวเตอร์ MacBook iPhone และอุปกรณ์ IT มือสองทุกชนิด<br class="hide-mobile"/>ประเมินราคาฟรี จ่ายเงินทันที บริการทั่วประเทศ
+			</p>
+			<div class="hero-btns">
+				<a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener" class="btn btn-line btn-big">
+					<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 5.83 2 10.44c0 4.17 3.7 7.66 8.69 8.32.34.07.8.23.91.52.1.27.07.68.03.95l-.15.88c-.04.25-.2.99.87.54s5.78-3.4 7.88-5.82C22.08 13.79 22 12.16 22 10.44 22 5.83 17.52 2 12 2z"/></svg>
+					ประเมินราคาฟรี @WEBUY
+				</a>
+				<a href="/articles" class="btn btn-big">อ่านบทความ →</a>
+			</div>
+			<div class="hero-trust">
+				<div class="trust-item">
+					<span class="trust-icon">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+					</span>
+					<span>ฟรีประเมินราคา</span>
+				</div>
+				<div class="trust-item">
+					<span class="trust-icon">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+					</span>
+					<span>จ่ายเงินทันที</span>
+				</div>
+				<div class="trust-item">
+					<span class="trust-icon">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+					</span>
+					<span>บริการทั่วไทย</span>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ━━━ STATS ━━━ -->
+	<section class="stats">
+		<div class="container">
+			<div class="stats-grid">
+				<div class="stat-item">
+					<div class="stat-num">5,000+</div>
+					<div class="stat-label">อุปกรณ์ที่รับซื้อแล้ว</div>
+				</div>
+				<div class="stat-divider"></div>
+				<div class="stat-item">
+					<div class="stat-num">15 นาที</div>
+					<div class="stat-label">ประเมินราคาเฉลี่ย</div>
+				</div>
+				<div class="stat-divider"></div>
+				<div class="stat-item">
+					<div class="stat-num">4.9/5</div>
+					<div class="stat-label">คะแนนรีวิวจากลูกค้า</div>
+				</div>
+				<div class="stat-divider"></div>
+				<div class="stat-item">
+					<div class="stat-num">ทั่วไทย</div>
+					<div class="stat-label">ให้บริการทุกพื้นที่</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ━━━ SERVICES ━━━ -->
+	<section class="services">
+		<div class="container">
+			<div class="sec-head">
+				<span class="pill">บริการของเรา</span>
+				<h2>อุปกรณ์ที่เรารับซื้อ</h2>
+				<p class="sec-desc">เลือกหมวดหมู่ที่ต้องการเพื่อดูรายละเอียดเพิ่มเติม</p>
+			</div>
+			<div class="svc-grid">
+			<a href="/รับซื้อโน๊ตบุ๊ค" class="svc-card">
+				<div class="svc-icon-wrap"><span class="svc-icon">💻</span></div>
+				<div class="svc-body"><strong>รับซื้อโน๊ตบุ๊ค</strong><span>ทุกยี่ห้อ ทุกรุ่น ราคาสูง</span></div>
+				<span class="svc-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+			</a>
+			<a href="/รับซื้อคอมพิวเตอร์" class="svc-card">
+				<div class="svc-icon-wrap"><span class="svc-icon">🖥️</span></div>
+				<div class="svc-body"><strong>รับซื้อคอมพิวเตอร์</strong><span>PC ตั้งโต๊ะทุกสเปก</span></div>
+				<span class="svc-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+			</a>
+			<a href="/รับซื้อmacbook" class="svc-card">
+				<div class="svc-icon-wrap"><span class="svc-icon">🍎</span></div>
+				<div class="svc-body"><strong>รับซื้อ MacBook</strong><span>Air / Pro ทุกรุ่น ทุกชิป</span></div>
+				<span class="svc-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+			</a>
+			<a href="/รับซื้อiphone" class="svc-card">
+				<div class="svc-icon-wrap"><span class="svc-icon">📱</span></div>
+				<div class="svc-body"><strong>รับซื้อ iPhone</strong><span>ทุกรุ่น ทุกความจุ</span></div>
+				<span class="svc-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+			</a>
+			<a href="/รับซื้อipad" class="svc-card">
+				<div class="svc-icon-wrap"><span class="svc-icon">📋</span></div>
+				<div class="svc-body"><strong>รับซื้อ iPad</strong><span>ทุกรุ่น ทุกขนาดหน้าจอ</span></div>
+				<span class="svc-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+			</a>
+			<a href="/รับซื้อกล้อง" class="svc-card">
+				<div class="svc-icon-wrap"><span class="svc-icon">📷</span></div>
+				<div class="svc-body"><strong>รับซื้อกล้อง</strong><span>DSLR, Mirrorless, เลนส์</span></div>
+				<span class="svc-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+			</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- ━━━ PROCESS ━━━ -->
+	<section class="process">
+		<div class="container">
+			<div class="sec-head center">
+				<span class="pill">ขั้นตอนง่ายๆ</span>
+				<h2>ขายอุปกรณ์ IT ใน 3 ขั้นตอน</h2>
+			</div>
+			<div class="proc-grid">
+				<div class="proc-card">
+					<div class="proc-num">01</div>
+					<div class="proc-line"></div>
+					<h3>ส่งรายละเอียด</h3>
+					<p>แอดไลน์ @WEBUY แล้วส่งรูปพร้อมรายละเอียดอุปกรณ์มาให้ทีมงาน</p>
+				</div>
+				<div class="proc-card">
+					<div class="proc-num">02</div>
+					<div class="proc-line"></div>
+					<h3>รับการประเมินราคา</h3>
+					<p>ทีมงานตรวจสอบสเปกและสภาพ แจ้งราคารับซื้อให้ทราบภายใน 15 นาที</p>
+				</div>
+				<div class="proc-card">
+					<div class="proc-num">03</div>
+					<h3>รับเงินทันที</h3>
+					<p>ตกลงราคา นัดส่งเครื่อง รับเงินโอนทันทีหลังตรวจสอบเรียบร้อย</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ━━━ WHY ━━━ -->
+	<section class="why">
+		<div class="container">
+			<div class="sec-head center">
+				<span class="pill">ทำไมต้องเรา</span>
+				<h2>ลูกค้าเลือก Winner IT เพราะ...</h2>
+			</div>
+			<div class="why-grid">
+				<div class="why-card">
+					<div class="why-icon">
+						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+					</div>
+					<h3>ราคาสูงกว่าตลาด</h3>
+					<p>ประเมินราคาตามสภาพจริง ตรวจเช็กทุกจุด ให้ราคาที่ดีที่สุด</p>
+				</div>
+				<div class="why-card">
+					<div class="why-icon">
+						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+					</div>
+					<h3>รวดเร็ว จ่ายทันที</h3>
+					<p>ส่งรูปพร้อมรายละเอียด ประเมินภายใน 15 นาที โอนจ่ายทันที</p>
+				</div>
+				<div class="why-card">
+					<div class="why-icon">
+						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+					</div>
+					<h3>ปลอดภัย น่าเชื่อถือ</h3>
+					<p>เปิดให้บริการมานาน รีวิวจริง ข้อมูลส่วนตัวถูกลบอย่างปลอดภัย</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ━━━ CTA ━━━ -->
+	<section class="cta">
+		<div class="container">
+			<div class="cta-box">
+				<div class="cta-orb"></div>
+				<div class="cta-content">
+					<h2>พร้อมขายอุปกรณ์ IT มือสอง?</h2>
+					<p>แอดไลน์ส่งรูป+รายละเอียดมา รับประเมินราคาฟรีทันที ไม่มีค่าใช้จ่าย</p>
+				</div>
+				<a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener" class="cta-btn">
+					<svg width="22" height="22" viewBox="0 0 24 24" fill="#06C755"><path d="M12 2C6.48 2 2 5.83 2 10.44c0 4.17 3.7 7.66 8.69 8.32.34.07.8.23.91.52.1.27.07.68.03.95l-.15.88c-.04.25-.2.99.87.54s5.78-3.4 7.88-5.82C22.08 13.79 22 12.16 22 10.44 22 5.83 17.52 2 12 2z"/></svg>
+					Line: @WEBUY
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- ━━━ POSTS ━━━ -->
+	<section class="posts-sec">
+		<div class="container">
+			<div class="posts-head">
+				<div>
+					<span class="pill">บทความ</span>
+					<h2>บทความล่าสุด</h2>
+				</div>
+				<a class="btn" href="/articles">ดูทั้งหมด →</a>
+			</div>
+			<div class="grid-3">
+				{posts.map((post) => <PostCard post={post} />)}
+			</div>
+		</div>
+	</section>
 </Layout>
+
+<style>
+	/* ── HERO ── */
+	.hero {
+		position: relative;
+		overflow: hidden;
+		padding: 88px 0 72px;
+	}
+	.hero-bg {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(168deg, #fff7ed 0%, #fffbf5 25%, #fff 60%);
+		z-index: 0;
+	}
+	.hero-grid-bg {
+		position: absolute;
+		inset: 0;
+		background-image:
+			linear-gradient(rgba(249,115,22,.03) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(249,115,22,.03) 1px, transparent 1px);
+		background-size: 60px 60px;
+		mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 20%, transparent 70%);
+		-webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 20%, transparent 70%);
+	}
+	.hero-orb {
+		position: absolute;
+		border-radius: 50%;
+		pointer-events: none;
+	}
+	.hero-orb-1 {
+		right: -5%;
+		top: -15%;
+		width: 500px;
+		height: 500px;
+		background: radial-gradient(circle, rgba(249,115,22,.07) 0%, transparent 70%);
+		animation: float 8s ease-in-out infinite;
+	}
+	.hero-orb-2 {
+		left: -8%;
+		bottom: -25%;
+		width: 400px;
+		height: 400px;
+		background: radial-gradient(circle, rgba(249,115,22,.05) 0%, transparent 70%);
+		animation: float 10s ease-in-out infinite 2s;
+	}
+	.hero-orb-3 {
+		right: 20%;
+		bottom: 5%;
+		width: 200px;
+		height: 200px;
+		background: radial-gradient(circle, rgba(6,199,85,.04) 0%, transparent 70%);
+		animation: float 6s ease-in-out infinite 1s;
+	}
+	.hero-inner {
+		position: relative;
+		z-index: 1;
+		text-align: center;
+		max-width: 740px;
+		margin: 0 auto;
+		animation: fadeUp .7s var(--ease-out) both;
+	}
+	.hero-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 8px 20px;
+		border-radius: 100px;
+		background: rgba(255,255,255,.8);
+		backdrop-filter: blur(12px);
+		border: 1px solid var(--border);
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--text-2);
+		box-shadow: 0 2px 16px rgba(26,18,7,.04);
+		margin-bottom: 28px;
+	}
+	.badge-dot {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background: #22c55e;
+		box-shadow: 0 0 0 3px rgba(34,197,94,.2);
+		animation: pulse 2s infinite;
+	}
+	@keyframes pulse {
+		0%, 100% { box-shadow: 0 0 0 3px rgba(34,197,94,.2); }
+		50% { box-shadow: 0 0 0 7px rgba(34,197,94,.08); }
+	}
+	.hero h1 {
+		font-size: 50px;
+		line-height: 1.12;
+		letter-spacing: -.03em;
+		font-weight: 800;
+		margin: 0;
+	}
+	.h-accent {
+		background: linear-gradient(135deg, #F97316 20%, #ea580c 80%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+	.hero-sub {
+		margin: 22px auto 0;
+		font-size: 17px;
+		color: var(--muted);
+		line-height: 1.75;
+		max-width: 580px;
+	}
+	.hide-mobile { display: inline; }
+	.hero-btns {
+		display: flex;
+		gap: 14px;
+		justify-content: center;
+		margin-top: 36px;
+		flex-wrap: wrap;
+	}
+	.hero-trust {
+		display: flex;
+		justify-content: center;
+		gap: 28px;
+		margin-top: 44px;
+		flex-wrap: wrap;
+	}
+	.trust-item {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-size: 14px;
+		font-weight: 500;
+		color: var(--text-2);
+	}
+	.trust-icon {
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+		background: linear-gradient(135deg, #F97316, #ea580c);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		box-shadow: 0 2px 6px rgba(249,115,22,.25);
+	}
+
+	/* ── STATS ── */
+	.stats {
+		padding: 0;
+		position: relative;
+		z-index: 2;
+		margin-top: -20px;
+	}
+	.stats-grid {
+		background: #fff;
+		border: 1px solid var(--border);
+		border-radius: 20px;
+		padding: 32px 40px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 24px;
+		box-shadow: var(--shadow-elevated);
+		animation: fadeUp .7s var(--ease-out) .15s both;
+	}
+	.stat-item {
+		text-align: center;
+		flex: 1;
+	}
+	.stat-num {
+		font-size: 28px;
+		font-weight: 800;
+		color: var(--accent);
+		letter-spacing: -.02em;
+		line-height: 1.2;
+	}
+	.stat-label {
+		font-size: 13px;
+		color: var(--muted);
+		margin-top: 4px;
+		font-weight: 500;
+	}
+	.stat-divider {
+		width: 1px;
+		height: 40px;
+		background: var(--border);
+		flex-shrink: 0;
+	}
+
+	/* ── SERVICES ── */
+	.services {
+		padding: 80px 0;
+		background: var(--bg-alt);
+	}
+	.sec-head {
+		margin-bottom: 40px;
+	}
+	.sec-head.center {
+		text-align: center;
+	}
+	.sec-head h2 {
+		font-size: 32px;
+		margin: 12px 0 0;
+		letter-spacing: -.02em;
+	}
+	.sec-desc {
+		margin: 8px 0 0;
+		font-size: 16px;
+		color: var(--muted);
+	}
+	.svc-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 20px;
+	}
+	.svc-card {
+		display: flex;
+		align-items: center;
+		gap: 20px;
+		padding: 24px 28px;
+		border-radius: 16px;
+		background: #fff;
+		border: 1.5px solid var(--border);
+		text-decoration: none;
+		color: var(--text);
+		box-shadow: var(--shadow-card);
+		transition: all .3s var(--ease-out);
+	}
+	.svc-card:hover {
+		border-color: var(--accent);
+		box-shadow: var(--shadow-hover), 0 0 0 1px var(--accent);
+		transform: translateY(-3px);
+	}
+	.svc-icon-wrap {
+		width: 56px;
+		height: 56px;
+		border-radius: 14px;
+		background: var(--accent-light);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		transition: all .3s var(--ease-out);
+	}
+	.svc-card:hover .svc-icon-wrap {
+		background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+		transform: scale(1.05);
+	}
+	.svc-icon {
+		font-size: 28px;
+		line-height: 1;
+		transition: filter .3s;
+	}
+	.svc-card:hover .svc-icon {
+		filter: brightness(0) invert(1);
+	}
+	.svc-body {
+		flex: 1;
+		min-width: 0;
+	}
+	.svc-body strong {
+		display: block;
+		font-size: 16px;
+		font-weight: 700;
+		margin-bottom: 3px;
+	}
+	.svc-body span {
+		font-size: 14px;
+		color: var(--muted);
+	}
+	.svc-arrow {
+		color: var(--border);
+		transition: all .3s var(--ease-out);
+		flex-shrink: 0;
+	}
+	.svc-card:hover .svc-arrow {
+		color: var(--accent);
+		transform: translateX(4px);
+	}
+
+	/* ── PROCESS ── */
+	.process {
+		padding: 80px 0;
+	}
+	.proc-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 28px;
+	}
+	.proc-card {
+		position: relative;
+		padding: 36px 28px 32px;
+		border-radius: 20px;
+		background: #fff;
+		border: 1px solid var(--border);
+		box-shadow: var(--shadow-card);
+		transition: all .3s var(--ease-out);
+	}
+	.proc-card:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--shadow-hover);
+	}
+	.proc-num {
+		font-size: 48px;
+		font-weight: 900;
+		background: linear-gradient(135deg, rgba(249,115,22,.15) 0%, rgba(249,115,22,.05) 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		line-height: 1;
+		margin-bottom: 16px;
+		letter-spacing: -.04em;
+	}
+	.proc-line {
+		position: absolute;
+		top: 50%;
+		right: -14px;
+		width: 28px;
+		height: 2px;
+		background: linear-gradient(90deg, var(--accent), transparent);
+		transform: translateY(-50%);
+	}
+	.proc-card:last-child .proc-line { display: none; }
+	.proc-card h3 {
+		font-size: 18px;
+		margin: 0 0 8px;
+	}
+	.proc-card p {
+		font-size: 15px;
+		color: var(--muted);
+		line-height: 1.7;
+		margin: 0;
+	}
+
+	/* ── WHY ── */
+	.why {
+		padding: 80px 0;
+		background: var(--bg-alt);
+	}
+	.why-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 24px;
+	}
+	.why-card {
+		padding: 40px 28px;
+		border-radius: 20px;
+		background: #fff;
+		border: 1px solid var(--border);
+		box-shadow: var(--shadow-card);
+		text-align: center;
+		transition: all .3s var(--ease-out);
+		position: relative;
+		overflow: hidden;
+	}
+	.why-card::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 3px;
+		background: linear-gradient(90deg, var(--accent), #fdba74);
+		opacity: 0;
+		transition: opacity .3s;
+	}
+	.why-card:hover::before { opacity: 1; }
+	.why-card:hover {
+		transform: translateY(-5px);
+		box-shadow: var(--shadow-hover);
+	}
+	.why-icon {
+		width: 60px;
+		height: 60px;
+		border-radius: 16px;
+		background: var(--accent-light);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 20px;
+		transition: all .3s var(--ease-out);
+	}
+	.why-card:hover .why-icon {
+		transform: scale(1.08);
+		box-shadow: 0 4px 16px rgba(249,115,22,.15);
+	}
+	.why-card h3 {
+		font-size: 18px;
+		margin: 0 0 10px;
+	}
+	.why-card p {
+		font-size: 15px;
+		color: var(--muted);
+		line-height: 1.7;
+		margin: 0;
+	}
+
+	/* ── CTA ── */
+	.cta {
+		padding: 80px 0;
+	}
+	.cta-box {
+		background: linear-gradient(135deg, #1a1207 0%, #2d2418 50%, #1a1207 100%);
+		border-radius: 24px;
+		padding: 56px 52px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 32px;
+		flex-wrap: wrap;
+		position: relative;
+		overflow: hidden;
+	}
+	.cta-orb {
+		position: absolute;
+		top: -60px;
+		right: -40px;
+		width: 240px;
+		height: 240px;
+		border-radius: 50%;
+		background: radial-gradient(circle, rgba(249,115,22,.2) 0%, transparent 70%);
+		pointer-events: none;
+	}
+	.cta-orb::after {
+		content: '';
+		position: absolute;
+		bottom: -80px;
+		left: -100px;
+		width: 180px;
+		height: 180px;
+		border-radius: 50%;
+		background: radial-gradient(circle, rgba(249,115,22,.1) 0%, transparent 70%);
+	}
+	.cta-content {
+		position: relative;
+		z-index: 1;
+	}
+	.cta-content h2 {
+		color: #fff;
+		font-size: 26px;
+		margin: 0;
+	}
+	.cta-content p {
+		color: rgba(255,255,255,.6);
+		font-size: 16px;
+		margin: 10px 0 0;
+	}
+	.cta-btn {
+		position: relative;
+		z-index: 1;
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		padding: 16px 34px;
+		border-radius: 14px;
+		background: #fff;
+		color: var(--text);
+		font-size: 17px;
+		font-weight: 700;
+		text-decoration: none;
+		transition: all .3s var(--ease-out);
+		box-shadow: 0 4px 24px rgba(0,0,0,.15);
+		white-space: nowrap;
+	}
+	.cta-btn:hover {
+		background: var(--accent-light);
+		color: var(--accent-hover);
+		transform: translateY(-3px);
+		box-shadow: 0 8px 32px rgba(0,0,0,.2);
+	}
+
+	/* ── POSTS ── */
+	.posts-sec {
+		padding: 80px 0 88px;
+		background: var(--bg-alt);
+	}
+	.posts-head {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 16px;
+		flex-wrap: wrap;
+		margin-bottom: 36px;
+	}
+	.posts-head h2 {
+		font-size: 30px;
+		margin: 10px 0 0;
+		letter-spacing: -.02em;
+	}
+
+	/* ── RESPONSIVE ── */
+	@media (max-width: 900px) {
+		.hero { padding: 64px 0 56px; }
+		.hero h1 { font-size: 36px; }
+		.hero-sub { font-size: 16px; }
+		.hide-mobile { display: none; }
+		.stats-grid {
+			flex-direction: column;
+			gap: 20px;
+			padding: 28px 24px;
+		}
+		.stat-divider { width: 80px; height: 1px; }
+		.svc-grid { grid-template-columns: 1fr; }
+		.proc-grid { grid-template-columns: 1fr; }
+		.proc-line { display: none; }
+		.why-grid { grid-template-columns: 1fr; }
+		.cta-box { padding: 40px 28px; flex-direction: column; text-align: center; }
+	}
+	@media (max-width: 480px) {
+		.hero h1 { font-size: 30px; }
+		.hero-trust { flex-direction: column; align-items: center; gap: 12px; }
+	}
+</style>

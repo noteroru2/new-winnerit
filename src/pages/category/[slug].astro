@@ -1,0 +1,175 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getAllPosts, getAllCategories, getCategoriesByIds, decodeSlug, type WPPost, type WPCategory } from '../../lib/wp';
+import PostCard from '../../components/blog/PostCard.astro';
+
+export async function getStaticPaths() {
+	const [posts, categories] = await Promise.all([getAllPosts(), getAllCategories()]);
+	const sorted = [...posts].sort((a, b) => (a.date < b.date ? 1 : -1));
+
+	const paths: any[] = [];
+	for (const cat of categories) {
+		const catPosts = sorted.filter((p) => p.categories?.includes(cat.id));
+		const slug = decodeSlug(cat.slug);
+		paths.push({
+			params: { slug },
+			props: { category: cat, posts: catPosts, allCategories: categories },
+		});
+	}
+	return paths;
+}
+
+const { category, posts, allCategories } = Astro.props as {
+	category: WPCategory;
+	posts: WPPost[];
+	allCategories: WPCategory[];
+};
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://winnerit.in.th';
+const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
+
+const breadcrumbSchema = {
+	'@type': 'BreadcrumbList',
+	itemListElement: [
+		{ '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: siteUrl },
+		{ '@type': 'ListItem', position: 2, name: 'บทความ', item: `${siteUrl}/articles` },
+		{ '@type': 'ListItem', position: 3, name: category.name, item: pageUrl },
+	],
+};
+
+const collectionSchema = {
+	'@type': 'CollectionPage',
+	name: `${category.name} — Winner IT`,
+	description: `บทความในหมวดหมู่ ${category.name} จาก Winner IT`,
+	url: pageUrl,
+	mainEntity: {
+		'@type': 'ItemList',
+		numberOfItems: posts.length,
+		itemListElement: posts.slice(0, 20).map((p, i) => ({
+			'@type': 'ListItem',
+			position: i + 1,
+			url: `${siteUrl}/${decodeSlug(p.slug)}`,
+		})),
+	},
+};
+---
+
+<Layout
+	title={`${category.name} — บทความ Winner IT`}
+	description={`อ่านบทความในหมวด ${category.name} จาก Winner IT รวม ${posts.length} บทความ เกี่ยวกับการรับซื้ออุปกรณ์ IT มือสอง`}
+	jsonLd={[breadcrumbSchema, collectionSchema]}
+>
+	<section class="hero">
+		<div class="hero-bg"></div>
+		<div class="container hero-inner">
+			<span class="pill">หมวดหมู่</span>
+			<h1>{category.name}</h1>
+			<p class="lead">{posts.length} บทความในหมวดหมู่นี้</p>
+		</div>
+	</section>
+
+	<section class="container cat-nav">
+		<div class="cat-chips">
+			{allCategories.map((c) => (
+				<a href={`/category/${c.slug}`} class:list={['cat-chip', { active: c.id === category.id }]}>{c.name} <span class="cat-count">{c.count}</span></a>
+			))}
+		</div>
+	</section>
+
+	<section class="container list">
+		{posts.length > 0 ? (
+			<div class="grid-3">
+				{posts.map((post) => <PostCard post={post} />)}
+			</div>
+		) : (
+			<p class="empty">ยังไม่มีบทความในหมวดหมู่นี้</p>
+		)}
+	</section>
+</Layout>
+
+<style>
+	.hero {
+		position: relative;
+		padding: 72px 0 52px;
+		text-align: center;
+		overflow: hidden;
+	}
+	.hero-bg {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(168deg, #fff7ed 0%, #fffbf5 30%, #fff 60%);
+		z-index: 0;
+	}
+	.hero-inner {
+		position: relative;
+		z-index: 1;
+		animation: fadeUp .6s var(--ease-out) both;
+	}
+	@keyframes fadeUp {
+		from { opacity: 0; transform: translateY(20px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+	.hero h1 {
+		font-size: 38px;
+		margin: 14px 0 0;
+		letter-spacing: -.03em;
+	}
+	.lead {
+		margin: 10px 0 0;
+		color: var(--muted);
+		font-size: 16px;
+	}
+
+	.cat-nav { padding: 32px 0 0; }
+	.cat-chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		justify-content: center;
+	}
+	.cat-chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 8px 18px;
+		border-radius: 100px;
+		border: 1.5px solid var(--border);
+		background: #fff;
+		color: var(--text-2);
+		font-size: 14px;
+		font-weight: 500;
+		text-decoration: none;
+		transition: all .2s var(--ease-out);
+	}
+	.cat-chip:hover {
+		border-color: var(--accent);
+		color: var(--accent);
+		background: var(--accent-light);
+	}
+	.cat-chip.active {
+		border-color: var(--accent);
+		background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+		color: #fff;
+		box-shadow: 0 2px 8px rgba(249,115,22,.2);
+	}
+	.cat-chip.active .cat-count {
+		background: rgba(255,255,255,.25);
+		color: #fff;
+	}
+	.cat-count {
+		font-size: 11px;
+		font-weight: 700;
+		padding: 2px 7px;
+		border-radius: 100px;
+		background: var(--bg-alt);
+		color: var(--muted);
+	}
+
+	.list { padding: 40px 0 80px; }
+	.empty {
+		text-align: center;
+		color: var(--muted);
+		font-size: 16px;
+		padding: 60px 0;
+	}
+</style>

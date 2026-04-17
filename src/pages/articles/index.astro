@@ -1,0 +1,138 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getAllPosts } from '../../lib/wp';
+import PostCard from '../../components/blog/PostCard.astro';
+
+const pageSize = 12;
+const page = 1;
+const postsAll = (await getAllPosts()).sort((a, b) => (a.date < b.date ? 1 : -1));
+const totalPages = Math.max(1, Math.ceil(postsAll.length / pageSize));
+const posts = postsAll.slice((page - 1) * pageSize, page * pageSize);
+
+const delta = 2;
+const pagRange: (number | string)[] = [];
+for (let i = 1; i <= totalPages; i++) {
+	if (i === 1 || i === totalPages || (i >= page - delta && i <= page + delta)) {
+		pagRange.push(i);
+	} else if (pagRange[pagRange.length - 1] !== '...') {
+		pagRange.push('...');
+	}
+}
+---
+
+<Layout title="บทความ — Winner IT" description="บทความ เทคนิค และข่าวสารเกี่ยวกับการรับซื้อโน๊ตบุ๊ค คอม อุปกรณ์ IT มือสอง">
+	<section class="hero">
+		<div class="hero-bg"></div>
+		<div class="container hero-inner">
+			<span class="pill">บทความ</span>
+			<h1>บทความล่าสุด</h1>
+			<p class="lead">เทคนิค ข่าวสาร และความรู้เกี่ยวกับอุปกรณ์ IT มือสอง</p>
+		</div>
+	</section>
+
+	<section class="container list">
+		<div class="grid-3">
+			{posts.map((post) => <PostCard post={post} />)}
+		</div>
+	</section>
+
+	{totalPages > 1 && (
+		<section class="container pag">
+			{pagRange.map((item) =>
+				item === '...'
+					? <span class="pag-dots">&hellip;</span>
+					: <a class:list={['pag-btn', { active: item === page }]} href={item === 1 ? '/articles' : `/articles/page/${item}`} aria-current={item === page ? 'page' : undefined}>{item}</a>
+			)}
+			{page < totalPages && (
+				<a class="pag-btn pag-arrow" href={`/articles/page/${page + 1}`} aria-label="หน้าถัดไป">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+				</a>
+			)}
+		</section>
+	)}
+</Layout>
+
+<style>
+	.hero {
+		position: relative;
+		padding: 72px 0 52px;
+		text-align: center;
+		overflow: hidden;
+	}
+	.hero-bg {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(168deg, #fff7ed 0%, #fffbf5 30%, #fff 60%);
+		z-index: 0;
+	}
+	.hero-inner {
+		position: relative;
+		z-index: 1;
+		animation: fadeUp .6s var(--ease-out) both;
+	}
+	@keyframes fadeUp {
+		from { opacity: 0; transform: translateY(20px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+	.hero h1 {
+		font-size: 38px;
+		margin: 14px 0 0;
+		letter-spacing: -.03em;
+	}
+	.lead {
+		margin: 10px 0 0;
+		color: var(--muted);
+		font-size: 16px;
+	}
+	.list { padding: 48px 0; }
+	.pag {
+		padding: 0 0 64px;
+		display: flex;
+		gap: 8px;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+	.pag-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 42px;
+		height: 42px;
+		border-radius: 10px;
+		border: 1.5px solid var(--border);
+		background: #fff;
+		color: var(--text);
+		font-size: 15px;
+		font-weight: 600;
+		text-decoration: none;
+		transition: all .25s var(--ease-out);
+	}
+	.pag-btn:hover {
+		border-color: var(--accent);
+		color: var(--accent);
+		background: var(--accent-light);
+		transform: translateY(-2px);
+	}
+	.pag-btn.active {
+		border-color: var(--accent);
+		background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+		color: #fff;
+		box-shadow: 0 2px 8px rgba(249,115,22,.25);
+		pointer-events: none;
+	}
+	.pag-arrow {
+		width: 42px;
+		color: var(--muted);
+	}
+	.pag-arrow:hover { color: var(--accent); }
+	.pag-dots {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 42px;
+		color: var(--muted);
+		font-size: 16px;
+		letter-spacing: .1em;
+	}
+</style>

@@ -1,0 +1,240 @@
+---
+import he from 'he';
+import type { WPCategory, WPMedia, WPPost } from '../../lib/wp';
+import { decodeSlug } from '../../lib/wp';
+
+const { post, categories, contentHtml, featuredMedia, prevPost, nextPost } = Astro.props as {
+	post: WPPost;
+	categories: WPCategory[];
+	contentHtml: string;
+	featuredMedia?: WPMedia | null;
+	prevPost?: WPPost | null;
+	nextPost?: WPPost | null;
+};
+
+const title = he.decode(post.title.rendered);
+---
+
+<article class="container post-page">
+	<a class="back-link" href="/articles">
+		<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+		กลับไปหน้าบทความ
+	</a>
+
+	<header class="post-hdr">
+		{featuredMedia?.source_url ? (
+			<div class="cover">
+				<img src={featuredMedia.source_url} alt={featuredMedia.alt_text?.trim() || title} loading="eager" decoding="async" />
+			</div>
+		) : null}
+		<div class="hdr-body">
+			<div class="meta">
+				<time datetime={post.date}>
+					{new Date(post.date).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}
+				</time>
+				{categories.length > 0 && (
+					<div class="cats">
+						{categories.map((c) => <a href={`/category/${c.slug}`} class="pill">{c.name}</a>)}
+					</div>
+				)}
+			</div>
+			<h1>{title}</h1>
+		</div>
+	</header>
+
+	<section class="post-content prose" set:html={contentHtml} />
+
+	{(prevPost || nextPost) && (
+		<nav class="post-nav" aria-label="บทความก่อนหน้า/ถัดไป">
+			{prevPost ? (
+				<a href={`/${decodeSlug(prevPost.slug)}`} class="pn-link pn-prev">
+					<span class="pn-label">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+						บทความก่อนหน้า
+					</span>
+					<span class="pn-title">{he.decode(prevPost.title.rendered)}</span>
+				</a>
+			) : <span />}
+			{nextPost ? (
+				<a href={`/${decodeSlug(nextPost.slug)}`} class="pn-link pn-next">
+					<span class="pn-label">
+						บทความถัดไป
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+					</span>
+					<span class="pn-title">{he.decode(nextPost.title.rendered)}</span>
+				</a>
+			) : <span />}
+		</nav>
+	)}
+
+	<div class="post-cta">
+		<div class="cta-left">
+			<strong>สนใจขายอุปกรณ์ IT มือสอง?</strong>
+			<span>ประเมินราคาฟรี จ่ายทันที</span>
+		</div>
+		<a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener" class="btn btn-line">
+			<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 5.83 2 10.44c0 4.17 3.7 7.66 8.69 8.32.34.07.8.23.91.52.1.27.07.68.03.95l-.15.88c-.04.25-.2.99.87.54s5.78-3.4 7.88-5.82C22.08 13.79 22 12.16 22 10.44 22 5.83 17.52 2 12 2z"/></svg>
+			แอดไลน์ @WEBUY
+		</a>
+	</div>
+</article>
+
+<style>
+	.post-page {
+		padding: 32px 0 40px;
+		max-width: 800px;
+		animation: fadeUp .6s var(--ease-out, cubic-bezier(0.16,1,0.3,1)) both;
+	}
+	@keyframes fadeUp {
+		from { opacity: 0; transform: translateY(16px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+
+	.back-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 14px;
+		font-weight: 500;
+		color: var(--muted);
+		text-decoration: none;
+		margin-bottom: 20px;
+		transition: all .2s;
+		padding: 6px 0;
+	}
+	.back-link:hover {
+		color: var(--accent);
+		gap: 8px;
+	}
+
+	.post-hdr {
+		background: #fff;
+		border: 1px solid var(--border);
+		border-radius: 20px;
+		overflow: hidden;
+		box-shadow: var(--shadow-card);
+	}
+	.cover {
+		aspect-ratio: 16 / 9;
+		overflow: hidden;
+		background: var(--bg-alt);
+	}
+	.cover img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	.hdr-body {
+		padding: 32px 36px 36px;
+	}
+	.meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		align-items: center;
+	}
+	.meta time {
+		font-size: 14px;
+		color: var(--muted);
+		font-weight: 500;
+	}
+	.cats { display: flex; gap: 6px; flex-wrap: wrap; }
+	.cats .pill {
+		text-decoration: none;
+		transition: all .2s;
+	}
+	.cats .pill:hover {
+		background: var(--accent);
+		color: #fff;
+	}
+	.hdr-body h1 {
+		margin: 16px 0 0;
+		font-size: 32px;
+		line-height: 1.3;
+		letter-spacing: -.02em;
+	}
+
+	.post-content {
+		margin-top: 28px;
+		padding: 36px 40px;
+		background: #fff;
+		border: 1px solid var(--border);
+		border-radius: 20px;
+		box-shadow: var(--shadow-card);
+	}
+
+	.post-nav {
+		margin-top: 32px;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 16px;
+	}
+	.pn-link {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding: 20px 24px;
+		border-radius: 16px;
+		border: 1px solid var(--border);
+		background: #fff;
+		text-decoration: none;
+		transition: all .25s var(--ease-out);
+		box-shadow: var(--shadow-xs);
+	}
+	.pn-link:hover {
+		border-color: var(--accent);
+		box-shadow: var(--shadow-hover);
+		transform: translateY(-2px);
+	}
+	.pn-next { text-align: right; }
+	.pn-label {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		font-size: 12px;
+		font-weight: 600;
+		color: var(--accent);
+		text-transform: uppercase;
+		letter-spacing: .04em;
+	}
+	.pn-title {
+		font-size: 15px;
+		font-weight: 600;
+		color: var(--text);
+		line-height: 1.4;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.post-cta {
+		margin-top: 32px;
+		padding: 28px 32px;
+		background: linear-gradient(135deg, var(--accent-light), #fff);
+		border: 1.5px solid rgba(249,115,22,.12);
+		border-radius: 16px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		flex-wrap: wrap;
+		box-shadow: var(--shadow-xs);
+	}
+	.cta-left strong {
+		display: block;
+		font-size: 16px;
+	}
+	.cta-left span {
+		font-size: 14px;
+		color: var(--muted);
+	}
+
+	@media (max-width: 768px) {
+		.hdr-body h1 { font-size: 24px; }
+		.post-content { padding: 24px 20px; }
+		.hdr-body { padding: 24px 22px 28px; }
+		.post-cta { flex-direction: column; text-align: center; }
+		.post-nav { grid-template-columns: 1fr; }
+	}
+</style>

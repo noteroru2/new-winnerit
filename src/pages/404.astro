@@ -1,0 +1,83 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404 ไม่พบหน้าที่ต้องการ — Winner IT" description="ไม่พบหน้าที่คุณกำลังมองหา" robots="noindex, follow">
+	<section class="nf">
+		<div class="container inner">
+			<div class="nf-illustration">
+				<div class="nf-circle"></div>
+				<div class="code">404</div>
+			</div>
+			<h1>ไม่พบหน้าที่ต้องการ</h1>
+			<p>หน้านี้อาจถูกลบหรือย้ายไปแล้ว ลองกลับไปหน้าแรกหรือดูบทความของเรา</p>
+			<div class="actions">
+				<a class="btn btn-primary btn-big" href="/">กลับหน้าแรก</a>
+				<a class="btn btn-big" href="/articles">ดูบทความ</a>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.nf {
+		padding: 80px 0 100px;
+	}
+	.inner {
+		text-align: center;
+		max-width: 480px;
+		margin: 0 auto;
+		animation: fadeUp .6s var(--ease-out) both;
+	}
+	@keyframes fadeUp {
+		from { opacity: 0; transform: translateY(20px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+	.nf-illustration {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 24px;
+	}
+	.nf-circle {
+		position: absolute;
+		width: 160px;
+		height: 160px;
+		border-radius: 50%;
+		background: var(--accent-light);
+		border: 2px dashed rgba(249,115,22,.15);
+		animation: spin 20s linear infinite;
+	}
+	@keyframes spin {
+		to { transform: rotate(360deg); }
+	}
+	.code {
+		position: relative;
+		font-size: 88px;
+		font-weight: 900;
+		background: linear-gradient(135deg, #F97316, #fdba74);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		line-height: 1;
+		letter-spacing: -.04em;
+	}
+	.nf h1 {
+		margin: 0;
+		font-size: 28px;
+	}
+	.nf p {
+		margin: 14px 0 0;
+		color: var(--muted);
+		font-size: 16px;
+		line-height: 1.7;
+	}
+	.actions {
+		margin-top: 36px;
+		display: flex;
+		gap: 14px;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+</style>
