@@ -1,17 +1,28 @@
 ---
 import he from 'he';
-import { getMediaById, decodeSlug, type WPPost } from '../../lib/wp';
+import { getMediaById, decodeSlug, pickMediaUrl, buildMediaSrcset, type WPPost } from '../../lib/wp';
 
 const { post } = Astro.props as { post: WPPost };
 const title = he.decode(post.title.rendered);
 const featuredMedia = post.featured_media ? await getMediaById(post.featured_media) : null;
 const slugSafe = decodeSlug(post.slug);
+const thumbUrl = featuredMedia ? pickMediaUrl(featuredMedia, ['medium_large', 'medium', 'thumbnail']) : '';
+const thumbSrcset = featuredMedia ? buildMediaSrcset(featuredMedia, ['thumbnail', 'medium', 'medium_large', 'large']) : '';
 ---
 
 <article class="card">
 	{featuredMedia?.source_url ? (
 		<a href={`/${slugSafe}`} class="thumb" aria-label={`อ่าน: ${title}`}>
-			<img src={featuredMedia.source_url} alt={featuredMedia.alt_text?.trim() || title} loading="lazy" decoding="async" />
+			<img
+				src={thumbUrl}
+				srcset={thumbSrcset || undefined}
+				sizes="(max-width: 900px) 100vw, 360px"
+				alt={featuredMedia.alt_text?.trim() || title}
+				loading="lazy"
+				decoding="async"
+				width="800"
+				height="500"
+			/>
 			<div class="thumb-overlay"></div>
 		</a>
 	) : (

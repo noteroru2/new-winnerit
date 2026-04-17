@@ -1,7 +1,7 @@
 ---
 import he from 'he';
 import type { WPCategory, WPMedia, WPPost } from '../../lib/wp';
-import { decodeSlug } from '../../lib/wp';
+import { decodeSlug, pickMediaUrl, buildMediaSrcset } from '../../lib/wp';
 
 const { post, categories, contentHtml, featuredMedia, prevPost, nextPost } = Astro.props as {
 	post: WPPost;
@@ -13,6 +13,8 @@ const { post, categories, contentHtml, featuredMedia, prevPost, nextPost } = Ast
 };
 
 const title = he.decode(post.title.rendered);
+const coverUrl = featuredMedia ? pickMediaUrl(featuredMedia, ['large', 'medium_large', 'medium']) : '';
+const coverSrcset = featuredMedia ? buildMediaSrcset(featuredMedia, ['medium', 'medium_large', 'large']) : '';
 ---
 
 <article class="container post-page">
@@ -25,7 +27,9 @@ const title = he.decode(post.title.rendered);
 		{featuredMedia?.source_url ? (
 			<div class="cover">
 				<img
-					src={featuredMedia.source_url}
+					src={coverUrl}
+					srcset={coverSrcset || undefined}
+					sizes="(max-width: 900px) 100vw, 800px"
 					alt={featuredMedia.alt_text?.trim() || title}
 					loading="eager"
 					decoding="async"

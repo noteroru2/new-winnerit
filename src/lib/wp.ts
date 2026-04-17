@@ -16,6 +16,18 @@ export type WPMedia = {
 	source_url: string;
 	alt_text?: string;
 	title?: { rendered: string };
+	media_details?: {
+		width?: number;
+		height?: number;
+		sizes?: Record<
+			string,
+			{
+				source_url?: string;
+				width?: number;
+				height?: number;
+			}
+		>;
+	};
 };
 
 export type WPCategory = {
@@ -85,13 +97,35 @@ const mediaCache = new Map<number, WPMedia | null>();
 export async function getMediaById(id: number): Promise<WPMedia | null> {
 	if (mediaCache.has(id)) return mediaCache.get(id) ?? null;
 	try {
-		const media = await wpFetch<WPMedia>(`/wp-json/wp/v2/media/${id}?_fields=id,source_url,alt_text,title`);
+		const media = await wpFetch<WPMedia>(
+			`/wp-json/wp/v2/media/${id}?_fields=id,source_url,alt_text,title,media_details`
+		);
 		mediaCache.set(id, media);
 		return media;
 	} catch {
 		mediaCache.set(id, null);
 		return null;
 	}
+}
+
+export function pickMediaUrl(media: WPMedia, preferred: string[] = ['large', 'medium_large', 'medium', 'thumbnail']) {
+	const sizes = media.media_details?.sizes ?? {};
+	for (const key of preferred) {
+		const url = sizes[key]?.source_url;
+		if (url) return url;
+	}
+	return media.source_url;
+}
+
+export function buildMediaSrcset(media: WPMedia, preferred: string[] = ['thumbnail', 'medium', 'medium_large', 'large']) {
+	const sizes = media.media_details?.sizes ?? {};
+	const parts: string[] = [];
+	for (const key of preferred) {
+		const s = sizes[key];
+		if (!s?.source_url || !s?.width) continue;
+		parts.push(`${s.source_url} ${s.width}w`);
+	}
+	return parts.length ? parts.join(', ') : '';
 }
 
 const categoryCache = new Map<number, WPCategory | null>();
