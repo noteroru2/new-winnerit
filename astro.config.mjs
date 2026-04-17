@@ -13,27 +13,37 @@ function sitemapLastmodPlugin() {
 				outDir = config.outDir?.pathname?.replace(/^\/([A-Z]:)/, '$1') ?? './dist';
 			},
 			async 'astro:build:done'() {
-				const mapPath = join(outDir, '_lastmod-map.json');
-				if (!existsSync(mapPath)) return;
-				const map = JSON.parse(readFileSync(mapPath, 'utf-8'));
+				// Never fail the build if sitemap patching fails.
+				try {
+					const mapPath = join(outDir, '_lastmod-map.json');
+					if (!existsSync(mapPath)) return;
+					const raw = readFileSync(mapPath, 'utf-8').trim();
+					if (!raw) return;
+					const map = JSON.parse(raw);
 
-				for (const name of ['sitemap-0.xml', 'sitemap.xml']) {
-					const sitemapPath = join(outDir, name);
-					if (!existsSync(sitemapPath)) continue;
-					let xml = readFileSync(sitemapPath, 'utf-8');
-					for (const [url, mod] of Object.entries(map)) {
-						const locTag = `<loc>${url}</loc>`;
-						if (!xml.includes(locTag)) continue;
-						const dateStr = new Date(/** @type {string} */ (mod)).toISOString();
-						xml = xml.replace(
-							new RegExp(`${locTag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*<lastmod>[^<]+</lastmod>`),
-							`${locTag}<lastmod>${dateStr}</lastmod>`
-						);
+					for (const name of ['sitemap-0.xml', 'sitemap.xml']) {
+						const sitemapPath = join(outDir, name);
+						if (!existsSync(sitemapPath)) continue;
+						let xml = readFileSync(sitemapPath, 'utf-8');
+						for (const [url, mod] of Object.entries(map)) {
+							try {
+								const locTag = `<loc>${url}</loc>`;
+								if (!xml.includes(locTag)) continue;
+								const dateStr = new Date(/** @type {string} */ (mod)).toISOString();
+								const escapedLoc = locTag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+								xml = xml.replace(
+									new RegExp(`${escapedLoc}\\s*<lastmod>[^<]+</lastmod>`),
+									`${locTag}<lastmod>${dateStr}</lastmod>`
+								);
+							} catch {
+								// ignore per-entry failures
+							}
+						}
+						writeFileSync(sitemapPath, xml);
 					}
-					writeFileSync(sitemapPath, xml);
+				} catch {
+					// ignore
 				}
-
-				try { readFileSync(mapPath); writeFileSync(mapPath, ''); } catch {}
 			},
 		},
 	};
