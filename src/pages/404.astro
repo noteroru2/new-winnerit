@@ -1,8 +1,61 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { REDIRECTS } from '../config/redirects';
 ---
 
 <Layout title="404 ไม่พบหน้าที่ต้องการ — Winner IT" description="ไม่พบหน้าที่คุณกำลังมองหา" robots="noindex, follow">
+	<script define:vars={{ REDIRECTS }}>
+		(() => {
+			try {
+				const rawPath = window.location.pathname || '/';
+				const path = rawPath.length > 1 ? rawPath.replace(/\/+$/, '') : rawPath;
+				const suffix = `${window.location.search || ''}${window.location.hash || ''}`;
+
+				const normalize = (p) => (p && p.length > 1 ? p.replace(/\/+$/, '') : p || '/');
+				const rules = Array.isArray(REDIRECTS) ? REDIRECTS : [];
+
+				for (const rule of rules) {
+					if (!rule || typeof rule !== 'object') continue;
+					const type = rule.type || 'exact';
+
+					if (type === 'exact') {
+						const from = normalize(rule.from);
+						if (from && from === path) {
+							const to = normalize(rule.to);
+							if (to && to !== path) window.location.replace(`${to}${suffix}`);
+							return;
+						}
+					}
+
+					if (type === 'prefix') {
+						const from = rule.from || '';
+						if (from && rawPath.startsWith(from)) {
+							const to = rule.to || '/';
+							const rest = rawPath.slice(from.length);
+							const next = `${to}${rest}`.replace(/\/{2,}/g, '/');
+							const dest = normalize(next);
+							if (dest && dest !== path) window.location.replace(`${dest}${suffix}`);
+							return;
+						}
+					}
+
+					if (type === 'regex') {
+						const from = rule.from || '';
+						if (!from) continue;
+						const re = new RegExp(from);
+						if (re.test(rawPath)) {
+							const next = rawPath.replace(re, rule.to || '/');
+							const dest = normalize(next);
+							if (dest && dest !== path) window.location.replace(`${dest}${suffix}`);
+							return;
+						}
+					}
+				}
+			} catch {
+				// ignore
+			}
+		})();
+	</script>
 	<section class="nf">
 		<div class="container inner">
 			<div class="nf-illustration">

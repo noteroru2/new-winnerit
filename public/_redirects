@@ -1,3 +1,12 @@
+# Optional host-level redirects (Netlify / Cloudflare Pages compatible).
+#
+# Prefer adding rules in `src/config/redirects.ts` because that works on ANY static host
+# via the 404 page fallback. Use this file only if your host supports it.
+#
+# Examples:
+# /old-page        /new-page        301
+# /blog/*          /articles/:splat  301
+
 /buy-laptop /รับซื้อโน๊ตบุ๊ค 301
 /buy-computer /รับซื้อคอมพิวเตอร์ 301
 /buy-macbook /รับซื้อmacbook 301
