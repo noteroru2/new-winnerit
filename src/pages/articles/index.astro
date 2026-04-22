@@ -3,10 +3,18 @@ import Layout from '../../layouts/Layout.astro';
 import { getAllPosts } from '../../lib/wp';
 import PostCard from '../../components/blog/PostCard.astro';
 
-const pageSize = 12;
+const env = (import.meta.env ?? {}) as any;
+const envNumber = (key: string, fallback: number) => {
+	const raw = env?.[key];
+	const n = typeof raw === 'string' || typeof raw === 'number' ? Number(raw) : NaN;
+	return Number.isFinite(n) && n > 0 ? n : fallback;
+};
+
+const pageSize = envNumber('ARTICLES_PAGE_SIZE', 24);
 const page = 1;
 const postsAll = (await getAllPosts()).sort((a, b) => (a.date < b.date ? 1 : -1));
-const totalPages = Math.max(1, Math.ceil(postsAll.length / pageSize));
+const maxPages = envNumber('ARTICLES_MAX_PAGES', 200);
+const totalPages = Math.max(1, Math.min(maxPages, Math.ceil(postsAll.length / pageSize)));
 const posts = postsAll.slice((page - 1) * pageSize, page * pageSize);
 
 const delta = 2;
