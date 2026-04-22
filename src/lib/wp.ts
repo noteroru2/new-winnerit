@@ -40,12 +40,56 @@ export type WPCategory = {
 const env = (import.meta.env ?? {}) as any;
 export const WP_BASE = String(env.WP_BASE_URL ?? 'https://wp.winnerit.in.th');
 
+function envNumber(key: string, fallback: number) {
+	const raw = env?.[key];
+	const n = typeof raw === 'string' || typeof raw === 'number' ? Number(raw) : NaN;
+	return Number.isFinite(n) && n >= 0 ? n : fallback;
+}
+
+const WP_FETCH_TIMEOUT_MS = envNumber('WP_FETCH_TIMEOUT_MS', 30_000);
+const WP_FETCH_RETRIES = envNumber('WP_FETCH_RETRIES', 3);
+const WP_FETCH_RETRY_DELAY_MS = envNumber('WP_FETCH_RETRY_DELAY_MS', 750);
+
 function wpUrl(path: string) {
 	return new URL(path, WP_BASE).toString();
 }
 
+function sleep(ms: number) {
+	return new Promise((r) => setTimeout(r, ms));
+}
+
+async function fetchWithRetry(url: string, init?: RequestInit) {
+	let lastErr: unknown = null;
+
+	for (let attempt = 0; attempt <= WP_FETCH_RETRIES; attempt++) {
+		try {
+			const timeoutMs = envNumber('WP_FETCH_TIMEOUT_MS', WP_FETCH_TIMEOUT_MS);
+			const controller = new AbortController();
+			const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+			try {
+				return await fetch(url, {
+					...init,
+					signal: controller.signal,
+				});
+			} finally {
+				clearTimeout(timer);
+			}
+		} catch (err) {
+			lastErr = err;
+			if (attempt >= WP_FETCH_RETRIES) break;
+
+			// Basic exponential backoff with a small base delay.
+			const delay = WP_FETCH_RETRY_DELAY_MS * Math.pow(2, attempt);
+			await sleep(delay);
+		}
+	}
+
+	throw lastErr instanceof Error ? lastErr : new Error(`WP fetch failed for ${url}`);
+}
+
 async function wpFetch<T>(path: string, init?: RequestInit): Promise<T> {
-	const res = await fetch(wpUrl(path), {
+	const res = await fetchWithRetry(wpUrl(path), {
 		...init,
 		headers: {
 			Accept: 'application/json',
@@ -68,11 +112,18 @@ export async function getAllPosts(): Promise<WPPost[]> {
 	const all: WPPost[] = [];
 
 	for (;;) {
-		const res = await fetch(wpUrl(`/wp-json/wp/v2/posts?per_page=${perPage}&page=${page}&_fields=id,slug,date,modified,link,title,excerpt,content,featured_media,categories`), {
-			headers: { Accept: 'application/json' },
-		});
+		const res = await fetchWithRetry(
+			wpUrl(
+				`/wp-json/wp/v2/posts?per_page=${perPage}&page=${page}&_fields=id,slug,date,modified,link,title,excerpt,content,featured_media,categories`
+			),
+			{ headers: { Accept: 'application/json' } }
+		);
 
-		if (!res.ok) break;
+		if (!res.ok) {
+			// If WordPress returns an error for a page beyond the last one, stop.
+			if (res.status === 400 || res.status === 404) break;
+			throw new Error(`WP API error ${res.status} for posts page ${page}`);
+		}
 
 		const posts = (await res.json()) as WPPost[];
 		if (!posts.length) break;
