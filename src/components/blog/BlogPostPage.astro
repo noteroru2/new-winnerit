@@ -1,0 +1,88 @@
+---
+import he from 'he';
+import { parse } from 'node-html-parser';
+import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import Layout from '../../layouts/Layout.astro';
+import Post from './Post.astro';
+import { getCategoriesByIds, getMediaById, type WPPost } from '../../lib/wp';
+import { transformPostHtml, extractFaqFromHtml } from '../../lib/contentTransforms';
+
+function stripHtml(html: string): string {
+	return parse(html).text.replace(/\s+/g, ' ').trim();
+}
+
+function makeDescription(excerpt: string, titleText: string): string {
+	const clean = stripHtml(excerpt).replace(/\[…\]|\[&hellip;\]|\.\.\.$/g, '').trim();
+	if (clean.length > 20) return clean.slice(0, 160);
+	return titleText.slice(0, 160);
+}
+
+const { post, prevPost, nextPost } = Astro.props as { post: WPPost; prevPost: WPPost | null; nextPost: WPPost | null };
+const title = he.decode(post.title.rendered);
+const description = makeDescription(post.excerpt.rendered, title);
+const categories = await getCategoriesByIds(post.categories ?? []);
+const contentHtml = await transformPostHtml(post.content.rendered, post.title.rendered);
+const featuredMedia = post.featured_media ? await getMediaById(post.featured_media) : null;
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://winnerit.in.th';
+const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
+
+const articleSchema = {
+	'@type': 'Article',
+	headline: title,
+	description,
+	url: pageUrl,
+	datePublished: post.date,
+	dateModified: post.modified,
+	...(featuredMedia?.source_url && {
+		image: { '@type': 'ImageObject', url: featuredMedia.source_url },
+	}),
+	author: { '@id': `${siteUrl}/#organization` },
+	publisher: { '@id': `${siteUrl}/#organization` },
+	mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+	inLanguage: 'th-TH',
+};
+
+const breadcrumbSchema = {
+	'@type': 'BreadcrumbList',
+	itemListElement: [
+		{ '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: siteUrl },
+		{ '@type': 'ListItem', position: 2, name: 'บทความ', item: `${siteUrl}/articles` },
+		{ '@type': 'ListItem', position: 3, name: title, item: pageUrl },
+	],
+};
+
+const faqs = extractFaqFromHtml(post.content.rendered);
+const faqSchema =
+	faqs.length > 0
+		? {
+				'@type': 'FAQPage',
+				mainEntity: faqs.map((f) => ({
+					'@type': 'Question',
+					name: f.question,
+					acceptedAnswer: { '@type': 'Answer', text: f.answer },
+				})),
+			}
+		: null;
+
+try {
+	const mapPath = join('dist', '_lastmod-map.json');
+	mkdirSync(dirname(mapPath), { recursive: true });
+	const existing = existsSync(mapPath) ? JSON.parse(readFileSync(mapPath, 'utf-8')) : {};
+	existing[pageUrl] = post.modified;
+	writeFileSync(mapPath, JSON.stringify(existing));
+} catch {}
+---
+
+<Layout
+	title={`${title} — Winner IT`}
+	description={description}
+	ogImage={featuredMedia?.source_url}
+	ogType="article"
+	articleDate={post.date}
+	articleModified={post.modified}
+	jsonLd={[articleSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])]}
+>
+	<Post post={post} categories={categories} contentHtml={contentHtml} featuredMedia={featuredMedia} prevPost={prevPost} nextPost={nextPost} />
+</Layout>

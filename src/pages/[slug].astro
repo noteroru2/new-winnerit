@@ -1,0 +1,51 @@
+---
+import BlogPostPage from '../components/blog/BlogPostPage.astro';
+import { getAllPosts, decodeSlug, type WPPost } from '../lib/wp';
+import { parsePrefixedWpSlug } from '../lib/postPaths';
+
+export async function getStaticPaths() {
+	const RESERVED = new Set([
+		'',
+		'about',
+		'articles',
+		'blog',
+		'contact',
+		'category',
+		'rss.xml',
+		'sitemap-index.xml',
+		'services',
+		'locations',
+		'prices',
+		'รับซื้อโน๊ตบุ๊ค',
+		'รับซื้อคอมพิวเตอร์',
+		'รับซื้อmacbook',
+		'รับซื้อiphone',
+		'รับซื้อipad',
+		'รับซื้อกล้อง',
+	]);
+
+	const posts = await getAllPosts();
+	const sorted = [...posts].sort((a, b) => (a.date < b.date ? 1 : -1));
+
+	const paths: { params: { slug: string }; props: { post: WPPost; prevPost: WPPost | null; nextPost: WPPost | null } }[] = [];
+
+	for (let i = 0; i < sorted.length; i++) {
+		const post = sorted[i];
+		if (!post.slug) continue;
+
+		const slug = decodeSlug(post.slug);
+		if (RESERVED.has(slug)) continue;
+		if (parsePrefixedWpSlug(post.slug)) continue;
+
+		const prevPost = i > 0 ? sorted[i - 1] : null;
+		const nextPost = i < sorted.length - 1 ? sorted[i + 1] : null;
+
+		paths.push({ params: { slug }, props: { post, prevPost, nextPost } });
+	}
+	return paths;
+}
+
+const { post, prevPost, nextPost } = Astro.props as { post: WPPost; prevPost: WPPost | null; nextPost: WPPost | null };
+---
+
+<BlogPostPage post={post} prevPost={prevPost} nextPost={nextPost} />

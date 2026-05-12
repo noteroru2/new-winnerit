@@ -1,0 +1,38 @@
+---
+// Canonical: /services/[slug], /locations/[slug], /prices/[slug] for WP slugs services-*, locations-*, prices-*.
+import BlogPostPage from '../../components/blog/BlogPostPage.astro';
+import { getAllPosts, type WPPost } from '../../lib/wp';
+import { parsePrefixedWpSlug, type PrefixedSegment } from '../../lib/postPaths';
+
+export async function getStaticPaths() {
+	const ALLOWED = new Set<PrefixedSegment>(['services', 'locations', 'prices']);
+	const posts = await getAllPosts();
+	const sorted = [...posts].sort((a, b) => (a.date < b.date ? 1 : -1));
+
+	const paths: {
+		params: { segment: string; slug: string };
+		props: { post: WPPost; prevPost: WPPost | null; nextPost: WPPost | null };
+	}[] = [];
+
+	for (let i = 0; i < sorted.length; i++) {
+		const post = sorted[i];
+		if (!post.slug) continue;
+
+		const parsed = parsePrefixedWpSlug(post.slug);
+		if (!parsed || !ALLOWED.has(parsed.segment)) continue;
+
+		const prevPost = i > 0 ? sorted[i - 1] : null;
+		const nextPost = i < sorted.length - 1 ? sorted[i + 1] : null;
+
+		paths.push({
+			params: { segment: parsed.segment, slug: parsed.rest },
+			props: { post, prevPost, nextPost },
+		});
+	}
+	return paths;
+}
+
+const { post, prevPost, nextPost } = Astro.props as { post: WPPost; prevPost: WPPost | null; nextPost: WPPost | null };
+---
+
+<BlogPostPage post={post} prevPost={prevPost} nextPost={nextPost} />

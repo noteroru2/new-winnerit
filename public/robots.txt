@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://winnerit.in.th/sitemap-index.xml

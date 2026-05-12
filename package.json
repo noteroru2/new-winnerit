@@ -1,0 +1,23 @@
+{
+  "name": "new-winnerit",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "prebuild": "node scripts/write-redirects.mjs",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check-status": "node scripts/check-status.mjs",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.2",
+    "astro": "^6.1.6",
+    "he": "^1.2.0",
+    "node-html-parser": "^7.1.0"
+  }
+}

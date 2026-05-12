@@ -1,0 +1,239 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="เกี่ยวกับเรา — Winner IT" description="Winner IT รับซื้อโน๊ตบุ๊ค คอมพิวเตอร์ MacBook iPhone อุปกรณ์ IT มือสอง ราคาดี จ่ายทันที">
+	<section class="hero">
+		<div class="hero-bg"></div>
+		<div class="container hero-inner">
+			<span class="pill">เกี่ยวกับเรา</span>
+			<h1>Winner IT คือใคร?</h1>
+			<p class="lead">
+				Winner IT ดำเนินการภายใต้<strong>บริษัท อำพล เทรดดิ้ง จำกัด</strong><br class="hide-m"/>
+				รับซื้อโน๊ตบุ๊ค คอมพิวเตอร์ MacBook iPhone และอุปกรณ์ IT มือสองทุกชนิด<br class="hide-m"/>
+				ด้วยกระบวนการประเมินราคาที่โปร่งใส รวดเร็ว จ่ายเงินทันที บริการลูกค้าทั่วประเทศ
+			</p>
+		</div>
+	</section>
+
+	<section class="values-sec">
+		<div class="container">
+			<div class="sec-title-wrap">
+				<h2 class="sec-title">สิ่งที่เราให้ความสำคัญ</h2>
+			</div>
+			<div class="v-grid">
+				<div class="v-card">
+					<div class="v-icon">
+						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+					</div>
+					<h3>ราคาโปร่งใส</h3>
+					<p>ประเมินราคาตามสภาพจริง ตรวจเช็กทุกจุด ให้ราคาที่เป็นธรรมที่สุด</p>
+				</div>
+				<div class="v-card">
+					<div class="v-icon">
+						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+					</div>
+					<h3>ปลอดภัย น่าเชื่อถือ</h3>
+					<p>เปิดให้บริการมานาน มีรีวิวจากลูกค้าจริง ข้อมูลส่วนตัวถูกลบอย่างปลอดภัย</p>
+				</div>
+				<div class="v-card">
+					<div class="v-icon">
+						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+					</div>
+					<h3>รวดเร็ว จ่ายทันที</h3>
+					<p>ส่งรูป+รายละเอียดมาทาง Line ประเมินเร็ว ตกลงราคาได้เลย โอนจ่ายทันที</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="steps-sec">
+		<div class="container">
+			<h2 class="sec-title">ขั้นตอนการขายอุปกรณ์กับเรา</h2>
+			<div class="s-grid">
+				<div class="s-card">
+					<div class="s-num-wrap">
+						<div class="s-num">1</div>
+						<div class="s-connector"></div>
+					</div>
+					<div class="s-content">
+						<strong>ส่งรายละเอียด</strong>
+						<p>แอดไลน์ @WEBUY แล้วส่งรูปพร้อมรายละเอียดอุปกรณ์มาให้ทีมงาน</p>
+					</div>
+				</div>
+				<div class="s-card">
+					<div class="s-num-wrap">
+						<div class="s-num">2</div>
+						<div class="s-connector"></div>
+					</div>
+					<div class="s-content">
+						<strong>รับการประเมินราคา</strong>
+						<p>ทีมงานตรวจสอบสเปกและสภาพ แจ้งราคารับซื้อให้ทราบ</p>
+					</div>
+				</div>
+				<div class="s-card">
+					<div class="s-num-wrap">
+						<div class="s-num">3</div>
+					</div>
+					<div class="s-content">
+						<strong>รับเงินทันที</strong>
+						<p>ตกลงราคา นัดส่งเครื่อง รับเงินโอนทันทีหลังตรวจสอบ</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+</Layout>
+
+<style>
+	.hero {
+		position: relative;
+		padding: 80px 0 64px;
+		text-align: center;
+		overflow: hidden;
+	}
+	.hero-bg {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(168deg, #fff7ed 0%, #fffbf5 30%, #fff 60%);
+		z-index: 0;
+	}
+	.hero-inner {
+		position: relative;
+		z-index: 1;
+		animation: fadeUp .6s var(--ease-out) both;
+	}
+	@keyframes fadeUp {
+		from { opacity: 0; transform: translateY(20px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+	.hero h1 {
+		font-size: 42px;
+		margin: 16px 0 0;
+		letter-spacing: -.03em;
+	}
+	.lead {
+		margin: 16px auto 0;
+		font-size: 17px;
+		color: var(--muted);
+		line-height: 1.75;
+		max-width: 640px;
+	}
+	.hide-m { display: inline; }
+
+	.values-sec {
+		padding: 80px 0;
+		background: var(--bg-alt);
+	}
+	.sec-title-wrap { text-align: center; margin-bottom: 40px; }
+	.sec-title {
+		text-align: center;
+		font-size: 30px;
+		margin: 0 0 40px;
+		letter-spacing: -.02em;
+	}
+	.v-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 24px;
+	}
+	.v-card {
+		background: #fff;
+		border: 1px solid var(--border);
+		border-radius: 20px;
+		padding: 40px 28px;
+		text-align: center;
+		box-shadow: var(--shadow-card);
+		transition: all .3s var(--ease-out);
+	}
+	.v-card:hover {
+		transform: translateY(-5px);
+		box-shadow: var(--shadow-hover);
+	}
+	.v-icon {
+		width: 60px;
+		height: 60px;
+		border-radius: 16px;
+		background: var(--accent-light);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 20px;
+		transition: all .3s var(--ease-out);
+	}
+	.v-card:hover .v-icon {
+		transform: scale(1.08);
+		box-shadow: 0 4px 16px rgba(249,115,22,.15);
+	}
+	.v-card h3 { margin: 0 0 10px; font-size: 18px; }
+	.v-card p { margin: 0; font-size: 15px; color: var(--muted); line-height: 1.7; }
+
+	.steps-sec {
+		padding: 80px 0;
+	}
+	.s-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 28px;
+	}
+	.s-card {
+		background: #fff;
+		border: 1px solid var(--border);
+		border-radius: 20px;
+		padding: 36px 28px;
+		box-shadow: var(--shadow-card);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		transition: all .3s var(--ease-out);
+	}
+	.s-card:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--shadow-hover);
+	}
+	.s-num-wrap {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-bottom: 20px;
+	}
+	.s-num {
+		width: 52px;
+		height: 52px;
+		border-radius: 50%;
+		background: linear-gradient(135deg, #F97316, #ea580c);
+		color: #fff;
+		font-weight: 800;
+		font-size: 22px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: 0 4px 16px rgba(249,115,22,.3);
+	}
+	.s-connector {
+		width: 2px;
+		height: 16px;
+		background: linear-gradient(180deg, var(--accent), transparent);
+		margin-top: 4px;
+	}
+	.s-content strong {
+		display: block;
+		font-size: 17px;
+		margin-bottom: 8px;
+	}
+	.s-content p {
+		margin: 0;
+		font-size: 15px;
+		color: var(--muted);
+		line-height: 1.7;
+	}
+
+	@media (max-width: 900px) {
+		.hero h1 { font-size: 34px; }
+		.hide-m { display: none; }
+		.v-grid, .s-grid { grid-template-columns: 1fr; }
+		.s-connector { display: none; }
+	}
+</style>
