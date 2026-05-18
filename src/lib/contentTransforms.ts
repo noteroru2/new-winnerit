@@ -1,7 +1,8 @@
 import { parse } from 'node-html-parser';
 import he from 'he';
 import keywordLinks from '../config/keyword-links.json';
-import { getMediaById, WP_BASE } from './wp';
+import { renderMarkdown } from './markdown';
+import { getMediaById } from './wp';
 
 type KeywordMap = Record<string, string>;
 
@@ -46,8 +47,12 @@ function getFilenameFromUrl(url: string) {
 
 function getMediaIdFromImgClass(classAttr: string | undefined) {
 	if (!classAttr) return null;
-	// Common WP pattern: class="... wp-image-123 ..."
 	const m = classAttr.match(/\bwp-image-(\d+)\b/);
+	return m ? Number(m[1]) : null;
+}
+
+function getMediaIdFromSrc(src: string) {
+	const m = src.match(/\/wp-media\/(\d+)\.webp$/i);
 	return m ? Number(m[1]) : null;
 }
 
@@ -60,25 +65,13 @@ function isInsideLink(node: any) {
 	return false;
 }
 
-function normalizeWpAssetUrl(raw: string) {
+function normalizeAssetUrl(raw: string) {
 	const s = String(raw ?? '').trim();
 	if (!s) return s;
-
-	// Keep non-network schemes as-is
 	if (s.startsWith('data:') || s.startsWith('blob:') || s.startsWith('mailto:') || s.startsWith('tel:')) return s;
-
-	// Protocol-relative URLs: //example.com/img.jpg
-	if (s.startsWith('//')) return `https:${s}`;
-
-	// Already absolute
+	if (s.startsWith('/wp-media/')) return s;
 	if (/^https?:\/\//i.test(s)) return s;
-
-	// Common WP relative paths
-	if (s.startsWith('/')) return new URL(s, WP_BASE).toString();
-
-	// Some editors output "wp-content/..." without a leading slash
-	if (s.startsWith('wp-content/') || s.startsWith('./wp-content/')) return new URL(`/${s.replace(/^\.\//, '')}`, WP_BASE).toString();
-
+	if (s.startsWith('/')) return s;
 	return s;
 }
 
@@ -95,7 +88,7 @@ function normalizeSrcset(raw: string) {
 			const pieces = part.split(/\s+/);
 			const url = pieces[0] ?? '';
 			const rest = pieces.slice(1).join(' ');
-			const norm = normalizeWpAssetUrl(url);
+			const norm = normalizeAssetUrl(url);
 			return rest ? `${norm} ${rest}` : norm;
 		})
 		.join(', ');
@@ -126,28 +119,22 @@ export function rewriteWinneritLegacyPrefixedPaths(html: string): string {
 	return root.toString();
 }
 
-function normalizeWpHtmlAssets(html: string) {
+function normalizeHtmlAssets(html: string) {
 	const root = parse(html, { comment: false });
 
-	// Normalize <img> URLs (src, srcset + common lazy-load attrs)
 	for (const img of root.querySelectorAll('img')) {
 		for (const attr of ['src', 'data-src', 'data-lazy-src'] as const) {
 			const v = img.getAttribute(attr);
-			if (v) img.setAttribute(attr, normalizeWpAssetUrl(v));
+			if (v) img.setAttribute(attr, normalizeAssetUrl(v));
 		}
-
 		const srcset = img.getAttribute('srcset');
 		if (srcset) img.setAttribute('srcset', normalizeSrcset(srcset));
-
-		const dataSrcset = img.getAttribute('data-srcset');
-		if (dataSrcset) img.setAttribute('data-srcset', normalizeSrcset(dataSrcset));
 	}
 
-	// Normalize <a href> that points to WP media/attachments so clicking images works
 	for (const a of root.querySelectorAll('a')) {
 		const href = a.getAttribute('href');
 		if (!href) continue;
-		a.setAttribute('href', normalizeWpAssetUrl(href));
+		a.setAttribute('href', normalizeAssetUrl(href));
 	}
 
 	return root.toString();
@@ -228,10 +215,10 @@ export async function autoGenerateImageAlts(html: string, postTitle: string) {
 		const existingAlt = img.getAttribute('alt');
 		if (existingAlt && existingAlt.trim().length > 0) continue;
 
-		const classAttr = img.getAttribute('class') ?? undefined;
-		const mediaId = getMediaIdFromImgClass(classAttr);
+		const src = img.getAttribute('src') ?? '';
+		const mediaId =
+			getMediaIdFromImgClass(img.getAttribute('class') ?? undefined) ?? getMediaIdFromSrc(src);
 
-		// (1) Use WP media alt_text if we can resolve an ID.
 		if (mediaId) {
 			const media = await getMediaById(mediaId);
 			const altText = (media?.alt_text ?? '').trim();
@@ -241,8 +228,6 @@ export async function autoGenerateImageAlts(html: string, postTitle: string) {
 			}
 		}
 
-		// (2) Filename + post title
-		const src = img.getAttribute('src') ?? '';
 		const filename = getFilenameFromUrl(src);
 		const label = titleCaseFromFilename(filename);
 		if (label) {
@@ -311,9 +296,15 @@ export function extractFaqFromHtml(html: string): { question: string; answer: st
 
 export async function transformPostHtml(html: string, postTitle: string) {
 	const legacyPaths = rewriteWinneritLegacyPrefixedPaths(html);
-	const normalizedAssets = normalizeWpHtmlAssets(legacyPaths);
+	const normalizedAssets = normalizeHtmlAssets(legacyPaths);
 	const withLinks = autoLinkKeywords(normalizedAssets);
 	const withAlts = await autoGenerateImageAlts(withLinks, postTitle);
 	return withAlts;
+}
+
+/** Markdown (from content/posts) → HTML with keyword links, alts, legacy path fixes */
+export async function transformPostContent(markdown: string, postTitle: string) {
+	const html = renderMarkdown(markdown);
+	return transformPostHtml(html, postTitle);
 }
 

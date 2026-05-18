@@ -6,7 +6,8 @@ import { join, dirname } from 'node:path';
 import Layout from '../../layouts/Layout.astro';
 import Post from './Post.astro';
 import { getCategoriesByIds, getMediaById, type WPPost } from '../../lib/wp';
-import { transformPostHtml, extractFaqFromHtml } from '../../lib/contentTransforms';
+import { transformPostContent, extractFaqFromHtml } from '../../lib/contentTransforms';
+import { renderMarkdown } from '../../lib/markdown';
 
 function stripHtml(html: string): string {
 	return parse(html).text.replace(/\s+/g, ' ').trim();
@@ -22,7 +23,7 @@ const { post, prevPost, nextPost } = Astro.props as { post: WPPost; prevPost: WP
 const title = he.decode(post.title.rendered);
 const description = makeDescription(post.excerpt.rendered, title);
 const categories = await getCategoriesByIds(post.categories ?? []);
-const contentHtml = await transformPostHtml(post.content.rendered, post.title.rendered);
+const contentHtml = await transformPostContent(post.content.markdown, post.title.rendered);
 const featuredMedia = post.featured_media ? await getMediaById(post.featured_media) : null;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://winnerit.in.th';
@@ -53,7 +54,7 @@ const breadcrumbSchema = {
 	],
 };
 
-const faqs = extractFaqFromHtml(post.content.rendered);
+const faqs = extractFaqFromHtml(renderMarkdown(post.content.markdown));
 const faqSchema =
 	faqs.length > 0
 		? {
