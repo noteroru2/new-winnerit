@@ -1,8 +1,6 @@
 ---
 import he from 'he';
 import { parse } from 'node-html-parser';
-import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'node:fs';
-import { join, dirname } from 'node:path';
 import Layout from '../../layouts/Layout.astro';
 import Post from './Post.astro';
 import { getCategoriesByIds, getMediaById, type WPPost } from '../../lib/wp';
@@ -66,14 +64,6 @@ const faqSchema =
 				})),
 			}
 		: null;
-
-try {
-	const mapPath = join('dist', '_lastmod-map.json');
-	mkdirSync(dirname(mapPath), { recursive: true });
-	const existing = existsSync(mapPath) ? JSON.parse(readFileSync(mapPath, 'utf-8')) : {};
-	existing[pageUrl] = post.modified;
-	writeFileSync(mapPath, JSON.stringify(existing));
-} catch {}
 ---
 
 <Layout

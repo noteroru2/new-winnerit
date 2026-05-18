@@ -1,33 +1,22 @@
-import { readFileSync, existsSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
 import matter from 'gray-matter';
+import categoriesJson from '../../data/wp/categories.json';
+import mediaJson from '../../data/wp/media.json';
 import type { WPCategory, WPMedia, WPPost } from './wp-types';
 
 export type { WPCategory, WPMedia, WPPost } from './wp-types';
 
-const root = process.cwd();
-const postsDir = join(root, 'content', 'posts');
-const dataDir = join(root, 'data', 'wp');
+const postModules = import.meta.glob('/content/posts/*.md', {
+	eager: true,
+	query: '?raw',
+	import: 'default',
+}) as Record<string, string>;
+
+const mediaManifest = mediaJson as Record<string, WPMedia>;
+const categoriesData = categoriesJson as WPCategory[];
 
 let _postsCache: WPPost[] | null = null;
-let _categoriesCache: WPCategory[] | null = null;
-/** @type {Record<string, WPMedia> | null} */
-let _mediaManifest: Record<string, WPMedia> | null = null;
 
-function loadMediaManifest(): Record<string, WPMedia> {
-	if (_mediaManifest) return _mediaManifest;
-	const path = join(dataDir, 'media.json');
-	if (!existsSync(path)) {
-		_mediaManifest = {};
-		return _mediaManifest;
-	}
-	const raw = JSON.parse(readFileSync(path, 'utf-8')) as Record<string, WPMedia>;
-	_mediaManifest = raw;
-	return raw;
-}
-
-function postFromFile(filePath: string): WPPost | null {
-	const raw = readFileSync(filePath, 'utf-8');
+function postFromRaw(raw: string): WPPost | null {
 	const { data, content } = matter(raw);
 	if (!data?.id || !data?.slug) return null;
 
@@ -50,15 +39,15 @@ function postFromFile(filePath: string): WPPost | null {
 
 export async function getAllPosts(): Promise<WPPost[]> {
 	if (_postsCache) return _postsCache;
-	if (!existsSync(postsDir)) {
-		throw new Error('No local content found in content/posts/.');
+
+	const posts: WPPost[] = [];
+	for (const raw of Object.values(postModules)) {
+		const post = postFromRaw(raw);
+		if (post) posts.push(post);
 	}
 
-	const files = readdirSync(postsDir).filter((f) => f.endsWith('.md'));
-	const posts: WPPost[] = [];
-	for (const file of files) {
-		const post = postFromFile(join(postsDir, file));
-		if (post) posts.push(post);
+	if (!posts.length) {
+		throw new Error('No local content found in content/posts/.');
 	}
 
 	_postsCache = posts;
@@ -75,8 +64,7 @@ const mediaCache = new Map<number, WPMedia | null>();
 export async function getMediaById(id: number): Promise<WPMedia | null> {
 	if (mediaCache.has(id)) return mediaCache.get(id) ?? null;
 
-	const manifest = loadMediaManifest();
-	const entry = manifest[String(id)];
+	const entry = mediaManifest[String(id)];
 	if (!entry) {
 		mediaCache.set(id, null);
 		return null;
@@ -132,15 +120,7 @@ export async function getCategoriesByIds(ids: number[]): Promise<WPCategory[]> {
 }
 
 export async function getAllCategories(): Promise<WPCategory[]> {
-	if (_categoriesCache) return _categoriesCache;
-
-	const path = join(dataDir, 'categories.json');
-	if (!existsSync(path)) {
-		throw new Error('Missing data/wp/categories.json');
-	}
-
-	_categoriesCache = JSON.parse(readFileSync(path, 'utf-8')) as WPCategory[];
-	return _categoriesCache;
+	return categoriesData;
 }
 
 export function decodeSlug(slug: string): string {
