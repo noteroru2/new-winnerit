@@ -17,7 +17,7 @@ export type RedirectRule =
 
 /**
  * Client-side fallback redirects on the 404 page (HTTP may still be 404 until host-level rules run).
- * Prefer Netlify/Cloudflare `public/_redirects` for real 301s.
+ * Prefer `public/_redirects` for real 301s (host uses splat rules for services/locations/prices).
  *
  * Notes:
  * - All `from` / `to` should be path-only (start with "/"), not full URLs.
