@@ -1,5 +1,5 @@
-import matter from 'gray-matter';
 import categoriesJson from '../../data/wp/categories.json';
+import { parseFrontmatter } from './frontmatter';
 import mediaJson from '../../data/wp/media.json';
 import type { WPCategory, WPMedia, WPPost } from './wp-types';
 
@@ -17,7 +17,7 @@ const categoriesData = categoriesJson as WPCategory[];
 let _postsCache: WPPost[] | null = null;
 
 function postFromRaw(raw: string): WPPost | null {
-	const { data, content } = matter(raw);
+	const { data, content } = parseFrontmatter(raw);
 	if (!data?.id || !data?.slug) return null;
 
 	const title = String(data.title ?? '');
