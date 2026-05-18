@@ -1,8 +1,17 @@
 {
 	"name": "new-winnerit",
 	"compatibility_date": "2024-11-01",
-	// Static site: serve prebuilt HTML from dist (no Astro Workers adapter).
 	"assets": {
 		"directory": "./dist"
-	}
+	},
+	"routes": [
+		{
+			"pattern": "winnerit.in.th",
+			"custom_domain": true
+		},
+		{
+			"pattern": "www.winnerit.in.th",
+			"custom_domain": true
+		}
+	]
 }
