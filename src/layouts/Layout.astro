@@ -30,6 +30,39 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const defaultOgImage = `${siteUrl}/og-default.png`;
 const ogImageUrl = ogImage ?? defaultOgImage;
 
+const normalizePath = (pathname: string) => {
+	let decoded = pathname || '/';
+	try {
+		decoded = decodeURI(decoded);
+	} catch {
+		// Keep the original pathname if decoding fails.
+	}
+	const withoutTrailingSlash = decoded.replace(/\/+$/, '');
+	return withoutTrailingSlash || '/';
+};
+
+const W1_SEO_OVERRIDES: Record<string, { title: string; description: string }> = {
+	'/รับซื้อmacbook': {
+		title: 'รับซื้อ MacBook มือสอง | Air Pro M1 M2 M3 M4 ประเมินตามสภาพ',
+		description: 'ขาย MacBook Air หรือ MacBook Pro มือสอง ส่งรุ่น ชิป RAM SSD รูปสภาพ แบตเตอรี่และอุปกรณ์เพื่อประเมินเบื้องต้น ราคาสุดท้ายยืนยันหลังตรวจเครื่องจริง',
+	},
+};
+
+const seoOverride = W1_SEO_OVERRIDES[normalizePath(Astro.url.pathname)];
+const resolvedTitle = seoOverride?.title ?? title;
+const resolvedDescription = seoOverride?.description ?? description;
+const inputJsonLd = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
+const resolvedJsonLd = inputJsonLd.map((schema) => {
+	if (schema?.['@type'] === 'WebPage') {
+		return {
+			...schema,
+			name: resolvedTitle,
+			description: resolvedDescription,
+		};
+	}
+	return schema;
+});
+
 const orgSchema = {
 	'@type': 'Organization',
 	'@id': `${siteUrl}/#organization`,
@@ -107,7 +140,7 @@ const baseJsonLd = {
 		orgSchema,
 		localBusinessSchema,
 		websiteSchema,
-		...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : []),
+		...resolvedJsonLd,
 	],
 };
 ---
@@ -120,8 +153,8 @@ const baseJsonLd = {
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="canonical" href={canonicalUrl.toString()} />
 		{robots && <meta name="robots" content={robots} />}
-		<title>{title}</title>
-		<meta name="description" content={description} />
+		<title>{resolvedTitle}</title>
+		<meta name="description" content={resolvedDescription} />
 		<meta name="theme-color" content="#F97316" />
 		<meta name="geo.region" content="TH-34" />
 		<meta name="geo.placename" content="อุบลราชธานี" />
@@ -148,8 +181,8 @@ const baseJsonLd = {
 
 		<meta property="og:type" content={ogType} />
 		<meta property="og:url" content={canonicalUrl.toString()} />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
+		<meta property="og:title" content={resolvedTitle} />
+		<meta property="og:description" content={resolvedDescription} />
 		<meta property="og:image" content={ogImageUrl} />
 		<meta property="og:locale" content="th_TH" />
 		<meta property="og:site_name" content="Winner IT" />
@@ -157,8 +190,8 @@ const baseJsonLd = {
 		{articleModified && <meta property="article:modified_time" content={articleModified} />}
 
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content={title} />
-		<meta name="twitter:description" content={description} />
+		<meta name="twitter:title" content={resolvedTitle} />
+		<meta name="twitter:description" content={resolvedDescription} />
 		<meta name="twitter:image" content={ogImageUrl} />
 
 		<link rel="alternate" type="application/rss+xml" title="Winner IT RSS" href="/rss.xml" />
