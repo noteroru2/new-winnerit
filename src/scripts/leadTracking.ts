@@ -1,5 +1,5 @@
 declare global {interface Window {dataLayer?: Record<string,unknown>[]}}
-function normalized(value:string,length=64){return value.slice(0,length).replace(/[^\p{L}\p{N}_./-]/gu,'');}
+function normalized(value:string,length=64){return value.slice(0,length).replace(/[^\p{L}\p{M}\p{N}_./-]/gu,'');}
 function track(event:'line_click'|'phone_click',placement:string){
   const url=new URL(window.location.href);
   const payload={
