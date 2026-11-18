@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { getAllPosts } from '../lib/wp';
 import PostCard from '../components/blog/PostCard.astro';
+import TrustProof from '../components/site/TrustProof.astro';
 
 const posts = (await getAllPosts())
 	.sort((a, b) => (a.date < b.date ? 1 : -1))
@@ -64,18 +65,18 @@ const posts = (await getAllPosts())
 		<div class="container">
 			<div class="stats-grid">
 				<div class="stat-item">
-					<div class="stat-num">5,000+</div>
-					<div class="stat-label">อุปกรณ์ที่รับซื้อแล้ว</div>
+					<div class="stat-num">หน้าร้านจริง</div>
+					<div class="stat-label">ตรวจสอบที่ตั้งได้</div>
 				</div>
 				<div class="stat-divider"></div>
 				<div class="stat-item">
-					<div class="stat-num">15 นาที</div>
-					<div class="stat-label">ประเมินราคาเฉลี่ย</div>
+					<div class="stat-num">09:00–19:00</div>
+					<div class="stat-label">เปิดให้บริการทุกวัน</div>
 				</div>
 				<div class="stat-divider"></div>
 				<div class="stat-item">
-					<div class="stat-num">4.9/5</div>
-					<div class="stat-label">คะแนนรีวิวจากลูกค้า</div>
+					<div class="stat-num">บริษัทจดทะเบียน</div>
+					<div class="stat-label">อำพล เทรดดิ้ง จำกัด</div>
 				</div>
 				<div class="stat-divider"></div>
 				<div class="stat-item">
@@ -103,6 +104,11 @@ const posts = (await getAllPosts())
 			<a href="/รับซื้อคอมพิวเตอร์" class="svc-card">
 				<div class="svc-icon-wrap"><span class="svc-icon">🖥️</span></div>
 				<div class="svc-body"><strong>รับซื้อคอมพิวเตอร์</strong><span>PC ตั้งโต๊ะทุกสเปก</span></div>
+				<span class="svc-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+			</a>
+			<a href="/รับซื้อมือถือ" class="svc-card">
+				<div class="svc-icon-wrap"><span class="svc-icon">📱</span></div>
+				<div class="svc-body"><strong>รับซื้อมือถือ</strong><span>Android และ iPhone มือสอง</span></div>
 				<span class="svc-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
 			</a>
 			<a href="/รับซื้อmacbook" class="svc-card">
@@ -147,7 +153,7 @@ const posts = (await getAllPosts())
 					<div class="proc-num">02</div>
 					<div class="proc-line"></div>
 					<h3>รับการประเมินราคา</h3>
-					<p>ทีมงานตรวจสอบสเปกและสภาพ แจ้งราคารับซื้อให้ทราบภายใน 15 นาที</p>
+					<p>ทีมงานตรวจสอบสเปกและสภาพ แล้วแจ้งราคาประเมินเบื้องต้นจากข้อมูลที่ได้รับ</p>
 				</div>
 				<div class="proc-card">
 					<div class="proc-num">03</div>
@@ -170,26 +176,27 @@ const posts = (await getAllPosts())
 					<div class="why-icon">
 						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
 					</div>
-					<h3>ราคาสูงกว่าตลาด</h3>
-					<p>ประเมินราคาตามสภาพจริง ตรวจเช็กทุกจุด ให้ราคาที่ดีที่สุด</p>
+					<h3>ประเมินตามข้อมูลจริง</h3>
+					<p>พิจารณารุ่น สเปก สภาพ อุปกรณ์ และราคาตลาดก่อนยืนยันราคา</p>
 				</div>
 				<div class="why-card">
 					<div class="why-icon">
 						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
 					</div>
-					<h3>รวดเร็ว จ่ายทันที</h3>
-					<p>ส่งรูปพร้อมรายละเอียด ประเมินภายใน 15 นาที โอนจ่ายทันที</p>
+					<h3>ขั้นตอนชัดเจน</h3>
+					<p>ส่งรายละเอียด รับราคาเบื้องต้น ตรวจเครื่องจริง และตกลงซื้อขาย</p>
 				</div>
 				<div class="why-card">
 					<div class="why-icon">
 						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
 					</div>
-					<h3>ปลอดภัย น่าเชื่อถือ</h3>
-					<p>เปิดให้บริการมานาน รีวิวจริง ข้อมูลส่วนตัวถูกลบอย่างปลอดภัย</p>
+					<h3>ข้อมูลธุรกิจตรวจสอบได้</h3>
+					<p>มีชื่อบริษัท ที่อยู่ เบอร์โทร หน้าร้าน และตำแหน่ง Google Maps</p>
 				</div>
 			</div>
 		</div>
 	</section>
+	<TrustProof />
 
 	<!-- ━━━ CTA ━━━ -->
 	<section class="cta">

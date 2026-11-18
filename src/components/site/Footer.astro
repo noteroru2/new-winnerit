@@ -1,5 +1,6 @@
 ---
 const year = new Date().getFullYear();
+import { business } from '../../config/business';
 ---
 
 <footer class="footer">
@@ -32,6 +33,7 @@ const year = new Date().getFullYear();
 				</a>
 				<p class="ft-desc">บริการรับซื้อโน๊ตบุ๊ค คอมพิวเตอร์ MacBook iPhone และอุปกรณ์ IT มือสอง ราคาดี จ่ายเงินทันที ให้บริการทั่วประเทศ</p>
 				<p class="ft-company">Winner IT ดำเนินการภายใต้บริษัท อำพล เทรดดิ้ง จำกัด</p>
+				<p class="ft-company">{business.fullAddress}<br /><a href={business.phoneHref}>{business.phoneDisplay}</a> · ทุกวัน {business.opens}–{business.closes} น.</p>
 			</div>
 
 			<div class="ft-col">
@@ -39,6 +41,7 @@ const year = new Date().getFullYear();
 				<ul>
 				<li><a href="/รับซื้อโน๊ตบุ๊ค">รับซื้อโน๊ตบุ๊ค</a></li>
 				<li><a href="/รับซื้อคอมพิวเตอร์">รับซื้อคอมพิวเตอร์</a></li>
+				<li><a href="/รับซื้อมือถือ">รับซื้อมือถือ</a></li>
 				<li><a href="/รับซื้อmacbook">รับซื้อ MacBook</a></li>
 				<li><a href="/รับซื้อiphone">รับซื้อ iPhone</a></li>
 				<li><a href="/รับซื้อipad">รับซื้อ iPad</a></li>
@@ -57,28 +60,18 @@ const year = new Date().getFullYear();
 			</div>
 
 		<div class="ft-col">
-			<h4>เว็บในเครือ</h4>
-			<ul>
-				<li><a href="https://amphontd.com/" target="_blank" rel="noopener">AMPHON TRADING</a></li>
-				<li><a href="https://webuy.in.th/" target="_blank" rel="noopener">Webuy Hub</a></li>
-				<li><a href="https://xn--c3c3a0aa6cvaf8b9dze.com/" target="_blank" rel="noopener">เรารับซื้อ.com</a></li>
-				<li><a href="https://xn--12cman8e0bjt1czaccb9b1fg31ad.com/" target="_blank" rel="noopener">รับซื้อกล้องมือสอง.com</a></li>
-			</ul>
-		</div>
-
-		<div class="ft-col">
 			<h4>ติดต่อเรา</h4>
 				<ul class="ft-contact">
 					<li>
-						<a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener" class="contact-line">
+						<a href={business.lineUrl} target="_blank" rel="noopener" class="contact-line">
 							<svg width="18" height="18" viewBox="0 0 24 24" fill="#06C755"><path d="M12 2C6.48 2 2 5.83 2 10.44c0 4.17 3.7 7.66 8.69 8.32.34.07.8.23.91.52.1.27.07.68.03.95l-.15.88c-.04.25-.2.99.87.54s5.78-3.4 7.88-5.82C22.08 13.79 22 12.16 22 10.44 22 5.83 17.52 2 12 2z"/></svg>
 							@WEBUY
 						</a>
 					</li>
 					<li>
-						<a href="mailto:amphontrading@gmail.com">
+						<a href={`mailto:${business.email}`}>
 							<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4l-10 8L2 4"/></svg>
-							amphontrading@gmail.com
+							{business.email}
 						</a>
 					</li>
 				</ul>
@@ -193,7 +186,7 @@ const year = new Date().getFullYear();
 	}
 	.ft-grid {
 		display: grid;
-		grid-template-columns: 1.5fr 1fr 1fr 1fr 1.2fr;
+		grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
 		gap: 36px;
 	}
 	.ft-logo {

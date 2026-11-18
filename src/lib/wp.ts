@@ -34,6 +34,7 @@ function postFromRaw(raw: string): WPPost | null {
 		content: { markdown: content.trim(), protected: false },
 		featured_media: data.featured_media ? Number(data.featured_media) : undefined,
 		categories: Array.isArray(data.categories) ? data.categories.map(Number) : [],
+		seo_index: data.seo_index === true,
 	};
 }
 

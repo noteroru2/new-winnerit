@@ -1,0 +1,23 @@
+---
+import { business } from '../../config/business';
+type Props = { compact?: boolean };
+const { compact = false } = Astro.props as Props;
+---
+<section class:list={['trust-proof', { compact }]} aria-labelledby="trust-proof-heading">
+	<div class="container">
+		<div class="trust-head">
+			<div><span class="pill">สถานที่และตัวตนจริง</span><h2 id="trust-proof-heading">ตรวจสอบร้านและข้อมูลธุรกิจได้</h2><p>{business.legalName} ให้บริการที่จังหวัดอุบลราชธานี ข้อมูลด้านล่างตรงกับช่องทางทางการของบริษัท</p></div>
+			<a class="btn" href={business.googleMapsUrl} target="_blank" rel="noopener noreferrer">ดูแผนที่และรีวิวล่าสุด</a>
+		</div>
+		<div class="proof-grid">{business.realPhotos.map((photo, index) => <figure><img src={photo.src} alt={photo.alt} loading={index === 0 ? 'eager' : 'lazy'} decoding="async" /></figure>)}</div>
+		<div class="facts">
+			<p><strong>ที่อยู่</strong><span>{business.fullAddress}</span></p>
+			<p><strong>โทร</strong><a href={business.phoneHref}>{business.phoneDisplay}</a></p>
+			<p><strong>เวลาทำการ</strong><span>ทุกวัน {business.opens}–{business.closes} น.</span></p>
+			<p><strong>LINE</strong><a href={business.lineUrl} target="_blank" rel="noopener noreferrer">{business.lineId}</a></p>
+		</div>
+	</div>
+</section>
+<style>
+	.trust-proof{padding:72px 0;background:var(--bg-alt,#faf7f4);border-block:1px solid var(--border,#ebe4db)}.trust-proof.compact{padding:48px 0}.trust-head{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:28px}.trust-head h2{font-size:clamp(28px,4vw,40px);margin:14px 0 8px;letter-spacing:-.03em}.trust-head p{margin:0;max-width:720px;color:var(--muted);line-height:1.75}.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.proof-grid figure{margin:0;border-radius:18px;overflow:hidden;background:#fff;aspect-ratio:4/3;border:1px solid var(--border);box-shadow:var(--shadow-card)}.proof-grid img{width:100%;height:100%;object-fit:cover;display:block}.facts{display:grid;grid-template-columns:2fr 1fr 1.2fr 1fr;gap:16px;margin-top:18px}.facts p{margin:0;padding:18px;border-radius:14px;background:#fff;border:1px solid var(--border);display:grid;gap:5px}.facts strong{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}.facts span,.facts a{font-size:14px;line-height:1.55;color:var(--text);text-decoration:none}.facts a:hover{color:var(--accent)}@media(max-width:900px){.trust-head{align-items:flex-start;flex-direction:column}.proof-grid{grid-template-columns:1fr}.facts{grid-template-columns:1fr 1fr}}@media(max-width:560px){.facts{grid-template-columns:1fr}}
+</style>

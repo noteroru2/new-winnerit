@@ -1,0 +1,55 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TrustProof from '../components/site/TrustProof.astro';
+import { business } from '../config/business';
+
+const pageUrl = 'https://winnerit.in.th/รับซื้อมือถือ/';
+const faqs = [
+	['รับซื้อมือถือยี่ห้ออะไรบ้าง?', 'รับประเมินโทรศัพท์ Android และ iPhone หลายยี่ห้อ เช่น Samsung, OPPO, vivo, Xiaomi, realme, OnePlus และ Google Pixel โดยราคาขึ้นอยู่กับรุ่น ความจุ สภาพ และการตรวจเครื่องจริง'],
+	['เครื่องจอแตกหรือมีตำหนิประเมินได้ไหม?', 'ส่งรูปตำหนิและอาการมาให้ทีมงานดูก่อนได้ เครื่องที่มีปัญหาบางประเภทอาจยังประเมินได้ แต่ต้องแจ้งสภาพตามจริงและยืนยันราคาหลังตรวจเครื่อง'],
+	['ต้องเตรียมอะไรเพื่อขอราคาประเมิน?', 'ส่งยี่ห้อ รุ่น ความจุ สี รูปด้านหน้า ด้านหลัง ขอบเครื่อง หน้าจอที่เปิดติด รวมถึงแจ้งประวัติซ่อมและอุปกรณ์ที่มี'],
+	['ต้องลบข้อมูลก่อนส่งเครื่องหรือไม่?', 'ควรสำรองข้อมูล ออกจากระบบบัญชีผู้ผลิต ปิดระบบค้นหาเครื่อง และลบข้อมูลส่วนตัวก่อนส่งมอบ โดยตรวจสอบให้แน่ใจว่าเครื่องไม่ติดล็อกบัญชี'],
+];
+
+const jsonLd = [
+	{ '@type': 'WebPage', name: 'รับซื้อมือถือมือสอง ประเมินตามรุ่นและสภาพ — Winner IT', description: 'รับประเมินมือถือ Android และ iPhone มือสอง ส่งรุ่น ความจุ รูปสภาพและประวัติซ่อมผ่าน LINE ก่อนยืนยันราคาหลังตรวจเครื่อง', url: pageUrl },
+	{ '@type': 'BreadcrumbList', itemListElement: [
+		{ '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: 'https://winnerit.in.th/' },
+		{ '@type': 'ListItem', position: 2, name: 'รับซื้อมือถือ', item: pageUrl },
+	] },
+	{ '@type': 'FAQPage', mainEntity: faqs.map(([name, text]) => ({ '@type': 'Question', name, acceptedAnswer: { '@type': 'Answer', text } })) },
+];
+---
+
+<Layout title="รับซื้อมือถือมือสอง Android และ iPhone — Winner IT" description="รับประเมินมือถือ Android และ iPhone มือสอง ส่งรุ่น ความจุ รูปสภาพและประวัติซ่อมผ่าน LINE ก่อนยืนยันราคาหลังตรวจเครื่อง" jsonLd={jsonLd}>
+	<section class="hero">
+		<div class="container hero-grid">
+			<div>
+				<span class="pill">รับซื้อมือถือมือสอง</span>
+				<h1>ส่งข้อมูลครบ<br /><span>ประเมินได้ตรงสภาพ</span></h1>
+				<p>รับประเมินโทรศัพท์ Android และ iPhone หลายรุ่น โดยดูจากรุ่น ความจุ สภาพภายนอก การทำงาน ประวัติซ่อม และอุปกรณ์ที่มี ราคาสุดท้ายยืนยันหลังตรวจเครื่องจริง</p>
+				<div class="actions"><a class="btn btn-line btn-big" href={business.lineUrl} target="_blank" rel="noopener noreferrer">ส่งรูปทาง LINE {business.lineId}</a><a class="btn btn-big" href={business.phoneHref}>โทร {business.phoneDisplay}</a></div>
+			</div>
+			<div class="check-card"><h2>ข้อมูลที่ควรส่ง</h2><ol><li>ยี่ห้อ รุ่น ความจุ และสี</li><li>รูปด้านหน้า หลัง ขอบ และหน้าจอ</li><li>ตำหนิ อาการเสีย หรือประวัติซ่อม</li><li>สถานะแบตเตอรี่และอุปกรณ์ที่มี</li><li>ยืนยันว่าออกจากบัญชีและไม่ติดล็อก</li></ol></div>
+		</div>
+	</section>
+
+	<section class="content container">
+		<div class="section-head"><span class="pill">หลักเกณฑ์ประเมิน</span><h2>อะไรมีผลต่อราคารับซื้อ</h2></div>
+		<div class="cards">
+			<article><span>01</span><h3>รุ่นและความจุ</h3><p>รุ่นย่อย ปีเปิดตัว RAM และพื้นที่จัดเก็บทำให้มูลค่าต่างกัน ควรส่งเลขรุ่นที่แสดงในเมนูตั้งค่าหรือบนกล่อง</p></article>
+			<article><span>02</span><h3>สภาพตัวเครื่อง</h3><p>ตรวจหน้าจอ ทัช กล้อง ลำโพง ไมค์ พอร์ตชาร์จ ปุ่ม และสภาพเฟรม รวมถึงรอยแตก รอยบุบ หรือรอยน้ำ</p></article>
+			<article><span>03</span><h3>บัญชีและประวัติซ่อม</h3><p>เครื่องต้องไม่ติดล็อกบัญชีหรือมีภาระผูกพัน แจ้งการเปลี่ยนจอ แบตเตอรี่ หรือชิ้นส่วนอื่นตามจริงเพื่อประเมินแม่นยำ</p></article>
+		</div>
+	</section>
+
+	<section class="steps"><div class="container"><div class="section-head"><span class="pill">4 ขั้นตอน</span><h2>ขายมือถืออย่างเป็นระบบ</h2></div><div class="step-grid"><p><b>1</b><strong>ส่งรายละเอียด</strong><span>รุ่น ความจุ รูปสภาพ และตำหนิ</span></p><p><b>2</b><strong>รับราคาประเมินเบื้องต้น</strong><span>ทีมงานพิจารณาจากข้อมูลที่ได้รับ</span></p><p><b>3</b><strong>ตรวจเครื่องจริง</strong><span>ตรวจฟังก์ชัน สภาพ และสถานะบัญชี</span></p><p><b>4</b><strong>ยืนยันราคาและชำระเงิน</strong><span>ตกลงซื้อขายเมื่อทั้งสองฝ่ายยอมรับราคา</span></p></div></div></section>
+
+	<TrustProof />
+
+	<section class="faq container"><div class="section-head"><span class="pill">คำถามที่พบบ่อย</span><h2>ก่อนส่งมือถือมาประเมิน</h2></div>{faqs.map(([question, answer]) => <details><summary>{question}</summary><p>{answer}</p></details>)}</section>
+</Layout>
+
+<style>
+	.hero{padding:88px 0;background:linear-gradient(145deg,#fff7ed,#fff 60%)}.hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:64px;align-items:center}.hero h1{font-size:clamp(42px,6vw,68px);line-height:1.08;letter-spacing:-.05em;margin:18px 0}.hero h1 span{color:var(--accent)}.hero p{font-size:18px;line-height:1.8;color:var(--muted);max-width:720px}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}.check-card{padding:34px;background:#fff;border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow-hover)}.check-card h2{margin:0 0 18px}.check-card ol{margin:0;padding-left:22px;display:grid;gap:13px;color:var(--text-2)}.content,.faq{padding-top:80px;padding-bottom:80px}.section-head{text-align:center;margin-bottom:34px}.section-head h2{font-size:clamp(30px,4vw,44px);margin:14px 0 0;letter-spacing:-.03em}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.cards article{padding:28px;border:1px solid var(--border);border-radius:18px;background:#fff}.cards article>span{font-weight:900;color:var(--accent);font-size:13px}.cards h3{font-size:21px;margin:14px 0 8px}.cards p{color:var(--muted);line-height:1.75;margin:0}.steps{padding:80px 0;background:#17130f;color:#fff}.steps .pill{color:#fdba74;background:#431e0a}.step-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.step-grid p{display:grid;gap:8px;margin:0;padding:24px;border:1px solid rgba(255,255,255,.12);border-radius:16px}.step-grid b{color:#fb923c;font-size:26px}.step-grid strong{font-size:17px}.step-grid span{font-size:14px;color:rgba(255,255,255,.65);line-height:1.6}.faq{max-width:900px}.faq details{border-bottom:1px solid var(--border);padding:20px 0}.faq summary{font-weight:700;cursor:pointer;font-size:18px}.faq details p{color:var(--muted);line-height:1.75;margin:14px 0 0}@media(max-width:900px){.hero-grid{grid-template-columns:1fr}.cards,.step-grid{grid-template-columns:1fr 1fr}}@media(max-width:560px){.hero{padding:64px 0}.cards,.step-grid{grid-template-columns:1fr}}
+</style>

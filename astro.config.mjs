@@ -1,98 +1,85 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import matter from 'gray-matter';
 
 const PREFIX_RE = /^(services|locations|prices)-(.+)$/;
 
 /** @param {string} siteUrl */
-function buildLastmodMapFromPosts(siteUrl) {
+function buildPostSeoData(siteUrl) {
 	/** @type {Record<string, string>} */
-	const map = {};
+	const lastmod = {};
+	/** @type {Set<string>} */
+	const noindex = new Set();
 	const postsDir = join(process.cwd(), 'content', 'posts');
-	if (!existsSync(postsDir)) return map;
+	if (!existsSync(postsDir)) return { lastmod, noindex };
 
 	const base = siteUrl.replace(/\/$/, '');
 	for (const file of readdirSync(postsDir)) {
 		if (!file.endsWith('.md')) continue;
 		try {
 			const { data } = matter(readFileSync(join(postsDir, file), 'utf-8'));
-			if (!data?.slug || !data?.modified) continue;
-			const slug = String(data.slug);
+			if (!data?.slug) continue;
+			let slug = String(data.slug);
+			try {
+				slug = decodeURIComponent(slug);
+			} catch {
+				// Keep malformed legacy slugs unchanged.
+			}
 			const m = slug.match(PREFIX_RE);
 			const path = m ? `/${m[1]}/${m[2]}` : `/${slug}`;
-			map[`${base}${path}`] = String(data.modified);
+			const url = new URL(`${path}/`, `${base}/`).toString();
+			// Imported bulk content is quarantined by default. A reviewed page must
+			// explicitly opt in with `seo_index: true` before entering the sitemap.
+			if (data.seo_index !== true) noindex.add(url);
+			if (data.modified) lastmod[url] = String(data.modified);
 		} catch {
 			// ignore per-file failures
 		}
 	}
-	return map;
+	return { lastmod, noindex };
 }
 
-function sitemapLastmodPlugin() {
-	let outDir = '';
-	let siteUrl = 'https://winnerit.in.th';
-	return {
-		name: 'sitemap-lastmod',
-		hooks: {
-			'astro:config:done'({ config }) {
-				outDir = config.outDir?.pathname?.replace(/^\/([A-Z]:)/, '$1') ?? './dist';
-				siteUrl = config.site?.toString() ?? siteUrl;
-			},
-			async 'astro:build:done'() {
-				// Never fail the build if sitemap patching fails.
-				try {
-					const map = buildLastmodMapFromPosts(siteUrl);
-					if (!Object.keys(map).length) return;
-
-					for (const name of ['sitemap-0.xml', 'sitemap.xml']) {
-						const sitemapPath = join(outDir, name);
-						if (!existsSync(sitemapPath)) continue;
-						let xml = readFileSync(sitemapPath, 'utf-8');
-						for (const [url, mod] of Object.entries(map)) {
-							try {
-								const locTag = `<loc>${url}</loc>`;
-								if (!xml.includes(locTag)) continue;
-								const dateStr = new Date(/** @type {string} */ (mod)).toISOString();
-								const escapedLoc = locTag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-								xml = xml.replace(
-									new RegExp(`${escapedLoc}\\s*<lastmod>[^<]+</lastmod>`),
-									`${locTag}<lastmod>${dateStr}</lastmod>`
-								);
-							} catch {
-								// ignore per-entry failures
-							}
-						}
-						writeFileSync(sitemapPath, xml);
-					}
-				} catch {
-					// ignore
-				}
-			},
-		},
-	};
-}
+const siteUrl = process.env.PUBLIC_SITE_URL ?? 'https://winnerit.in.th';
+const postSeo = buildPostSeoData(siteUrl);
+const corePages = new Set([
+	'/', '/about', '/articles', '/contact', '/รับซื้อโน๊ตบุ๊ค', '/รับซื้อคอมพิวเตอร์',
+	'/รับซื้อมือถือ', '/รับซื้อmacbook', '/รับซื้อiphone', '/รับซื้อipad', '/รับซื้อกล้อง',
+]);
+const normalizeUrl = (page) => {
+	const url = new URL(page, siteUrl);
+	if (url.pathname !== '/' && !url.pathname.endsWith('/')) url.pathname += '/';
+	return url.toString();
+};
 
 // https://astro.build/config
 export default defineConfig({
 	output: 'static',
-	site: process.env.PUBLIC_SITE_URL ?? 'https://winnerit.in.th',
+	site: siteUrl,
 	integrations: [
 		sitemap({
 			filter: (page) => {
-				const path = page.startsWith('http') ? new URL(page).pathname : page;
+				let path = page.startsWith('http') ? new URL(page).pathname : page;
+				try {
+					path = decodeURI(path);
+				} catch {
+					// Keep malformed legacy paths unchanged.
+				}
 				const normalized = path.replace(/\/$/, '') || '/';
-				return !/^\/(services|locations|prices)-[^/]+$/.test(normalized);
+				if (corePages.has(normalized)) return true;
+				if (/^\/(services|locations|prices)-[^/]+$/.test(normalized)) return false;
+				if (/^\/articles\/page\/\d+$/.test(normalized)) return false;
+				if (/^\/category\//.test(normalized)) return false;
+				return !postSeo.noindex.has(normalizeUrl(page));
 			},
 			serialize(item) {
-				if (!item.lastmod) {
-					item.lastmod = new Date().toISOString();
-				}
+				const normalizedUrl = normalizeUrl(item.url);
+				const modified = postSeo.lastmod[normalizedUrl];
+				if (modified && !postSeo.noindex.has(normalizedUrl)) item.lastmod = new Date(modified).toISOString();
 				return item;
 			},
 		}),
-		sitemapLastmodPlugin(),
 	],
 });

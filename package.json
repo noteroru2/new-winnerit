@@ -10,6 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check-status": "node scripts/check-status.mjs",
+    "seo:audit-content": "node scripts/audit-seo-content.mjs",
     "astro": "astro"
   },
   "dependencies": {
@@ -20,5 +21,8 @@
     "he": "^1.2.0",
     "marked": "^18.0.3",
     "node-html-parser": "^7.1.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.164.0"
   }
 }

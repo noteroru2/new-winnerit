@@ -25,6 +25,7 @@ const { category, posts, allCategories } = Astro.props as {
 	posts: WPPost[];
 	allCategories: WPCategory[];
 };
+const visiblePosts = posts.slice(0, 48);
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://winnerit.in.th';
 const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
@@ -58,6 +59,7 @@ const collectionSchema = {
 <Layout
 	title={`${category.name} — บทความ Winner IT`}
 	description={`อ่านบทความในหมวด ${category.name} จาก Winner IT รวม ${posts.length} บทความ เกี่ยวกับการรับซื้ออุปกรณ์ IT มือสอง`}
+	robots="noindex, follow"
 	jsonLd={[breadcrumbSchema, collectionSchema]}
 >
 	<section class="hero">
@@ -80,11 +82,12 @@ const collectionSchema = {
 	<section class="container list">
 		{posts.length > 0 ? (
 			<div class="grid-3">
-				{posts.map((post) => <PostCard post={post} />)}
+				{visiblePosts.map((post) => <PostCard post={post} />)}
 			</div>
 		) : (
 			<p class="empty">ยังไม่มีบทความในหมวดหมู่นี้</p>
 		)}
+		{posts.length > visiblePosts.length && <p class="more-note">แสดง 48 บทความล่าสุดจากหมวดนี้ · <a href="/articles/">ดูบทความทั้งหมด</a></p>}
 	</section>
 </Layout>
 
@@ -173,4 +176,6 @@ const collectionSchema = {
 		font-size: 16px;
 		padding: 60px 0;
 	}
+	.more-note { text-align:center; margin:32px 0 0; color:var(--muted); }
+	.more-note a { color:var(--accent); font-weight:700; }
 </style>

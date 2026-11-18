@@ -1,12 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import TrustProof from '../components/site/TrustProof.astro';
 
 const faqSchema = {
 	'@type': 'FAQPage',
 	mainEntity: [
 		{ '@type': 'Question', name: 'รับซื้อคอมพิวเตอร์ประกอบเอง (Custom Build) ไหม?', acceptedAnswer: { '@type': 'Answer', text: 'รับซื้อครับ เรารับซื้อคอมพิวเตอร์ประกอบเองทุกสเปก ทีมงานจะประเมินราคาจากชิ้นส่วนแต่ละชิ้น ได้แก่ CPU, GPU, RAM, Storage, Mainboard, PSU และ Case โดยพิจารณาจากรุ่น สภาพ และมูลค่าตลาดปัจจุบัน PC ประกอบเองที่ใช้ชิ้นส่วนคุณภาพดีจะได้ราคาสูง' } },
 		{ '@type': 'Question', name: 'คอมพิวเตอร์เปิดไม่ติดหรือมีปัญหา ยังรับซื้อไหม?', acceptedAnswer: { '@type': 'Answer', text: 'รับซื้อครับ เรารับซื้อคอมพิวเตอร์ทุกสภาพ ทั้งเครื่องที่ใช้งานได้ปกติและเครื่องที่มีปัญหา เช่น เปิดไม่ติด จอไม่ขึ้นภาพ หรือชิ้นส่วนเสีย แต่ราคาจะขึ้นอยู่กับสภาพเครื่องและชิ้นส่วนที่ยังใช้งานได้ ทีมช่างจะประเมินให้อย่างยุติธรรม' } },
-		{ '@type': 'Question', name: 'ประเมินราคาใช้เวลานานแค่ไหน?', acceptedAnswer: { '@type': 'Answer', text: 'ส่งรูปถ่ายและรายละเอียดสเปกมาทาง Line @WEBUY ทีมงานจะประเมินราคาและแจ้งกลับภายใน 15-30 นาทีในเวลาทำการ (จันทร์-เสาร์ 09:00-18:00) สำหรับนอกเวลาทำการ จะตอบกลับภายในเช้าวันถัดไป' } },
+		{ '@type': 'Question', name: 'ขอราคาประเมินเบื้องต้นอย่างไร?', acceptedAnswer: { '@type': 'Answer', text: 'ส่งรูปถ่าย รายละเอียดสเปก สภาพ และอุปกรณ์ที่มีมาทาง LINE @WEBUY ในเวลาทำการทุกวัน 09:00-19:00 น. ราคาสุดท้ายยืนยันหลังตรวจเครื่องจริง' } },
 		{ '@type': 'Question', name: 'ขายคอมพิวเตอร์แค่บางชิ้นส่วนได้ไหม?', acceptedAnswer: { '@type': 'Answer', text: 'ได้ครับ เรารับซื้อทั้งคอมพิวเตอร์ทั้งเครื่องและชิ้นส่วนแยกชิ้น ไม่ว่าจะเป็นการ์ดจอ แรม SSD ซีพียู เมนบอร์ด พาวเวอร์ซัพพลาย จอมอนิเตอร์ หรืออุปกรณ์ต่อพ่วงอื่นๆ สามารถนำมาขายแยกได้เลย' } },
 		{ '@type': 'Question', name: 'อยู่ต่างจังหวัด ขายคอมพิวเตอร์ได้ไหม?', acceptedAnswer: { '@type': 'Answer', text: 'ได้ครับ ลูกค้าต่างจังหวัดสามารถส่งคอมพิวเตอร์ทางขนส่ง เช่น Kerry Express, Flash Express หรือไปรษณีย์ไทย โดยทีมงานจะแนะนำวิธีแพ็คเครื่องอย่างปลอดภัย เมื่อได้รับเครื่องและตรวจสอบแล้วจะโอนเงินทันที' } },
 		{ '@type': 'Question', name: 'ต้องล้างข้อมูลก่อนขายไหม?', acceptedAnswer: { '@type': 'Answer', text: 'แนะนำให้สำรองข้อมูลสำคัญก่อน แต่ไม่จำเป็นต้องล้างข้อมูลเอง ทีมช่างของเราจะทำการลบข้อมูลทั้งหมดอย่างปลอดภัยด้วยซอฟต์แวร์มาตรฐานหลังจากรับซื้อ เพื่อให้มั่นใจว่าข้อมูลส่วนตัวจะไม่รั่วไหล' } },
@@ -19,18 +20,18 @@ const breadcrumbSchema = {
 	'@type': 'BreadcrumbList',
 	itemListElement: [
 		{ '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: 'https://winnerit.in.th' },
-		{ '@type': 'ListItem', position: 2, name: 'รับซื้อคอมพิวเตอร์', item: 'https://winnerit.in.th/รับซื้อคอมพิวเตอร์' },
+		{ '@type': 'ListItem', position: 2, name: 'รับซื้อคอมพิวเตอร์', item: 'https://winnerit.in.th/รับซื้อคอมพิวเตอร์/' },
 	],
 };
 ---
 
-<Layout title="รับซื้อคอมพิวเตอร์มือสอง ราคาดี PC ตั้งโต๊ะ — Winner IT" description="รับซื้อคอมพิวเตอร์ PC ตั้งโต๊ะ มือสอง ทุกยี่ห้อ ทุกสเปก ประเมินราคาฟรี จ่ายเงินทันที ติดต่อ Line @WEBUY" jsonLd={[faqSchema, breadcrumbSchema, { '@type': 'WebPage', name: 'รับซื้อคอมพิวเตอร์มือสอง ราคาดี — Winner IT', speakable: { '@type': 'SpeakableSpecification', cssSelector: ['.hero h1', '.lead', '.faq-sec summary'] }, url: 'https://winnerit.in.th/รับซื้อคอมพิวเตอร์' }]}>
+<Layout title="รับซื้อคอมพิวเตอร์มือสอง PC ประกอบและแบรนด์ — Winner IT" description="รับประเมินคอมพิวเตอร์ PC ตั้งโต๊ะมือสอง ส่งสเปก รูปสภาพและอุปกรณ์ทาง LINE ราคาสุดท้ายยืนยันหลังตรวจเครื่องจริง" jsonLd={[faqSchema, breadcrumbSchema, { '@type': 'WebPage', name: 'รับซื้อคอมพิวเตอร์มือสอง — Winner IT', speakable: { '@type': 'SpeakableSpecification', cssSelector: ['.hero h1', '.lead', '.faq summary'] }, url: 'https://winnerit.in.th/รับซื้อคอมพิวเตอร์/' }]}>
 	<section class="hero">
 		<div class="hero-bg"></div>
 		<div class="container hero-inner">
 			<span class="pill">🖥️ รับซื้อคอมพิวเตอร์</span>
-			<h1>รับซื้อคอมพิวเตอร์มือสอง <span class="accent">ราคาดี ทุกสเปก</span></h1>
-			<p class="lead">Winner IT รับซื้อคอมพิวเตอร์ PC ตั้งโต๊ะมือสอง ทั้ง PC ประกอบเอง และแบรนด์เนม ประเมินราคาฟรี จ่ายเงินทันที</p>
+			<h1>รับซื้อคอมพิวเตอร์มือสอง <span class="accent">PC ประกอบและแบรนด์</span></h1>
+			<p class="lead">ส่งสเปก รูปสภาพ ประวัติการใช้งานและอุปกรณ์ที่มีเพื่อรับราคาประเมินเบื้องต้น ราคาสุดท้ายยืนยันหลังตรวจเครื่องจริง</p>
 			<div class="btns">
 				<a class="btn btn-line btn-big" href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener">
 					<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 5.83 2 10.44c0 4.17 3.7 7.66 8.69 8.32.34.07.8.23.91.52.1.27.07.68.03.95l-.15.88c-.04.25-.2.99.87.54s5.78-3.4 7.88-5.82C22.08 13.79 22 12.16 22 10.44 22 5.83 17.52 2 12 2z"/></svg>
@@ -45,7 +46,7 @@ const breadcrumbSchema = {
 		<div class="container article-wrap">
 			<div class="prose">
 
-				<img src="https://images.unsplash.com/photo-1547082299-de196ea013d6?w=800&q=80" alt="รับซื้อคอมพิวเตอร์มือสอง PC ตั้งโต๊ะ" width="800" height="450" loading="eager" />
+				<img src="https://amphon.co.th/images/about/amphon-trading-shop-interior-evaluation.webp" alt="พื้นที่ตรวจสอบและประเมินอุปกรณ์ภายในร้านอำพล เทรดดิ้ง" width="800" height="600" loading="eager" />
 
 				<p>ปัจจุบันเทคโนโลยีคอมพิวเตอร์มีการพัฒนาอย่างรวดเร็ว ทำให้ผู้ใช้จำนวนมากต้องการอัปเกรดเครื่องใหม่อยู่เสมอ ไม่ว่าจะเป็นเพื่อการทำงาน การเล่นเกม การตัดต่อวิดีโอ หรือการใช้งานทั่วไป เมื่อต้องการเปลี่ยนเครื่องใหม่ คอมพิวเตอร์ตั้งโต๊ะเครื่องเก่าที่ยังใช้งานได้ก็ไม่ควรปล่อยทิ้งไว้ให้เสียเปล่า การนำมาขายต่อเป็นทางเลือกที่ดีที่สุด ทั้งได้เงินกลับคืนมาเป็นทุนสำหรับเครื่องใหม่ และยังช่วยลดขยะอิเล็กทรอนิกส์อีกด้วย <strong>Winner IT</strong> คือผู้เชี่ยวชาญด้านการ<strong>รับซื้อคอมพิวเตอร์</strong>มือสองที่ให้บริการมาอย่างยาวนาน พร้อมให้ราคาที่เป็นธรรมและบริการที่สะดวกรวดเร็ว</p>
 
@@ -63,7 +64,7 @@ const breadcrumbSchema = {
 
 				<p><strong>บริการสะดวก รวดเร็ว</strong> — ทีมงานของเราพร้อมให้บริการทั้งแบบนัดรับที่ร้าน หรือบริการรับถึงที่สำหรับเครื่องจำนวนมาก โดยเฉพาะลูกค้าองค์กรที่ต้องการขายคอมพิวเตอร์สำนักงานพร้อมกันหลายเครื่อง เราสามารถเข้าไปตรวจเช็กและประเมินราคาถึงที่ทำการได้เลย</p>
 
-				<p><strong>มืออาชีพ น่าเชื่อถือ</strong> — Winner IT ดำเนินธุรกิจมาอย่างยาวนาน มีรีวิวจากลูกค้าจริงมากมาย ทุกขั้นตอนโปร่งใส ตรวจสอบได้ คุณมั่นใจได้ว่าจะได้รับบริการที่ดีที่สุด</p>
+				<p><strong>มีตัวตนและสถานที่ตรวจสอบได้</strong> — Winner IT ดำเนินการภายใต้บริษัท อำพล เทรดดิ้ง จำกัด มีหน้าร้าน ที่อยู่ เบอร์โทร และตำแหน่ง Google Maps ที่ตรวจสอบได้</p>
 
 				<p><strong>ลบข้อมูลอย่างปลอดภัย</strong> — เราให้ความสำคัญกับความเป็นส่วนตัวของลูกค้า หลังจาก<strong>รับซื้อคอมพิวเตอร์</strong>แล้ว ทีมช่างจะทำการลบข้อมูลทั้งหมดในฮาร์ดดิสก์อย่างปลอดภัยด้วยซอฟต์แวร์มาตรฐาน เพื่อให้มั่นใจว่าข้อมูลส่วนตัวของคุณจะไม่รั่วไหล</p>
 
@@ -89,7 +90,7 @@ const breadcrumbSchema = {
 
 				<p>คอมพิวเตอร์ออลอินวันเป็นเครื่องที่รวมจอภาพและตัวประมวลผลไว้ในตัวเดียว ได้แก่ Dell Inspiron AIO, HP All-in-One, Lenovo IdeaCentre AIO, Acer Aspire C เครื่องประเภทนี้ได้รับความนิยมในสำนักงานและบ้านเพราะประหยัดพื้นที่ เราประเมินราคาตามขนาดจอ ความละเอียดจอ สเปกภายใน และสภาพทั่วไปของเครื่อง</p>
 
-				<img src="https://images.unsplash.com/photo-1593062096033-9a26b09da705?w=800&q=80" alt="คอมพิวเตอร์ตั้งโต๊ะหลายรุ่นพร้อมขาย" width="800" height="450" loading="lazy" />
+				<img src="https://amphon.co.th/images/about/amphon-trading-storefront-ubon.webp" alt="หน้าร้านบริษัท อำพล เทรดดิ้ง จังหวัดอุบลราชธานี" width="800" height="600" loading="lazy" />
 
 				<h3>📦 Mini PC — มินิพีซี</h3>
 
@@ -119,7 +120,7 @@ const breadcrumbSchema = {
 
 				<p>นอกจาก<strong>รับซื้อคอมพิวเตอร์</strong>ทั้งเครื่องแล้ว Winner IT ยังรับซื้ออะไหล่และอุปกรณ์เสริมแยกชิ้นอีกด้วย หากคุณมีชิ้นส่วนคอมพิวเตอร์ที่ไม่ได้ใช้แล้ว สามารถนำมาขายให้เราได้เช่นกัน</p>
 
-				<img src="https://images.unsplash.com/photo-1591488320449-011701bb6704?w=800&q=80" alt="อะไหล่คอมพิวเตอร์ การ์ดจอ RAM SSD" width="800" height="450" loading="lazy" />
+				<img src="https://amphon.co.th/images/about/amphon-trading-shop-showroom.webp" alt="บรรยากาศภายในร้านอำพล เทรดดิ้ง" width="800" height="600" loading="lazy" />
 
 				<p><strong>การ์ดจอ (GPU)</strong> — เป็นชิ้นส่วนที่มีมูลค่าสูงที่สุดในคอมพิวเตอร์ เรารับซื้อการ์ดจอทุกรุ่น ทั้ง NVIDIA GeForce RTX 3060, 3070, 3080, 3090, RTX 4060, 4070, 4080, 4090 รวมถึง AMD Radeon RX 6000 และ RX 7000 ซีรีส์ การ์ดจอระดับสูงมีมูลค่ามือสองที่ดีมาก เนื่องจากราคาเครื่องใหม่สูงและความต้องการมีอยู่ตลอดเวลา ทั้งสำหรับเกมเมอร์ ครีเอเตอร์ และนักขุดคริปโตเดิม</p>
 
@@ -181,7 +182,7 @@ const breadcrumbSchema = {
 
 				<p><strong>ขั้นตอนที่ 4 — ตรวจสอบและรับเงิน</strong> ทีมช่างจะตรวจสอบสภาพเครื่องจริง หากตรงตามที่แจ้งไว้ จะดำเนินการจ่ายเงินทันที ทั้งเงินสดหรือโอนผ่านบัญชีธนาคาร เสร็จสิ้นกระบวนการ!</p>
 
-				<img src="https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=800&q=80" alt="บริการรับซื้อคอมพิวเตอร์ทั่วประเทศ" width="800" height="450" loading="lazy" />
+				<img src="https://amphon.co.th/images/about/amphon-trading-shop-interior-evaluation.webp" alt="จุดตรวจสอบอุปกรณ์ก่อนยืนยันราคา" width="800" height="600" loading="lazy" />
 
 				<h2>เคล็ดลับเพิ่มมูลค่าคอมพิวเตอร์ก่อนขาย</h2>
 
@@ -264,6 +265,7 @@ const breadcrumbSchema = {
 			</div>
 		</div>
 	</section>
+	<TrustProof />
 
 	<section class="faq">
 		<div class="container">
@@ -278,8 +280,8 @@ const breadcrumbSchema = {
 					<p>รับซื้อครับ เรารับซื้อคอมพิวเตอร์ทุกสภาพ ทั้งเครื่องที่ใช้งานได้ปกติและเครื่องที่มีปัญหา เช่น เปิดไม่ติด จอไม่ขึ้นภาพ หรือชิ้นส่วนเสีย แต่ราคาจะขึ้นอยู่กับสภาพเครื่องและชิ้นส่วนที่ยังใช้งานได้ ทีมช่างจะประเมินให้อย่างยุติธรรม</p>
 				</details>
 				<details>
-					<summary>ประเมินราคาใช้เวลานานแค่ไหน?</summary>
-					<p>ส่งรูปถ่ายและรายละเอียดสเปกมาทาง Line @WEBUY ทีมงานจะประเมินราคาและแจ้งกลับภายใน 15-30 นาทีในเวลาทำการ (จันทร์-เสาร์ 09:00-18:00) สำหรับนอกเวลาทำการ จะตอบกลับภายในเช้าวันถัดไป</p>
+					<summary>ขอราคาประเมินเบื้องต้นอย่างไร?</summary>
+					<p>ส่งรูปถ่าย รายละเอียดสเปก สภาพ และอุปกรณ์ที่มีมาทาง LINE @WEBUY ในเวลาทำการทุกวัน 09:00-19:00 น. ราคาสุดท้ายยืนยันหลังตรวจเครื่องจริง</p>
 				</details>
 				<details>
 					<summary>ขายคอมพิวเตอร์แค่บางชิ้นส่วนได้ไหม?</summary>
@@ -301,31 +303,6 @@ const breadcrumbSchema = {
 					<summary>รับซื้อคอมพิวเตอร์จากบริษัท/องค์กร จำนวนมากได้ไหม?</summary>
 					<p>ได้ครับ เรามีบริการรับซื้อคอมพิวเตอร์เป็นล็อตสำหรับองค์กร สามารถเข้าตรวจเช็กสภาพเครื่องถึงที่ทำการ พร้อมจัดการขนย้ายให้ทั้งหมด ออกเอกสารรับซื้ออย่างเป็นทางการ และให้บริการลบข้อมูลตามมาตรฐานความปลอดภัย ติดต่อ Line @WEBUY เพื่อนัดหมาย</p>
 				</details>
-			</div>
-		</div>
-	</section>
-
-	<section class="partner-sec">
-		<div class="container">
-			<h2>เว็บในเครือที่ให้บริการรับซื้อ</h2>
-			<p class="partner-desc">นอกจาก Winner IT แล้ว คุณยังสามารถติดต่อขายผ่านเว็บในเครือของเราได้อีกหลายช่องทาง</p>
-			<div class="partner-grid">
-				<a href="https://amphontd.com/" target="_blank" rel="noopener" class="partner-card">
-					<span class="partner-name">AMPHON TRADING</span>
-					<span class="partner-tagline">รับซื้อคอมพิวเตอร์และอุปกรณ์ IT ทุกประเภท</span>
-				</a>
-				<a href="https://webuy.in.th/" target="_blank" rel="noopener" class="partner-card">
-					<span class="partner-name">Webuy Hub</span>
-					<span class="partner-tagline">รับซื้อ PC ถึงบ้าน นัดรับสะดวก จ่ายสดทันที</span>
-				</a>
-				<a href="https://xn--c3c3a0aa6cvaf8b9dze.com/" target="_blank" rel="noopener" class="partner-card">
-					<span class="partner-name">เรารับซื้อ.com</span>
-					<span class="partner-tagline">ขายคอมมือสองง่ายๆ ประเมินฟรี ไม่มีค่าใช้จ่าย</span>
-				</a>
-				<a href="https://xn--12cman8e0bjt1czaccb9b1fg31ad.com/" target="_blank" rel="noopener" class="partner-card">
-					<span class="partner-name">รับซื้อกล้องมือสอง.com</span>
-					<span class="partner-tagline">รับซื้อกล้อง DSLR Mirrorless และเลนส์ทุกยี่ห้อ</span>
-				</a>
 			</div>
 		</div>
 	</section>

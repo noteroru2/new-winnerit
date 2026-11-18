@@ -1,6 +1,7 @@
 ---
 import Header from '../components/site/Header.astro';
 import Footer from '../components/site/Footer.astro';
+import { business } from '../config/business';
 import '../styles/global.css';
 
 type Props = {
@@ -27,6 +28,9 @@ const {
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://winnerit.in.th';
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+if (canonicalUrl.pathname !== '/' && !canonicalUrl.pathname.endsWith('/') && !canonicalUrl.pathname.split('/').pop()?.includes('.')) {
+	canonicalUrl.pathname += '/';
+}
 const defaultOgImage = `${siteUrl}/og-default.png`;
 const ogImageUrl = ogImage ?? defaultOgImage;
 
@@ -66,8 +70,8 @@ const resolvedJsonLd = inputJsonLd.map((schema) => {
 const orgSchema = {
 	'@type': 'Organization',
 	'@id': `${siteUrl}/#organization`,
-	name: 'Winner IT',
-	legalName: 'บริษัท อำพล เทรดดิ้ง จำกัด',
+	name: business.brandName,
+	legalName: business.legalName,
 	url: siteUrl,
 	logo: {
 		'@type': 'ImageObject',
@@ -76,46 +80,46 @@ const orgSchema = {
 	contactPoint: {
 		'@type': 'ContactPoint',
 		contactType: 'customer service',
-		telephone: '+66-64-257-9353',
-		email: 'amphontrading@gmail.com',
+		telephone: business.phoneInternational,
+		email: business.email,
 		availableLanguage: 'Thai',
 	},
 	sameAs: [
-		'https://line.me/R/ti/p/@webuy',
-		'https://amphontd.com/',
-		'https://webuy.in.th/',
+		business.lineUrl,
+		business.facebookUrl,
+		business.companySite,
 	],
 };
 
 const localBusinessSchema = {
 	'@type': 'LocalBusiness',
 	'@id': `${siteUrl}/#localbusiness`,
-	name: 'Winner IT (ร้านอำพล เทรดดิ้ง)',
-	alternateName: 'AMPHON TRADING',
-	image: `${siteUrl}/og-default.png`,
+	name: `${business.brandName} (ร้านอำพล เทรดดิ้ง)`,
+	alternateName: business.alternateName,
+	image: business.realPhotos.map((photo) => photo.src),
 	url: siteUrl,
-	telephone: '+66-64-257-9353',
-	email: 'amphontrading@gmail.com',
+	telephone: business.phoneInternational,
+	email: business.email,
 	priceRange: '฿',
 	address: {
 		'@type': 'PostalAddress',
-		streetAddress: '740/8 ถนนชยางกูร',
-		addressLocality: 'เมืองอุบลราชธานี',
-		addressRegion: 'อุบลราชธานี',
-		postalCode: '34000',
-		addressCountry: 'TH',
+		streetAddress: business.streetAddress,
+		addressLocality: business.addressLocality,
+		addressRegion: business.addressRegion,
+		postalCode: business.postalCode,
+		addressCountry: business.country,
 	},
 	geo: {
 		'@type': 'GeoCoordinates',
-		latitude: 15.2448,
-		longitude: 104.8473,
+		latitude: business.latitude,
+		longitude: business.longitude,
 	},
 	openingHoursSpecification: [
 		{
 			'@type': 'OpeningHoursSpecification',
-			dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-			opens: '09:00',
-			closes: '18:00',
+			dayOfWeek: business.openingDays,
+			opens: business.opens,
+			closes: business.closes,
 		},
 	],
 	areaServed: {

@@ -10,6 +10,8 @@ export type WPPost = {
 	content: { markdown: string; protected: boolean };
 	featured_media?: number;
 	categories?: number[];
+	/** Bulk imports default to noindex; set true only after editorial and search-demand review. */
+	seo_index?: boolean;
 };
 
 export type WPMedia = {

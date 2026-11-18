@@ -7,6 +7,7 @@
 /buy-iphone /รับซื้อiphone 301
 /buy-ipad /รับซื้อipad 301
 /buy-camera /รับซื้อกล้อง 301
+/buy-phone /รับซื้อมือถือ 301
 
 /services-* /services/:splat 301
 /locations-* /locations/:splat 301

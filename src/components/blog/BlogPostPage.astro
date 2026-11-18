@@ -73,6 +73,7 @@ const faqSchema =
 	ogType="article"
 	articleDate={post.date}
 	articleModified={post.modified}
+	robots={post.seo_index === false ? 'noindex, follow' : undefined}
 	jsonLd={[articleSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])]}
 >
 	<Post post={post} categories={categories} contentHtml={contentHtml} featuredMedia={featuredMedia} prevPost={prevPost} nextPost={nextPost} />

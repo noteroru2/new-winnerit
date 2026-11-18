@@ -142,14 +142,17 @@ function normalizeHtmlAssets(html: string) {
 
 export function autoLinkKeywords(html: string, map: KeywordMap = keywordLinks as KeywordMap) {
 	const root = parse(html, { comment: false });
+	// Automatic links are intentionally limited to this site. External links must be
+	// editorially selected per article instead of injected across thousands of pages.
+	const internalMap = Object.fromEntries(Object.entries(map).filter(([, dest]) => dest.startsWith('/')));
 
 	// Build a single regex from all keywords (longest first to avoid partial overlaps).
-	const keywords = Object.keys(map).sort((a, b) => b.length - a.length);
+	const keywords = Object.keys(internalMap).sort((a, b) => b.length - a.length);
 	if (!keywords.length) return html;
 
 	const re = new RegExp(`(${keywords.map(escapeRegExp).join('|')})`, 'g');
 	const perKeywordLimit = 2;
-	const totalLimit = 20;
+	const totalLimit = 8;
 	const counts = new Map<string, number>();
 	let total = 0;
 
@@ -175,7 +178,7 @@ export function autoLinkKeywords(html: string, map: KeywordMap = keywordLinks as
 
 			const newHtml = parts
 				.map((part) => {
-					const dest = map[part];
+					const dest = internalMap[part];
 					if (!dest) return he.escape(part);
 					if (total >= totalLimit) return he.escape(part);
 					const c = counts.get(part) ?? 0;
@@ -185,11 +188,8 @@ export function autoLinkKeywords(html: string, map: KeywordMap = keywordLinks as
 					total += 1;
 					replaced = true;
 
-				const isExternal = dest.startsWith('http://') || dest.startsWith('https://');
 				const title = `ดูข้อมูลเกี่ยวกับ ${part}`;
-				const attrs = isExternal
-					? `href="${he.escape(dest)}" target="_blank" rel="noopener noreferrer" title="${he.escape(title)}"`
-					: `href="${he.escape(dest)}" rel="noopener" title="${he.escape(title)}"`;
+				const attrs = `href="${he.escape(dest)}" title="${he.escape(title)}"`;
 				return `<a ${attrs}>${he.escape(part)}</a>`;
 				})
 				.join('');
