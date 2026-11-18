@@ -40,24 +40,35 @@ import { business } from '../config/business';
 			<div class="g2">
 				<div class="box">
 					<h2>แบบฟอร์มติดต่อ</h2>
-					<form class="form" action={`mailto:${business.email}`} method="post" enctype="text/plain">
-						<label>
-							<span class="lb">ชื่อ</span>
-							<input name="name" required class="inp" placeholder="ชื่อ-นามสกุล" />
-						</label>
-						<label>
-							<span class="lb">อีเมล</span>
-							<input type="email" name="email" required class="inp" placeholder="email@example.com" />
-						</label>
-						<label>
-							<span class="lb">รายละเอียด</span>
-							<textarea name="message" rows={6} required class="inp ta" placeholder="อธิบายรายละเอียดอุปกรณ์ หรือสิ่งที่ต้องการติดต่อ..."></textarea>
-						</label>
-						<button class="btn btn-primary btn-big" type="submit">
-							<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-							ส่งข้อความ
-						</button>
-					</form>
+					<div id="form-offline" class="contact-offline" role="status">
+            กำลังตรวจสอบระบบรับข้อความ หากแบบฟอร์มยังไม่พร้อม กรุณาส่งรายละเอียดเครื่องผ่าน <a href={business.lineUrl} target="_blank" rel="noopener noreferrer">LINE {business.lineId}</a>
+          </div>
+          <form id="winner-contact" class="form" hidden novalidate>
+            <p class="form-hint">เมื่อส่งแบบฟอร์ม ระบบจะนำข้อมูลไปยังทีมงานผ่านช่องทางรับแจ้งที่ตั้งค่าไว้ และแจ้งหมายเลขอ้างอิงให้คุณ ไม่มีการส่งโดยเปิดโปรแกรมอีเมล</p>
+            <label><span class="lb">ชื่อผู้ติดต่อ *</span><input name="name" required maxlength="90" class="inp" autocomplete="name" placeholder="ชื่อผู้ติดต่อ" /></label>
+            <label><span class="lb">เบอร์ติดต่อ</span><input name="phone" type="tel" maxlength="30" class="inp" autocomplete="tel" placeholder="เบอร์โทรสำหรับติดต่อกลับ" /></label>
+            <label><span class="lb">อีเมล</span><input type="email" name="email" maxlength="120" class="inp" autocomplete="email" placeholder="email@example.com" /></label>
+            <p class="form-hint">โปรดระบุเบอร์โทรหรืออีเมลอย่างน้อยหนึ่งช่อง</p>
+            <label><span class="lb">อุปกรณ์ที่ต้องการขาย *</span>
+              <select name="category" required class="inp">
+                <option value="">เลือกประเภท</option>
+                <option value="notebook">โน๊ตบุ๊ค / Gaming Laptop</option>
+                <option value="pc">คอมพิวเตอร์ PC / การ์ดจอ</option>
+                <option value="macbook">MacBook / iMac</option>
+                <option value="iphone">iPhone</option>
+                <option value="ipad">iPad</option>
+                <option value="camera">กล้อง / เลนส์</option>
+                <option value="lot">งานเหมาล็อตองค์กร</option>
+                <option value="other">อุปกรณ์อื่น</option>
+              </select>
+            </label>
+            <label><span class="lb">รายละเอียดเครื่องและสภาพ *</span><textarea name="message" rows={6} minlength="20" maxlength="2500" required class="inp ta" placeholder="รุ่น สเปก สภาพ ตำหนิ จำนวน และจังหวัด..."></textarea></label>
+            <div class="trap" aria-hidden="true"><label>Website<input name="companyWebsite" tabindex="-1" autocomplete="off" /></label></div>
+            <label class="consent"><input type="checkbox" name="consent" required /> ยินยอมให้ Winner IT ใช้ข้อมูลนี้เพื่อติดต่อเกี่ยวกับการประเมินสินค้าและดำเนินการตามคำขอ โดยไม่เผยแพร่รายละเอียดส่วนตัวต่อสาธารณะ</label>
+            <div id="winner-turnstile"></div>
+            <p id="form-status" role="status" aria-live="polite"></p>
+            <button class="btn btn-primary btn-big" id="winner-submit" type="submit">ส่งข้อมูลให้ทีมงาน</button>
+          </form>
 				</div>
 
 				<div class="box">
@@ -73,6 +84,11 @@ import { business } from '../config/business';
 	</section>
 	<TrustProof compact />
 </Layout>
+
+<script>
+ import '../scripts/leadTracking';
+ import '../scripts/contactForm';
+</script>
 
 <style>
 	.hero {
@@ -166,6 +182,13 @@ import { business } from '../config/business';
 		font-size: 22px;
 	}
 
+	.contact-offline { padding: 18px; background: #fff7ed; border-radius: 12px; line-height: 1.8; }
+	.contact-offline a { color: var(--accent-hover); font-weight: 700; }
+	.form[hidden] { display: none; }
+	.form-hint { margin: 0; font-size: 13px; line-height: 1.7; color: var(--muted); }
+	.trap { position: absolute; left: -9999px; height: 0; overflow: hidden; }
+	.consent { display: flex; align-items: flex-start; gap: 10px; line-height: 1.6; font-size: 13px; }
+	.consent input { margin-top: 4px; }
 	.form {
 		display: grid;
 		gap: 18px;
