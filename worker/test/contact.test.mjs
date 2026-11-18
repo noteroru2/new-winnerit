@@ -7,7 +7,7 @@ const configured=()=>({...env(),CONTACT_WEBHOOK_URL:'https://n8n.example.test/we
 const post=(url,body,origin=root)=>new Request(root+url,{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify(body)});
 const data={name:'Somchai',phone:'0812345678',email:'',category:'notebook',message:'Notebook Intel i5 SSD 512GB screen good',consent:true,turnstileToken:'test-token',page:'/contact/',utm_source:'google',utm_medium:'organic'};
 test('canonical redirects legacy url and assets still serve',async()=>{
- const r=await worker.fetch(new Request(root+'/buy-laptop'),env());assert.equal(r.status,308);assert.ok(r.headers.get('location').endsWith('/รับซื้อโน๊ตบุ๊ค/'));
+ const r=await worker.fetch(new Request(root+'/buy-laptop'),env());assert.equal(r.status,308);assert.equal(decodeURIComponent(new URL(r.headers.get('location')).pathname),'/รับซื้อโน๊ตบุ๊ค/');
  const ok=await worker.fetch(new Request(root+'/'),env());assert.equal(ok.status,200);
 });
 test('form disabled without secrets and no false delivery',async()=>{
