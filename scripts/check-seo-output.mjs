@@ -44,6 +44,13 @@ const expectedCanonical = (document, expected) => {
 };
 expectedCanonical(index, '/');
 expectedCanonical(articles, '/articles/');
+// Permanent canonical URLs in global navigation must avoid a redirect hop.
+for (const link of index.querySelectorAll('.header a[href], .footer a[href]')) {
+  const href = link.getAttribute('href');
+  if (href?.startsWith('/') && href !== '/' && !href.endsWith('/') && !href.includes('.')) {
+    fail('Global navigation links to a redirecting path: ' + href);
+  }
+}
 if (!index.querySelector('h1')) fail('Homepage H1 missing');
 if (!index.text.includes('รับซื้อสินค้าไอทีมือสอง ประเมินจากอะไรบ้าง')) fail('Assessment guide missing on homepage');
 for (const document of [index, articles]) {

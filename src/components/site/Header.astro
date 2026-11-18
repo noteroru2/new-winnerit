@@ -1,27 +1,28 @@
 ---
 const services = [
-	{ href: '/รับซื้อโน๊ตบุ๊ค', label: 'รับซื้อโน๊ตบุ๊ค', icon: '💻' },
-	{ href: '/รับซื้อคอมพิวเตอร์', label: 'รับซื้อคอมพิวเตอร์', icon: '🖥️' },
-	{ href: '/รับซื้อมือถือ', label: 'รับซื้อมือถือ', icon: '📱' },
-	{ href: '/รับซื้อmacbook', label: 'รับซื้อ MacBook', icon: '🍎' },
-	{ href: '/รับซื้อiphone', label: 'รับซื้อ iPhone', icon: '📱' },
-	{ href: '/รับซื้อipad', label: 'รับซื้อ iPad', icon: '📋' },
-	{ href: '/รับซื้อกล้อง', label: 'รับซื้อกล้อง', icon: '📷' },
+	{ href: '/รับซื้อโน๊ตบุ๊ค/', label: 'รับซื้อโน๊ตบุ๊ค', icon: '💻' },
+	{ href: '/รับซื้อคอมพิวเตอร์/', label: 'รับซื้อคอมพิวเตอร์', icon: '🖥️' },
+	{ href: '/รับซื้อมือถือ/', label: 'รับซื้อมือถือ', icon: '📱' },
+	{ href: '/รับซื้อmacbook/', label: 'รับซื้อ MacBook', icon: '🍎' },
+	{ href: '/รับซื้อiphone/', label: 'รับซื้อ iPhone', icon: '📱' },
+	{ href: '/รับซื้อipad/', label: 'รับซื้อ iPad', icon: '📋' },
+	{ href: '/รับซื้อกล้อง/', label: 'รับซื้อกล้อง', icon: '📷' },
 ];
 
 const nav = [
 	{ href: '/', label: 'หน้าแรก' },
-	{ href: '/articles', label: 'บทความ' },
-	{ href: '/about', label: 'เกี่ยวกับเรา' },
-	{ href: '/contact', label: 'ติดต่อ' },
+	{ href: '/articles/', label: 'บทความ' },
+	{ href: '/about/', label: 'เกี่ยวกับเรา' },
+	{ href: '/contact/', label: 'ติดต่อ' },
 ];
 
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
 function isActive(href: string) {
 	if (href === '/') return pathname === '/';
-	return pathname.startsWith(href);
+	const base = href.endsWith('/') ? href.slice(0, -1) : href;
+	return pathname === base || pathname.startsWith(base + '/');
 }
-const isServiceActive = services.some(s => pathname.startsWith(s.href));
+const isServiceActive = services.some(s => isActive(s.href));
 ---
 
 <header class="header">
@@ -54,9 +55,9 @@ const isServiceActive = services.some(s => pathname.startsWith(s.href));
 				</div>
 			</div>
 
-			<a href="/articles" class:list={['nav-link', { active: isActive('/articles') }]}>บทความ</a>
-			<a href="/about" class:list={['nav-link', { active: isActive('/about') }]}>เกี่ยวกับเรา</a>
-			<a href="/contact" class:list={['nav-link', { active: isActive('/contact') }]}>ติดต่อ</a>
+			<a href="/articles/" class:list={['nav-link', { active: isActive('/articles') }]}>บทความ</a>
+			<a href="/about/" class:list={['nav-link', { active: isActive('/about') }]}>เกี่ยวกับเรา</a>
+			<a href="/contact/" class:list={['nav-link', { active: isActive('/contact') }]}>ติดต่อ</a>
 
 			<a href="https://line.me/R/ti/p/@webuy" target="_blank" rel="noopener" class="nav-cta">
 				<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 5.83 2 10.44c0 4.17 3.7 7.66 8.69 8.32.34.07.8.23.91.52.1.27.07.68.03.95l-.15.88c-.04.25-.2.99.87.54s5.78-3.4 7.88-5.82C22.08 13.79 22 12.16 22 10.44 22 5.83 17.52 2 12 2z"/></svg>
