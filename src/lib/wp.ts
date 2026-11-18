@@ -17,7 +17,7 @@ const editorialApproved = (data: Record<string, unknown>): boolean => {
  const evidence = String(data.seo_evidence ?? '').trim();
  const service = String(data.seo_service_verified ?? '').trim();
  return data.seo_index === true && reviewer.length >= 2
-  && /^20\\d\\d-\\d\\d-\\d\\d$/.test(at) && evidence.length >= 20 && service.length >= 20;
+  && (at.length === 10 && at[4] === '-' && at[7] === '-' && !Number.isNaN(Date.parse(at))) && evidence.length >= 20 && service.length >= 20;
 };
 
 const mediaManifest = mediaJson as Record<string, WPMedia>;

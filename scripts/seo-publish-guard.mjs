@@ -11,7 +11,7 @@ for(const file of readdirSync(dir).filter(x=>x.endsWith('.md'))){
  const reviewedAt=String(data.seo_reviewed_at||'').trim();
  const evidence=String(data.seo_evidence||'').trim();
  const serviceProof=String(data.seo_service_verified||'').trim();
- if(reviewer.length<2||!/^20\d\d-\d\d-\d\d$/.test(reviewedAt)||evidence.length<20||serviceProof.length<20)
+ if(reviewer.length<2||!(reviewedAt.length === 10 && reviewedAt[4] === '-' && reviewedAt[7] === '-' && !Number.isNaN(Date.parse(reviewedAt)))||evidence.length<20||serviceProof.length<20)
    bad.push({file,slug:data.slug,missing:['seo_reviewed_by','seo_reviewed_at (YYYY-MM-DD)','seo_evidence (min 20 chars)','seo_service_verified (min 20 chars)']});
 }
 if(bad.length){
