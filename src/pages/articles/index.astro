@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getAllPosts } from '../../lib/wp';
+import { getEditorialPosts } from '../../lib/wp';
 import PostCard from '../../components/blog/PostCard.astro';
 
 const env = (import.meta.env ?? {}) as any;
@@ -12,7 +12,7 @@ const envNumber = (key: string, fallback: number) => {
 
 const pageSize = envNumber('ARTICLES_PAGE_SIZE', 24);
 const page = 1;
-const postsAll = (await getAllPosts()).sort((a, b) => (a.date < b.date ? 1 : -1));
+const postsAll = await getEditorialPosts();
 const maxPages = envNumber('ARTICLES_MAX_PAGES', 200);
 const totalPages = Math.max(1, Math.min(maxPages, Math.ceil(postsAll.length / pageSize)));
 const posts = postsAll.slice((page - 1) * pageSize, page * pageSize);
@@ -39,9 +39,17 @@ for (let i = 1; i <= totalPages; i++) {
 	</section>
 
 	<section class="container list">
-		<div class="grid-3">
-			{posts.map((post) => <PostCard post={post} />)}
-		</div>
+		{posts.length > 0 ? (
+			<div class="grid-3">
+				{posts.map((post) => <PostCard post={post} />)}
+			</div>
+		) : (
+			<div class="editorial-empty">
+				<h2>คำแนะนำก่อนขายสินค้าไอทีมือสอง</h2>
+				<p>บทความนำเข้ากำลังอยู่ระหว่างตรวจทานข้อมูล ก่อนเปิดเผยแพร่ในส่วนบทความ ระหว่างนี้สามารถอ่านข้อมูลการประเมินตามประเภทสินค้าได้จากหน้าบริการหลัก</p>
+				<p><a href="/รับซื้อโน๊ตบุ๊ค/">การเตรียมโน๊ตบุ๊คก่อนขาย</a> · <a href="/รับซื้อคอมพิวเตอร์/">การประเมินคอมพิวเตอร์</a> · <a href="/รับซื้อmacbook/">การประเมิน MacBook</a></p>
+			</div>
+		)}
 	</section>
 
 	{totalPages > 1 && (
@@ -93,6 +101,10 @@ for (let i = 1; i <= totalPages; i++) {
 		font-size: 16px;
 	}
 	.list { padding: 48px 0; }
+	.editorial-empty { max-width: 760px; margin: 0 auto; padding: 32px; background: #fff7ed; border-radius: 18px; line-height: 1.8; }
+	.editorial-empty h2 { margin: 0 0 12px; font-size: 24px; }
+	.editorial-empty p { margin: 8px 0; }
+	.editorial-empty a { color: var(--accent-hover); font-weight: 650; }
 	.pag {
 		padding: 0 0 64px;
 		display: flex;

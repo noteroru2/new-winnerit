@@ -8,6 +8,8 @@ export async function getStaticPaths() {
 	const ALLOWED = new Set<PrefixedSegment>(['services', 'locations', 'prices']);
 	const posts = await getAllPosts();
 	const sorted = [...posts].sort((a, b) => (a.date < b.date ? 1 : -1));
+	const reviewed = sorted.filter((post) => post.seo_index === true);
+	const reviewedPositions = new Map(reviewed.map((post, i) => [post.id, i]));
 
 	const paths: {
 		params: { segment: string; slug: string };
@@ -21,8 +23,9 @@ export async function getStaticPaths() {
 		const parsed = parsePrefixedWpSlug(post.slug);
 		if (!parsed || !ALLOWED.has(parsed.segment)) continue;
 
-		const prevPost = i > 0 ? sorted[i - 1] : null;
-		const nextPost = i < sorted.length - 1 ? sorted[i + 1] : null;
+		const reviewedPosition = reviewedPositions.get(post.id);
+		const prevPost = reviewedPosition !== undefined && reviewedPosition > 0 ? reviewed[reviewedPosition - 1] : null;
+		const nextPost = reviewedPosition !== undefined ? (reviewed[reviewedPosition + 1] ?? null) : null;
 
 		paths.push({
 			params: { segment: parsed.segment, slug: parsed.rest },

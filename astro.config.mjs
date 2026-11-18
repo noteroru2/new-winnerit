@@ -77,7 +77,10 @@ export default defineConfig({
 			serialize(item) {
 				const normalizedUrl = normalizeUrl(item.url);
 				const modified = postSeo.lastmod[normalizedUrl];
-				if (modified && !postSeo.noindex.has(normalizedUrl)) item.lastmod = new Date(modified).toISOString();
+				if (modified && !postSeo.noindex.has(normalizedUrl)) {
+					const date = new Date(modified);
+					if (!Number.isNaN(date.getTime())) item.lastmod = date.toISOString();
+				}
 				return item;
 			},
 		}),

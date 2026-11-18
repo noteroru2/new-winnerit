@@ -1,17 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getAllPosts } from '../lib/wp';
+import { getEditorialPosts } from '../lib/wp';
 import PostCard from '../components/blog/PostCard.astro';
 import TrustProof from '../components/site/TrustProof.astro';
+import AssessmentGuide from '../components/site/AssessmentGuide.astro';
 
-const posts = (await getAllPosts())
-	.sort((a, b) => (a.date < b.date ? 1 : -1))
-	.slice(0, 6);
+const posts = (await getEditorialPosts()).slice(0, 6);
 ---
 
 <Layout
 	title="Winner IT — รับซื้อโน๊ตบุ๊ค คอม อุปกรณ์ IT มือสอง ราคาดี"
-	description="Winner IT รับซื้อโน๊ตบุ๊ค คอมพิวเตอร์ MacBook iPhone อุปกรณ์ IT มือสอง ราคาสูง จ่ายทันที ติดต่อ Line @WEBUY"
+	description="Winner IT รับซื้อโน๊ตบุ๊ค คอมพิวเตอร์ MacBook iPhone และสินค้าไอทีมือสอง ประเมินจากรุ่น สเปกและสภาพจริง ติดต่อ LINE @WEBUY มีหน้าร้านที่อุบลราชธานี"
 >
 	<!-- ━━━ HERO ━━━ -->
 	<section class="hero">
@@ -164,6 +163,8 @@ const posts = (await getAllPosts())
 		</div>
 	</section>
 
+	<AssessmentGuide />
+
 	<!-- ━━━ WHY ━━━ -->
 	<section class="why">
 		<div class="container">
@@ -216,6 +217,7 @@ const posts = (await getAllPosts())
 	</section>
 
 	<!-- ━━━ POSTS ━━━ -->
+	{posts.length > 0 && (
 	<section class="posts-sec">
 		<div class="container">
 			<div class="posts-head">
@@ -230,6 +232,7 @@ const posts = (await getAllPosts())
 			</div>
 		</div>
 	</section>
+	)}
 </Layout>
 
 <style>

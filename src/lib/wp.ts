@@ -55,6 +55,15 @@ export async function getAllPosts(): Promise<WPPost[]> {
 	return posts;
 }
 
+/** Only manually approved pages are promoted through navigational lists and RSS.
+ * Legacy imported URLs remain accessible with their existing noindex policy.
+ */
+export async function getEditorialPosts(): Promise<WPPost[]> {
+  const posts = await getAllPosts();
+  return posts.filter((post) => post.seo_index === true)
+    .sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
 export async function getPostBySlug(slug: string): Promise<WPPost | null> {
 	const posts = await getAllPosts();
 	return posts.find((p) => p.slug === slug) ?? null;
