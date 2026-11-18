@@ -28,7 +28,7 @@ const json = (value, status=200) => new Response(JSON.stringify(value), {
   },
 });
 const clean = (x,max=160) => typeof x === 'string' ? x.trim().slice(0,max) : '';
-const cleanDimension = (x,max=64) => clean(x,max).replace(/[^a-zA-Z0-9_./-]/g,'');
+const cleanDimension = (x,max=64) => clean(x,max).replace(/[^\p{L}\p{N}_./-]/gu,'');
 const sameOrigin = (request) => request.headers.get('Origin') === ALLOWED_HOST;
 const enabled = (env) => Boolean(
   env.CONTACT_WEBHOOK_URL && /^https:\/\//.test(env.CONTACT_WEBHOOK_URL)

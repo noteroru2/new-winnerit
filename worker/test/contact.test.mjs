@@ -33,6 +33,7 @@ test('Turnstile and webhook must both succeed; no PIIs in event',async()=>{
   const events=[];
   const e=await worker.fetch(post('/api/events',{event:'line_click',page:'/รับซื้อโน๊ตบุ๊ค/',placement:'hero',utm_source:'google'}),{...env(),SEO_EVENTS:{writeDataPoint:(x)=>events.push(x)}});
   assert.equal(e.status,200);assert.equal(events.length,1);
+  assert.equal(events[0].blobs[1],'/รับซื้อโน๊ตบุ๊ค/', 'Thai landing page must not be stripped from analytics');
   assert.ok(!JSON.stringify(events).includes(data.phone));assert.ok(!JSON.stringify(events).includes(data.name));
  } finally {globalThis.fetch=oldFetch;}
 });
