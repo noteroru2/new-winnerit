@@ -15,7 +15,14 @@ const records=files.map(file=>{
  const normalized=plain.replace(pRe,'[จังหวัด]').replace(/[0-9]+/g,'#').trim();
  const titleKey=title.replace(pRe,'[จังหวัด]').replace(/\s+/g,' ').trim().toLowerCase();
  const textHash=createHash('sha256').update(normalized).digest('hex').slice(0,16);
- return{file,slug,prefix,title,titleKey,chars:plain.length,indexable:data.seo_index===true,modified:data.modified||'',textHash,normalized};
+ const reviewer=String(data.seo_reviewed_by||'').trim();
+ const reviewedAt=String(data.seo_reviewed_at||'').trim();
+ const evidence=String(data.seo_evidence||'').trim();
+ const service=String(data.seo_service_verified||'').trim();
+ const approved=data.seo_index===true && reviewer.length>=2
+  && reviewedAt.length===10 && reviewedAt[4]==='-' && reviewedAt[7]==='-' && !Number.isNaN(Date.parse(reviewedAt))
+  && evidence.length>=20 && service.length>=20;
+ return{file,slug,prefix,title,titleKey,chars:plain.length,indexRequested:data.seo_index===true,indexable:approved,modified:data.modified||'',textHash,normalized};
 });
 const groups=new Map(),hashGroups=new Map();
 for(const a of records){
@@ -43,5 +50,5 @@ for(const [key,v] of groups){
 }
 similar.sort((a,b)=>b.overlap-a.overlap);
 const byPrefix=Object.fromEntries(['flat','services','locations','prices'].map(p=>[p,records.filter(x=>x.prefix===p).length]));
-const summary={generatedAt:new Date().toISOString(),total:records.length,indexable:records.filter(x=>x.indexable).length,noindex:records.filter(x=>!x.indexable).length,under800ThaiCharacters:records.filter(x=>x.chars<800).length,byPrefix};
-console.log(JSON.stringify({summary,topSimilarTitles:duplicateTitleGroups,topIdenticalBodies:duplicateBodyGroups,nearDuplicatesForHumanReview:similar.slice(0,100),notes:['Thailand uses Thai script; character-length heuristics are not word counts.','Normalized overlap is a screening heuristic, not proof of doorway or spam.','Do not bulk-open seo_index; check GSC, real services, unique evidence and owner approval first.']},null,2));
+const summary={generatedAt:new Date().toISOString(),total:records.length,indexRequested:records.filter(x=>x.indexRequested).length,indexable:records.filter(x=>x.indexable).length,noindex:records.filter(x=>!x.indexable).length,under800ThaiCharacters:records.filter(x=>x.chars<800).length,byPrefix};
+console.log(JSON.stringify({summary,topSimilarTitles:duplicateTitleGroups,topIdenticalBodies:duplicateBodyGroups,nearDuplicatesForHumanReview:similar.slice(0,100),notes:['Thailand uses Thai script; character-length heuristics are not word counts.','Normalized overlap is a screening heuristic, not proof of doorway or spam.','Requested index is not approved index: reviewer, date, specific evidence, and geographic fulfillment must all be recorded.','Do not bulk-open seo_index; check GSC, real services, unique evidence and owner approval first.']},null,2));

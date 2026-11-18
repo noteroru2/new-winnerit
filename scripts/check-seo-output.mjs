@@ -88,9 +88,63 @@ for (const path of quarantined) {
 for (const path of approved) {
   if (!coreRoutes.has(path) && !sitemapUrls.has(path)) fail('Approved article missing from sitemap: ' + path);
 }
+
+const coreServiceSlugs = [
+  'รับซื้อโน๊ตบุ๊ค', 'รับซื้อคอมพิวเตอร์', 'รับซื้อมือถือ',
+  'รับซื้อmacbook', 'รับซื้อiphone', 'รับซื้อipad', 'รับซื้อกล้อง'
+];
+const coreAudit = [];
+for (const slug of coreServiceSlugs) {
+  const pathname = '/' + slug + '/';
+  const document = parse(read(join(dist, slug, 'index.html')));
+  const h1 = document.querySelectorAll('main h1');
+  if (h1.length !== 1) fail('Expected one main H1 on ' + pathname + ', got ' + h1.length);
+  if (!document.querySelector('meta[name="description"]')?.getAttribute('content')?.trim()) {
+    fail('Missing meta description on ' + pathname);
+  }
+  if (document.querySelector('meta[name="robots"]')?.getAttribute('content')?.includes('noindex')) {
+    fail('Main service page accidentally noindexed: ' + pathname);
+  }
+  expectedCanonical(document, pathname);
+  const main = document.querySelector('main');
+  if (!main?.querySelector('a[href*="line.me/R/ti/p/@webuy"]')) {
+    fail('Missing contact LINE action on ' + pathname);
+  }
+  // Primary service photos must be genuine owned/licensed assets, not stock
+  // photos passed off as documented buyback cases.
+  for (const image of main.querySelectorAll('img[src]')) {
+    const src = image.getAttribute('src') || '';
+    if (src.includes('images.unsplash.com') || src.includes('source.unsplash.com')) {
+      fail('Stock image on core service ' + pathname + ': ' + src);
+    }
+    if (!image.getAttribute('alt')?.trim()) fail('Service image without meaningful alt: ' + pathname);
+  }
+  for (const schema of document.querySelectorAll('script[type="application/ld+json"]')) {
+    try { JSON.parse(schema.text); } catch { fail('Malformed JSON-LD: ' + pathname); }
+  }
+  const text = main.text.toLowerCase();
+  const forbidden = [
+    'ราคาสูงกว่าตลาด', 'มากกว่า 10 ปี', 'รับซื้อถึงที่ทุกจังหวัด',
+    'ลบข้อมูลจนไม่สามารถกู้คืนได้'
+  ];
+  for (const claim of forbidden) {
+    if (text.includes(claim.toLowerCase())) fail('Unverified marketing claim on ' + pathname + ': ' + claim);
+  }
+  coreAudit.push({pathname, h1:1, canonical:'ok', description:'ok', noindex:false, stockImages:0});
+}
+const contactDocument = parse(read(join(dist,'contact','index.html')));
+expectedCanonical(contactDocument,'/contact/');
+if (!contactDocument.querySelector('a[href*="line.me/R/ti/p/@webuy"]')) {
+  fail('Contact page missing usable LINE fallback');
+}
+if (!contactDocument.querySelector('#form-offline')) {
+  fail('Contact form must visibly fail closed until Worker secrets are configured');
+}
+if (!existsSync(join(dist,'privacy','index.html'))) fail('Privacy notice required for contact form');
+
 const robots = read(join(dist, 'robots.txt'));
 if (!robots.includes('https://winnerit.in.th/sitemap-index.xml')) fail('robots.txt sitemap reference missing');
 console.log(JSON.stringify({
   result: 'passed', approvedPosts: approved.size, quarantinedPosts: quarantined.size,
-  sitemapUrls: sitemapUrls.size, sitemapParts: sitemapParts.length
+  sitemapUrls: sitemapUrls.size, sitemapParts: sitemapParts.length, coreAudit
 }, null, 2));
