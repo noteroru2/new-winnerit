@@ -1,7 +1,7 @@
 import rss from '@astrojs/rss';
 import he from 'he';
 import { parse } from 'node-html-parser';
-import { getAllPosts } from '../lib/wp';
+import { getEditorialPosts } from '../lib/wp';
 import { postPublicPath } from '../lib/postPaths';
 
 function stripHtml(html) {
@@ -11,9 +11,7 @@ function stripHtml(html) {
 const RSS_LIMIT = 50;
 
 export async function GET(context) {
-	const posts = (await getAllPosts())
-		.sort((a, b) => (a.date < b.date ? 1 : -1))
-		.slice(0, RSS_LIMIT);
+	const posts = (await getEditorialPosts()).slice(0, RSS_LIMIT);
 
 	const siteBase = context.site
 		? typeof context.site === 'string'

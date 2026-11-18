@@ -11,6 +11,15 @@ const postModules = import.meta.glob('/content/posts/*.md', {
 	import: 'default',
 }) as Record<string, string>;
 
+const editorialApproved = (data: Record<string, unknown>): boolean => {
+ const reviewer = String(data.seo_reviewed_by ?? '').trim();
+ const at = String(data.seo_reviewed_at ?? '').trim();
+ const evidence = String(data.seo_evidence ?? '').trim();
+ const service = String(data.seo_service_verified ?? '').trim();
+ return data.seo_index === true && reviewer.length >= 2
+  && (at.length === 10 && at[4] === '-' && at[7] === '-' && !Number.isNaN(Date.parse(at))) && evidence.length >= 20 && service.length >= 20;
+};
+
 const mediaManifest = mediaJson as Record<string, WPMedia>;
 const categoriesData = categoriesJson as WPCategory[];
 
@@ -34,7 +43,7 @@ function postFromRaw(raw: string): WPPost | null {
 		content: { markdown: content.trim(), protected: false },
 		featured_media: data.featured_media ? Number(data.featured_media) : undefined,
 		categories: Array.isArray(data.categories) ? data.categories.map(Number) : [],
-		seo_index: data.seo_index === true,
+		seo_index: editorialApproved(data),
 	};
 }
 
@@ -53,6 +62,15 @@ export async function getAllPosts(): Promise<WPPost[]> {
 
 	_postsCache = posts;
 	return posts;
+}
+
+/** Only manually approved pages are promoted through navigational lists and RSS.
+ * Legacy imported URLs remain accessible with their existing noindex policy.
+ */
+export async function getEditorialPosts(): Promise<WPPost[]> {
+  const posts = await getAllPosts();
+  return posts.filter((post) => post.seo_index === true)
+    .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
 export async function getPostBySlug(slug: string): Promise<WPPost | null> {

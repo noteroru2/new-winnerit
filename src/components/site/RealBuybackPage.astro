@@ -1,0 +1,117 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { business } from '../../config/business';
+type Item = { title: string; text: string };
+type Scenario = { name: string; situation: string; checking: string; impact: string };
+type FAQ = { question: string; answer: string };
+type Props = {
+  category: string;
+  title: string;
+  description: string;
+  headline: string;
+  introduction: string;
+  checklist: Item[];
+  checks: Item[];
+  scenarios: Scenario[];
+  faqs: FAQ[];
+  related: { title: string; url: string }[];
+  serviceUrl: string;
+};
+const p = Astro.props as Props;
+const site = Astro.site?.toString().replace(/\/$/, '') ?? 'https://winnerit.in.th';
+const schema = [
+  {
+    '@type': 'Service',
+    '@id': `${site}${p.serviceUrl}#service`,
+    name: p.title,
+    serviceType: p.category,
+    description: p.description,
+    provider: { '@id': `${site}/#organization` },
+    areaServed: { '@type': 'Country', name: 'Thailand' },
+    url: `${site}${p.serviceUrl}`,
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: `${site}/` },
+      { '@type': 'ListItem', position: 2, name: p.category, item: `${site}${p.serviceUrl}` },
+    ],
+  },
+];
+---
+<Layout title={p.title} description={p.description} jsonLd={schema}>
+  <section class="buy-hero">
+    <div class="container hero-layout">
+      <div>
+        <span class="pill">Winner IT • {p.category}</span>
+        <h1>{p.headline}</h1>
+        <p class="lede">{p.introduction}</p>
+        <div class="hero-cta">
+          <a href={business.lineUrl} class="btn btn-line btn-big" target="_blank" rel="noopener noreferrer" data-lead-event="line_click" data-lead-placement="buyback_hero">ส่งข้อมูลประเมินทาง LINE {business.lineId}</a>
+          <a href="/contact/" class="btn btn-big">ดูที่ตั้งร้านและช่องทางติดต่อ</a>
+        </div>
+        <p class="scope">หน้าร้านตรวจเครื่องที่อุบลราชธานี • ผู้ขายต่างจังหวัดติดต่อสอบถามวิธีส่งมอบก่อนจัดส่ง • ราคาสุดท้ายยืนยันหลังตรวจเครื่องจริง</p>
+      </div>
+      <figure class="photo">
+        <img src={business.realPhotos[1].src} alt={business.realPhotos[1].alt} width="960" height="720" loading="eager" fetchpriority="high" decoding="async"/>
+        <figcaption>ภาพพื้นที่ตรวจอุปกรณ์ของบริษัท อำพล เทรดดิ้ง จำกัด (ผู้ดำเนินงาน Winner IT)</figcaption>
+      </figure>
+    </div>
+  </section>
+  <section class="buy-section" aria-labelledby="prep-heading">
+    <div class="container">
+      <div class="section-head"><span class="pill">เตรียมข้อมูลก่อนขาย</span><h2 id="prep-heading">ส่งข้อมูลอะไรเพื่อให้ประเมินได้ตรงสภาพ?</h2><p>รายการนี้เป็นข้อมูลที่ใช้ประกอบการประเมิน ไม่ใช่ราคาเสนอซื้อหรือการรับประกันว่าจะรับซื้อได้ทุกรุ่น</p></div>
+      <div class="check-grid">
+        {p.checklist.map((item, i) => <article class="check-card"><span class="check-num">{String(i + 1).padStart(2, '0')}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}
+      </div>
+    </div>
+  </section>
+  <section class="buy-section alt" aria-labelledby="inspection-heading">
+    <div class="container">
+      <div class="section-head"><span class="pill">ตรวจเครื่องก่อนตกลงซื้อขาย</span><h2 id="inspection-heading">จุดที่ต้องตรวจและเหตุผลที่มีผลต่อราคา</h2><p>การตรวจแต่ละรายการขึ้นอยู่กับรุ่น อาการที่พบ และอุปกรณ์ประกอบที่สามารถทดสอบได้</p></div>
+      <div class="inspection-grid">
+        {p.checks.map((item) => <div class="inspection-item"><h3>{item.title}</h3><p>{item.text}</p></div>)}
+      </div>
+    </div>
+  </section>
+  <section class="buy-section" aria-labelledby="case-heading">
+    <div class="container">
+      <div class="section-head"><span class="pill">ตัวอย่างเพื่อการเรียนรู้</span><h2 id="case-heading">ตัวอย่างสถานการณ์ประเมินราคา</h2><p><strong>สถานการณ์จำลอง ไม่ใช่รายการรับซื้อหรือราคาซื้อขายที่เกิดขึ้นจริง</strong> จัดทำเพื่อช่วยให้ผู้ขายเข้าใจว่าต้องตรวจข้อมูลใดก่อนตกลงราคา จึงไม่มีการแสดงราคาที่ไม่ได้ยืนยันจากธุรกรรมจริง</p></div>
+      <div class="scenario-grid">
+        {p.scenarios.map((caseItem) => <article class="scenario"><h3>{caseItem.name}</h3><p><strong>ข้อมูลที่ได้รับ:</strong> {caseItem.situation}</p><p><strong>ต้องตรวจเพิ่ม:</strong> {caseItem.checking}</p><p><strong>ผลต่อการประเมิน:</strong> {caseItem.impact}</p></article>)}
+      </div>
+      <aside class="reality"><h3>หลักฐานร้านจริง ≠ หลักฐานการรับซื้อเครื่องตัวอย่าง</h3><p>ภาพด้านล่างเป็นภาพพื้นที่ของบริษัท ไม่ได้อ้างว่าเป็นภาพเครื่องจากสถานการณ์จำลอง เมื่อมีดีลที่เจ้าของอนุญาตให้เผยแพร่ จึงค่อยเพิ่มภาพรุ่นจริง สภาพก่อน-หลังตรวจ และรายละเอียดการประเมินที่ตรวจสอบได้</p>
+        <figure><img src={business.realPhotos[0].src} alt={business.realPhotos[0].alt} width="960" height="720" loading="lazy" decoding="async"/><figcaption>หน้าร้านจริงที่จังหวัดอุบลราชธานี</figcaption></figure>
+      </aside>
+    </div>
+  </section>
+  <section class="buy-section alt" aria-labelledby="process-heading">
+    <div class="container">
+      <div class="section-head"><span class="pill">ขั้นตอนรับซื้อ</span><h2 id="process-heading">ติดต่อและส่งมอบอย่างไรให้ปลอดภัย?</h2></div>
+      <ol class="steps">
+        <li><strong>ส่งรายละเอียดและรูปเครื่อง</strong> ผ่าน LINE {business.lineId} แจ้งรุ่น สเปก ความจุ ตำหนิ และอุปกรณ์ที่มี</li>
+        <li><strong>รับการประเมินเบื้องต้น</strong> ทีมงานอาจขอข้อมูลหรือรูปเพิ่ม ราคานี้ยังไม่ใช่ราคาซื้อขายที่ยืนยันแล้ว</li>
+        <li><strong>ตกลงวิธีส่งมอบก่อนส่งเครื่อง</strong> สามารถนำเครื่องมาที่หน้าร้านอุบลราชธานี หรือสอบถามเงื่อนไขการส่งจากต่างจังหวัด ไม่กล่าวอ้างว่ามีสาขาในทุกจังหวัด</li>
+        <li><strong>ตรวจเครื่องและตกลงราคาสุดท้าย</strong> หลังผู้ขายตกลงราคาและยืนยันการโอนเงินเรียบร้อย จึงถือว่าการซื้อขายเสร็จสมบูรณ์</li>
+      </ol>
+      <p class="privacy-note">ก่อนส่งมอบควรสำรองข้อมูลส่วนตัว ออกจากบัญชีที่ผูกกับเครื่อง และยืนยันวิธีจัดการข้อมูลกับทีมงาน หากเป็นเครื่องบริษัทควรเตรียมหนังสืออนุญาตหรือหลักฐานสิทธิ์ครอบครอง ข้อความนี้ไม่ใช่คำรับรองการลบข้อมูลถาวรทุกกรณี</p>
+    </div>
+  </section>
+  <section class="buy-section" aria-labelledby="faqs-heading">
+    <div class="container compact">
+      <h2 id="faqs-heading">คำถามที่ผู้ขายถามบ่อย</h2>
+      {p.faqs.map((item) => <details class="faq"><summary>{item.question}</summary><p>{item.answer}</p></details>)}
+      <div class="other-services"><h3>บริการรับซื้อที่เกี่ยวข้อง</h3><nav aria-label="บริการรับซื้ออื่น">{p.related.map((item) => <a href={item.url}>{item.title}</a>)}</nav></div>
+    </div>
+  </section>
+  <section class="final-cta">
+    <div class="container">
+      <h2>ต้องการประเมินเครื่องของคุณ?</h2>
+      <p>ส่งข้อมูลสเปกและสภาพจริงได้ทาง LINE หรือดูรายละเอียดการติดต่อหน้าร้าน</p>
+      <a href={business.lineUrl} class="btn btn-line btn-big" target="_blank" rel="noopener noreferrer" data-lead-event="line_click" data-lead-placement="buyback_footer">เริ่มประเมินผ่าน LINE {business.lineId}</a>
+    </div>
+  </section>
+</Layout>
+<style>
+.buy-hero{padding:72px 0;background:linear-gradient(120deg,#fff7ed,#fff 65%)}.hero-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:center}.buy-hero h1{font-size:clamp(31px,4.5vw,48px);line-height:1.2;letter-spacing:-.02em;margin:18px 0}.lede{font-size:17px;line-height:1.85;color:var(--text-2,#554b42)}.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin:26px 0 16px}.scope{color:var(--muted);font-size:14px;line-height:1.75}.photo,.reality figure{margin:0}.photo img,.reality img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:18px}.photo figcaption,.reality figcaption{font-size:12px;color:var(--muted);margin:10px 0}.buy-section{padding:72px 0}.buy-section.alt{background:var(--bg-alt,#faf7f4)}.section-head{max-width:850px;margin-bottom:28px}.section-head h2,.compact h2{font-size:clamp(25px,3vw,34px);margin:12px 0}.section-head p,.check-card p,.inspection-item p,.scenario p,.reality p,.steps li,.privacy-note,.faq p{line-height:1.85;color:var(--muted)}.check-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.check-card,.scenario{border:1px solid var(--border);background:#fff;border-radius:16px;padding:24px}.check-num{color:var(--accent);font-weight:800;font-size:14px}.check-card h3,.inspection-item h3,.scenario h3{font-size:18px;line-height:1.4;margin:8px 0}.check-card p,.inspection-item p,.scenario p{margin:8px 0 0}.inspection-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.inspection-item{border-left:3px solid var(--accent);padding:10px 18px;background:#fff;border-radius:0 10px 10px 0}.scenario-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.scenario p strong{color:var(--text)}.reality{margin-top:26px;border:1px solid #fed7aa;border-radius:16px;padding:24px;display:grid;grid-template-columns:1fr 240px;gap:24px;align-items:center}.reality h3{margin:0}.reality p{margin:8px 0 0}.steps{padding-left:28px;display:grid;gap:15px}.steps li{padding-left:8px}.steps strong{color:var(--text)}.privacy-note{font-size:14px;margin-top:22px;background:#fff;padding:20px;border-radius:12px;border:1px solid var(--border)}.compact{max-width:850px}.faq{margin:12px 0;padding:18px 20px;border:1px solid var(--border);border-radius:12px;background:#fff}.faq summary{cursor:pointer;font-weight:700;line-height:1.6}.faq p{margin:12px 0 2px}.other-services{margin-top:32px}.other-services nav{display:flex;flex-wrap:wrap;gap:10px}.other-services a{color:var(--accent-hover);padding:10px 16px;background:#fff7ed;border-radius:10px;text-decoration:none;font-weight:600}.final-cta{padding:56px 0;background:#1a1207;color:#fff;text-align:center}.final-cta h2{color:#fff;margin:0 0 12px}.final-cta p{color:#f5e5d6;margin-bottom:22px}@media(max-width:900px){.hero-layout{grid-template-columns:1fr;gap:28px}.check-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.buy-hero{padding:48px 0}.reality{grid-template-columns:1fr}.reality figure{max-width:380px}}@media(max-width:560px){.buy-section{padding:48px 0}.check-grid,.inspection-grid,.scenario-grid{grid-template-columns:1fr}.check-card,.scenario{padding:20px}.hero-cta{flex-direction:column}}
+</style>

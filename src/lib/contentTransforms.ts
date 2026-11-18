@@ -144,7 +144,11 @@ export function autoLinkKeywords(html: string, map: KeywordMap = keywordLinks as
 	const root = parse(html, { comment: false });
 	// Automatic links are intentionally limited to this site. External links must be
 	// editorially selected per article instead of injected across thousands of pages.
-	const internalMap = Object.fromEntries(Object.entries(map).filter(([, dest]) => dest.startsWith('/')));
+	const internalMap = Object.fromEntries(
+		Object.entries(map)
+			.filter(([, dest]) => dest.startsWith('/'))
+			.map(([keyword, dest]) => [keyword, dest.endsWith('/') ? dest : `${dest}/`])
+	);
 
 	// Build a single regex from all keywords (longest first to avoid partial overlaps).
 	const keywords = Object.keys(internalMap).sort((a, b) => b.length - a.length);

@@ -1,0 +1,48 @@
+name: SEO build and index policy
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  seo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      PUBLIC_SITE_URL: https://winnerit.in.th
+      NODE_OPTIONS: --max-old-space-size=6144
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Audit editorial content
+        run: npm run seo:audit-content > seo-content-audit.json
+      - name: Publish evidence gate
+        run: npm run seo:publish-guard
+      - name: Review queue report
+        run: npm run seo:review-inventory > seo-review-inventory.json
+      - name: Test Worker APIs
+        run: npm run test:worker
+      - name: Build production HTML
+        run: npm run build
+      - name: Verify SEO output and sitemap safety
+        run: npm run seo:check-output
+
+      - name: Upload non-sensitive SEO review inventory
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-review-inventory
+          path: seo-review-inventory.json
+          retention-days: 14
+          if-no-files-found: ignore
