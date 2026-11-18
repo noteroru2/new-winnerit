@@ -45,7 +45,7 @@ function buildPostSeoData(siteUrl) {
 const siteUrl = process.env.PUBLIC_SITE_URL ?? 'https://winnerit.in.th';
 const postSeo = buildPostSeoData(siteUrl);
 const corePages = new Set([
-	'/', '/about', '/articles', '/contact', '/รับซื้อโน๊ตบุ๊ค', '/รับซื้อคอมพิวเตอร์',
+	'/', '/about', '/articles', '/contact', '/privacy', '/รับซื้อโน๊ตบุ๊ค', '/รับซื้อคอมพิวเตอร์',
 	'/รับซื้อมือถือ', '/รับซื้อmacbook', '/รับซื้อiphone', '/รับซื้อipad', '/รับซื้อกล้อง',
 ]);
 const normalizeUrl = (page) => {

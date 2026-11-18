@@ -7,7 +7,7 @@ function track(event:'line_click'|'phone_click',placement:string){
     utm_source:normalized(url.searchParams.get('utm_source')||''),
     utm_medium:normalized(url.searchParams.get('utm_medium')||''),
   };
-  window.dataLayer?.push({event:'winnerit_'+event,...payload});
+  window.dataLayer?.push({...payload,event:'winnerit_'+event});
   if(navigator.sendBeacon){
     navigator.sendBeacon('/api/events',new Blob([JSON.stringify(payload)],{type:'application/json'}));
   }
