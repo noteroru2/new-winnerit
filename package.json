@@ -11,6 +11,7 @@
     "preview": "astro preview",
     "check-status": "node scripts/check-status.mjs",
     "seo:audit-content": "node scripts/audit-seo-content.mjs",
+    "seo:check-output": "node scripts/check-seo-output.mjs",
     "astro": "astro"
   },
   "dependencies": {
