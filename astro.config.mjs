@@ -5,6 +5,16 @@ import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import matter from 'gray-matter';
 
+/** Fail-closed: manual review metadata is mandatory before promoting imported posts. */
+function editorialApproved(data) {
+ const reviewer = String(data.seo_reviewed_by ?? '').trim();
+ const at = String(data.seo_reviewed_at ?? '').trim();
+ const evidence = String(data.seo_evidence ?? '').trim();
+ const service = String(data.seo_service_verified ?? '').trim();
+ return data.seo_index === true && reviewer.length >= 2
+  && /^20\\d\\d-\\d\\d-\\d\\d$/.test(at) && evidence.length >= 20 && service.length >= 20;
+}
+
 const PREFIX_RE = /^(services|locations|prices)-(.+)$/;
 
 /** @param {string} siteUrl */
@@ -33,7 +43,7 @@ function buildPostSeoData(siteUrl) {
 			const url = new URL(`${path}/`, `${base}/`).toString();
 			// Imported bulk content is quarantined by default. A reviewed page must
 			// explicitly opt in with `seo_index: true` before entering the sitemap.
-			if (data.seo_index !== true) noindex.add(url);
+			if (!editorialApproved(data)) noindex.add(url);
 			if (data.modified) lastmod[url] = String(data.modified);
 		} catch {
 			// ignore per-file failures

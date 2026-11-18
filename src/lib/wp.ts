@@ -11,6 +11,15 @@ const postModules = import.meta.glob('/content/posts/*.md', {
 	import: 'default',
 }) as Record<string, string>;
 
+const editorialApproved = (data: Record<string, unknown>): boolean => {
+ const reviewer = String(data.seo_reviewed_by ?? '').trim();
+ const at = String(data.seo_reviewed_at ?? '').trim();
+ const evidence = String(data.seo_evidence ?? '').trim();
+ const service = String(data.seo_service_verified ?? '').trim();
+ return data.seo_index === true && reviewer.length >= 2
+  && /^20\\d\\d-\\d\\d-\\d\\d$/.test(at) && evidence.length >= 20 && service.length >= 20;
+};
+
 const mediaManifest = mediaJson as Record<string, WPMedia>;
 const categoriesData = categoriesJson as WPCategory[];
 
@@ -34,7 +43,7 @@ function postFromRaw(raw: string): WPPost | null {
 		content: { markdown: content.trim(), protected: false },
 		featured_media: data.featured_media ? Number(data.featured_media) : undefined,
 		categories: Array.isArray(data.categories) ? data.categories.map(Number) : [],
-		seo_index: data.seo_index === true,
+		seo_index: editorialApproved(data),
 	};
 }
 
