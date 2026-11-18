@@ -63,16 +63,23 @@ const sitemapIndex = read(join(dist, 'sitemap-index.xml'));
 if (!sitemapIndex.includes('sitemap-')) fail('Sitemap index missing child sitemaps');
 const sitemapParts = readdirSync(dist).filter((name) => /^sitemap-\d+\.xml$/.test(name));
 if (!sitemapParts.length) fail('No generated XML sitemap parts');
+const coreRoutes = new Set([
+  '/', '/about/', '/articles/', '/contact/', '/รับซื้อโน๊ตบุ๊ค/',
+  '/รับซื้อคอมพิวเตอร์/', '/รับซื้อมือถือ/', '/รับซื้อmacbook/',
+  '/รับซื้อiphone/', '/รับซื้อipad/', '/รับซื้อกล้อง/',
+]);
+// Imported posts that share a slug with a dedicated service page do not own
+// that URL; the real service page is intentionally indexable.
 const sitemapUrls = new Set();
 for (const file of sitemapParts) {
   const xml = read(join(dist, file));
   for (const match of xml.matchAll(/<loc>([^<]+)<\/loc>/g)) sitemapUrls.add(localPath(match[1].replaceAll('&amp;', '&')));
 }
 for (const path of quarantined) {
-  if (!approved.has(path) && sitemapUrls.has(path)) fail('Noindex post leaked into sitemap: ' + path);
+  if (!coreRoutes.has(path) && !approved.has(path) && sitemapUrls.has(path)) fail('Noindex post leaked into sitemap: ' + path);
 }
 for (const path of approved) {
-  if (!sitemapUrls.has(path)) fail('Approved article missing from sitemap: ' + path);
+  if (!coreRoutes.has(path) && !sitemapUrls.has(path)) fail('Approved article missing from sitemap: ' + path);
 }
 const robots = read(join(dist, 'robots.txt'));
 if (!robots.includes('https://winnerit.in.th/sitemap-index.xml')) fail('robots.txt sitemap reference missing');
