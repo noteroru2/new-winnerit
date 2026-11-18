@@ -12,6 +12,9 @@
     "check-status": "node scripts/check-status.mjs",
     "seo:audit-content": "node scripts/audit-seo-content.mjs",
     "seo:check-output": "node scripts/check-seo-output.mjs",
+    "seo:review-inventory": "node scripts/seo-review-inventory.mjs",
+    "seo:publish-guard": "node scripts/seo-publish-guard.mjs",
+    "test:worker": "node --test worker/test/*.test.mjs",
     "astro": "astro"
   },
   "dependencies": {

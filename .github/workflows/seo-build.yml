@@ -27,7 +27,22 @@ jobs:
         run: npm ci
       - name: Audit editorial content
         run: npm run seo:audit-content > seo-content-audit.json
+      - name: Publish evidence gate
+        run: npm run seo:publish-guard
+      - name: Review queue report
+        run: npm run seo:review-inventory > seo-review-inventory.json
+      - name: Test Worker APIs
+        run: npm run test:worker
       - name: Build production HTML
         run: npm run build
       - name: Verify SEO output and sitemap safety
         run: npm run seo:check-output
+
+      - name: Upload non-sensitive SEO review inventory
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-review-inventory
+          path: seo-review-inventory.json
+          retention-days: 14
+          if-no-files-found: ignore

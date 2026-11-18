@@ -4,8 +4,7 @@ import { parse } from 'node-html-parser';
 import Layout from '../../layouts/Layout.astro';
 import Post from './Post.astro';
 import { getCategoriesByIds, getMediaById, type WPPost } from '../../lib/wp';
-import { transformPostContent, extractFaqFromHtml } from '../../lib/contentTransforms';
-import { renderMarkdown } from '../../lib/markdown';
+import { transformPostContent } from '../../lib/contentTransforms';
 
 function stripHtml(html: string): string {
 	return parse(html).text.replace(/\s+/g, ' ').trim();
@@ -54,18 +53,6 @@ const breadcrumbSchema = {
 	],
 };
 
-const faqs = extractFaqFromHtml(renderMarkdown(post.content.markdown));
-const faqSchema =
-	faqs.length > 0
-		? {
-				'@type': 'FAQPage',
-				mainEntity: faqs.map((f) => ({
-					'@type': 'Question',
-					name: f.question,
-					acceptedAnswer: { '@type': 'Answer', text: f.answer },
-				})),
-			}
-		: null;
 ---
 
 <Layout
@@ -76,7 +63,7 @@ const faqSchema =
 	articleDate={post.date}
 	articleModified={post.modified}
 	robots={post.seo_index === false ? 'noindex, follow' : undefined}
-	jsonLd={[articleSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])]}
+	jsonLd={[articleSchema, breadcrumbSchema]}
 >
 	<Post post={post} categories={categories} contentHtml={contentHtml} featuredMedia={featuredMedia} prevPost={prevPost} nextPost={nextPost} />
 </Layout>
