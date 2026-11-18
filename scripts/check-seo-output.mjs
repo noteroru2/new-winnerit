@@ -13,7 +13,7 @@ const read = (file) => {
 const normalize = (path) => {
   let urlPath = path || '/';
   try { urlPath = decodeURIComponent(urlPath); } catch { /* malformed legacy URL */ }
-  urlPath = urlPath.replace(/\\/+$/, '') || '/';
+  urlPath = urlPath.replace(/\/+$/, '') || '/';
   return urlPath === '/' ? '/' : urlPath + '/';
 };
 const localPath = (value) => normalize(new URL(value, 'https://winnerit.in.th').pathname);
@@ -53,20 +53,20 @@ for (const document of [index, articles]) {
   }
 }
 const rss = read(join(dist, 'rss.xml'));
-for (const item of rss.matchAll(/<item>([\\s\\S]*?)<\\/item>/g)) {
-  const href = item[1].match(/<link>([^<]+)<\\/link>/)?.[1];
+for (const item of rss.matchAll(/<item>([\s\S]*?)<\/item>/g)) {
+  const href = item[1].match(/<link>([^<]+)<\/link>/)?.[1];
   if (href && !approved.has(localPath(href.replaceAll('&amp;', '&')))) {
     fail('RSS contains unapproved post: ' + href);
   }
 }
 const sitemapIndex = read(join(dist, 'sitemap-index.xml'));
 if (!sitemapIndex.includes('sitemap-')) fail('Sitemap index missing child sitemaps');
-const sitemapParts = readdirSync(dist).filter((name) => /^sitemap-\\d+\\.xml$/.test(name));
+const sitemapParts = readdirSync(dist).filter((name) => /^sitemap-\d+\.xml$/.test(name));
 if (!sitemapParts.length) fail('No generated XML sitemap parts');
 const sitemapUrls = new Set();
 for (const file of sitemapParts) {
   const xml = read(join(dist, file));
-  for (const match of xml.matchAll(/<loc>([^<]+)<\\/loc>/g)) sitemapUrls.add(localPath(match[1].replaceAll('&amp;', '&')));
+  for (const match of xml.matchAll(/<loc>([^<]+)<\/loc>/g)) sitemapUrls.add(localPath(match[1].replaceAll('&amp;', '&')));
 }
 for (const path of quarantined) {
   if (!approved.has(path) && sitemapUrls.has(path)) fail('Noindex post leaked into sitemap: ' + path);
