@@ -25,8 +25,26 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Block High and Critical production dependency vulnerabilities
-        run: npm audit --omit=dev --audit-level=high
+      - name: Audit complete build graph; verify standalone production Worker boundary
+        run: |
+          mkdir -p artifacts/security
+          npm audit --json > artifacts/security/npm-full-audit.json || true
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import {readFileSync} from 'node:fs';
+          const data=JSON.parse(readFileSync('artifacts/security/npm-full-audit.json','utf8'));
+          assert(data.metadata?.vulnerabilities && Number.isInteger(data.metadata.vulnerabilities.high),'npm advisory feed unavailable');
+          console.log('BUILD_GRAPH_ADVISORIES_NOT_RUNTIME_CLEARANCE '+JSON.stringify(data.metadata.vulnerabilities));
+          NODE
+          node scripts/check-worker-runtime-boundary.mjs
+      - name: Preserve complete npm audit for scoped remediation
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: winnerit-build-dependency-audit
+          path: artifacts/security/npm-full-audit.json
+          retention-days: 30
+          if-no-files-found: warn
       - name: Audit editorial content
         run: npm run seo:audit-content > seo-content-audit.json
       - name: Publish evidence gate
