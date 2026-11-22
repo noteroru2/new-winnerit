@@ -17,6 +17,9 @@ assert(about.includes('ขั้นตอนตรวจสอบชัดเจ
 assert(!about.includes('รับเงินทันที'), 'About has unverified payment claim');
 assert(contact.includes('id="form-offline"') && contact.includes('id="winner-contact"') && contact.includes('form" hidden'), 'Contact form must be hidden until webhook+Turnstile ready');
 assert(contact.includes('กรุณายืนยันวันเปิดก่อนเดินทาง'), 'Contact physical schedule not truthful');
+assert(contact.includes('id="winner-line-intake"') && contact.includes('เปิดแชท LINE พร้อมข้อความ'), 'Working manual LINE lead intake missing');
+const client=read('src/scripts/contactForm.ts');
+assert(client.includes('/oaMessage/%40webuy/?') && client.includes('encodeURIComponent(message)'), 'LINE OA prefilled-message link missing');
 assert(worker.includes('CONTACT_WEBHOOK_URL') && worker.includes('TURNSTILE_SECRET_KEY') && worker.includes('contact_unavailable'), 'No fail-closed contact API');
 assert(astro.includes('!editorialApproved(data)') && astro.includes('data.seo_index === true && reviewer.length >= 2'), '4,031-post fail-closed editorial quarantine removed');
 console.log('PASS Winner IT truthful storefront, conditional LINE intake, fail-closed webhook/contact, 4,031-post quarantine');
