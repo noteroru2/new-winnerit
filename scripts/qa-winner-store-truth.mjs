@@ -18,5 +18,5 @@ assert(!about.includes('รับเงินทันที'), 'About has unver
 assert(contact.includes('id="form-offline"') && contact.includes('id="winner-contact"') && contact.includes('form" hidden'), 'Contact form must be hidden until webhook+Turnstile ready');
 assert(contact.includes('กรุณายืนยันวันเปิดก่อนเดินทาง'), 'Contact physical schedule not truthful');
 assert(worker.includes('CONTACT_WEBHOOK_URL') && worker.includes('TURNSTILE_SECRET_KEY') && worker.includes('contact_unavailable'), 'No fail-closed contact API');
-assert(astro.includes('data.seo_index !== true'), '4,031-post editorial quarantine removed');
+assert(astro.includes('!editorialApproved(data)') && astro.includes('data.seo_index === true && reviewer.length >= 2'), '4,031-post fail-closed editorial quarantine removed');
 console.log('PASS Winner IT truthful storefront, conditional LINE intake, fail-closed webhook/contact, 4,031-post quarantine');
