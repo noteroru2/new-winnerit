@@ -76,7 +76,7 @@ lineIntake?.addEventListener('submit',e=>{
     'รายละเอียด: '+details,
     province?'จังหวัด: '+province:'',
     'หากมีรูปเครื่องจะส่งเพิ่มในแชท',
-  ].filter(Boolean).join('\\n');
+  ].filter(Boolean).join('\n');
   const url='https://line.me/R/oaMessage/%40webuy/?'+encodeURIComponent(message);
   // A direct synchronous click avoids popup blockers. LINE does not send automatically.
   window.open(url,'_blank','noopener,noreferrer');
