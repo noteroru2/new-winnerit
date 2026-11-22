@@ -43,6 +43,27 @@ import { business } from '../config/business';
 					<div id="form-offline" class="contact-offline" role="status">
             กำลังตรวจสอบระบบรับข้อความ หากแบบฟอร์มยังไม่พร้อม กรุณาส่งรายละเอียดเครื่องผ่าน <a href={business.lineUrl} target="_blank" rel="noopener noreferrer">LINE {business.lineId}</a>
           </div>
+          <form id="winner-line-intake" class="form" style="margin-top:18px" autocomplete="on">
+            <p class="form-hint">เตรียมรายละเอียดเครื่องเพื่อเปิดแชท LINE @webuy ระบบยังไม่ส่งข้อมูลอัตโนมัติ ลูกค้าต้องตรวจและกดส่งใน LINE ด้วยตนเอง เว็บไซต์ไม่เก็บข้อมูลจากแบบฟอร์มนี้</p>
+            <label><span class="lb">ชื่อผู้ติดต่อ (ไม่บังคับ)</span><input name="name" maxlength="60" class="inp" autocomplete="name" placeholder="ชื่อที่ต้องการให้ทีมงานเรียก" /></label>
+            <label><span class="lb">ประเภทอุปกรณ์ *</span>
+              <select name="category" required class="inp">
+                <option value="">เลือกประเภท</option>
+                <option value="โน๊ตบุ๊ค">โน๊ตบุ๊ค / Gaming Laptop</option>
+                <option value="คอมพิวเตอร์">PC / การ์ดจอ / อะไหล่</option>
+                <option value="MacBook">MacBook / iMac</option>
+                <option value="iPhone">iPhone</option>
+                <option value="iPad">iPad</option>
+                <option value="กล้อง">กล้อง / เลนส์</option>
+                <option value="ล็อตบริษัท">งานเหมาล็อตบริษัท</option>
+                <option value="อื่น ๆ">สินค้าไอทีอื่น ๆ</option>
+              </select>
+            </label>
+            <label><span class="lb">รายละเอียดรุ่น สเปกและสภาพ *</span><textarea name="details" class="inp ta" rows={4} required minlength="10" maxlength="450" placeholder="รุ่น / CPU / RAM / SSD / ตำหนิ / จำนวน / ประกัน"></textarea></label>
+            <label><span class="lb">จังหวัด (ไม่บังคับ)</span><input name="province" class="inp" maxlength="80" placeholder="จังหวัดที่อยู่ของเครื่อง" /></label>
+            <button class="btn btn-primary btn-big" type="submit">เปิดแชท LINE พร้อมข้อความ</button>
+            <p id="winner-line-intake-status" class="form-hint" role="status" aria-live="polite"></p>
+          </form>
           <form id="winner-contact" class="form" hidden novalidate>
             <p class="form-hint">เมื่อส่งแบบฟอร์ม ระบบจะนำข้อมูลไปยังทีมงานผ่านช่องทางรับแจ้งที่ตั้งค่าไว้ และแจ้งหมายเลขอ้างอิงให้คุณ ไม่มีการส่งโดยเปิดโปรแกรมอีเมล</p>
             <label><span class="lb">ชื่อผู้ติดต่อ *</span><input name="name" required maxlength="90" class="inp" autocomplete="name" placeholder="ชื่อผู้ติดต่อ" /></label>
