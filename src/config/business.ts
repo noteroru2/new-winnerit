@@ -18,7 +18,8 @@ export const business = {
 	longitude: 104.844358,
 	opens: '09:00',
 	closes: '19:00',
-	openingDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+	// Actual day-of-week schedule needs owner verification. Do not fabricate 7-day opening hours in schema.
+	openingDays: [] as string[],
 	googleMapsUrl: 'https://maps.app.goo.gl/krv97o14jPTRrnpW8',
 	facebookUrl: 'https://www.facebook.com/Amphontrading/',
 	companySite: 'https://amphon.co.th/',

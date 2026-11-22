@@ -114,14 +114,14 @@ const localBusinessSchema = {
 		latitude: business.latitude,
 		longitude: business.longitude,
 	},
-	openingHoursSpecification: [
+	...(business.openingDays.length ? { openingHoursSpecification: [
 		{
 			'@type': 'OpeningHoursSpecification',
 			dayOfWeek: business.openingDays,
 			opens: business.opens,
 			closes: business.closes,
 		},
-	],
+	] } : {}),
 	areaServed: {
 		'@type': 'Country',
 		name: 'Thailand',
@@ -208,5 +208,8 @@ const baseJsonLd = {
 			<slot />
 		</main>
 		<Footer />
+    <script>
+      import "../scripts/leadTracking";
+    </script>
 	</body>
 </html>

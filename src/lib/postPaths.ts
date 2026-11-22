@@ -17,6 +17,6 @@ export function parsePrefixedWpSlug(rawSlug: string): { segment: PrefixedSegment
 /** Canonical on-site path for a post (e.g. /services/buy-macbook-m1). */
 export function postPublicPath(post: WPPost): string {
 	const p = parsePrefixedWpSlug(post.slug);
-	if (p) return `/${p.segment}/${p.rest}`;
-	return `/${decodeSlug(post.slug)}`;
+	if (p) return `/${p.segment}/${p.rest}/`;
+	return `/${decodeSlug(post.slug)}/`;
 }

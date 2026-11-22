@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import { readFileSync, existsSync } from 'node:fs';
+const cfg=JSON.parse(readFileSync('wrangler.jsonc','utf8'));
+const source=readFileSync('worker/index.js','utf8');
+assert.equal(cfg.name,'new-winnerit');
+assert.equal(cfg.main,'./worker/index.js','Cloudflare production entry must be the audited standalone Worker');
+assert.equal(cfg.assets?.directory,'./dist','Only static Astro build may ship as assets');
+assert.equal(cfg.assets?.binding,'ASSETS');
+assert.equal(cfg.assets?.run_worker_first,true,'Contact APIs require Worker-first routing');
+assert(!/(?:^|\n)\s*(?:import\s|export\s+\*\s+from|const\s+\w+\s*=\s*require\s*\(|await\s+import\s*\()/m.test(source),'Worker must not import npm build dependencies');
+assert(!/\beval\s*\(|\bnew\s+Function\s*\(/.test(source),'No dynamic code evaluation in Worker');
+assert(source.includes('CONTACT_WEBHOOK_URL') && source.includes('TURNSTILE_SECRET_KEY') && source.includes('contact_unavailable'),'Contact fail-closed checks missing');
+assert(existsSync('src/scripts/contactForm.ts'),'Missing client contact fallback');
+console.log('PASS static-only Cloudflare Worker runtime boundary: no direct npm imports; Astro package advisories classified as BUILD GRAPH requiring separate remediation, not declared safe');
