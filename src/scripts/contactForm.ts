@@ -55,3 +55,31 @@ if(form && offline && widget && submit){
     }finally{submit.disabled=false;}
   });
 }
+
+// LINE Official Account fallback: no PII is posted to this website.
+// The user reviews and explicitly sends the prefilled message from LINE.
+const lineIntake=document.querySelector<HTMLFormElement>('#winner-line-intake');
+const lineStatus=document.querySelector<HTMLElement>('#winner-line-intake-status');
+lineIntake?.addEventListener('submit',e=>{
+  e.preventDefault();
+  if(!lineIntake.checkValidity()){lineIntake.reportValidity();return;}
+  const fields=new FormData(lineIntake);
+  const name=String(fields.get('name')||'').trim().slice(0,60);
+  const category=String(fields.get('category')||'').trim().slice(0,40);
+  const details=String(fields.get('details')||'').trim().slice(0,450);
+  const province=String(fields.get('province')||'').trim().slice(0,80);
+  if(details.length<10 || !category)return;
+  const message=[
+    'สวัสดีครับ/ค่ะ ต้องการประเมินราคาสินค้าไอทีผ่าน Winner IT',
+    name?'ชื่อผู้ติดต่อ: '+name:'',
+    'ประเภท: '+category,
+    'รายละเอียด: '+details,
+    province?'จังหวัด: '+province:'',
+    'หากมีรูปเครื่องจะส่งเพิ่มในแชท',
+  ].filter(Boolean).join('\\n');
+  const url='https://line.me/R/oaMessage/%40webuy/?'+encodeURIComponent(message);
+  // A direct synchronous click avoids popup blockers. LINE does not send automatically.
+  window.open(url,'_blank','noopener,noreferrer');
+  if(lineStatus)lineStatus.textContent='เปิดแชท LINE แล้ว กรุณาตรวจสอบข้อความและกดส่งใน LINE เพื่อให้ทีมงานได้รับข้อมูล';
+  window.dataLayer?.push({event:'winnerit_line_intake_open',category,page:window.location.pathname});
+});
